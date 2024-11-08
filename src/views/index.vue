@@ -1,42 +1,43 @@
 <template>
   <div ref="bigScreenHome" class="big-screen-home">
     <div class="big-screen-header">
-      <svg-icon class="full-screen-icon" :icon-class="isFullScreen ? 'exit-fullscreen' : 'fullscreen'" @click="toggleFullScreen()" />
+      <svg-icon class="full-screen-icon" :icon-class="isFullScreen ? 'exit-fullscreen' : 'fullscreen'"
+        @click="toggleFullScreen()" />
     </div>
     <div class="screen-title">标题</div>
     <div class="screen-content">
       <el-col class="grid-content grid-left">
         <el-col :span="24">
-          <div class="left-item item-top" >
+          <div class="left-item item-top">
             1
           </div>
-          <div class="left-item item-middle" >
+          <div class="left-item item-middle">
             2
           </div>
-          <div class="left-item item-bottom" >
+          <div class="left-item item-bottom">
             3
           </div>
         </el-col>
       </el-col>
       <el-col class="grid-content grid-center">
         <el-col :span="24">
-          <div class="center-item item-top" >
+          <div class="center-item item-top">
             4
           </div>
-          <div class="center-item item-bottom" >
+          <div class="center-item item-bottom">
             5
           </div>
         </el-col>
       </el-col>
       <el-col class="grid-content grid-right">
         <el-col :span="24">
-          <div class="right-item item-top" >
+          <div class="right-item item-top">
             6
           </div>
-          <div class="right-item item-middle" >
+          <div class="right-item item-middle">
             7
           </div>
-          <div class="right-item item-bottom" >
+          <div class="right-item item-bottom">
             8
           </div>
         </el-col>
@@ -116,7 +117,8 @@ export default {
     position: absolute;
     top: 3vh;
     right: 5%;
-    .full-screen-icon{
+
+    .full-screen-icon {
       color: aqua;
     }
   }
@@ -128,65 +130,81 @@ export default {
 }
 
 .screen-title {
-  width:100%;
-  height:7vh;
-  text-align:center;
-  background-color: rgba(33, 255, 28,0.5);
+  width: 100%;
+  height: 7vh;
+  text-align: center;
+  background-color: rgba(33, 255, 28, 0.5);
 }
 
 .screen-content {
-  display:flex;
+  display: flex;
   // flex-direction: column;
   height: calc(100vh - 7vh);
 
   .grid-content {
-    flex-grow: 1; /* 让子元素填满剩余空间 */
+    flex-grow: 1;
+    /* 让子元素填满剩余空间 */
   }
+
   .grid-left {
     width: 25%;
-    .left-item{
-      height:33vh;
-      width:100%;
+
+    .left-item {
+      height: 30vh;
+      width: 100%;
     }
-    .item-top{
-      background-color: rgba(91, 0, 0,0.5);
+
+    .item-top {
+      background-color: rgba(91, 0, 0, 0.5);
     }
-    .item-middle{
-      background-color: rgba(255, 0, 0,0.5);
+
+    .item-middle {
+      background-color: rgba(255, 0, 0, 0.5);
     }
-    .item-bottom{
-      background-color: rgba(255, 128, 128,0.5);
+
+    .item-bottom {
+      background-color: rgba(255, 128, 128, 0.5);
+      height: 33vh;
     }
 
   }
+
   .grid-center {
     width: 50%;
-    .center-item{
-      width:100%;
+
+    .center-item {
+      width: 100%;
     }
-    .item-top{
-      height:66vh;
-      background-color: rgba(194, 198, 57,0.5);
+
+    .item-top {
+      height: 61vh;
+      background-color: rgba(194, 198, 57, 0.5);
     }
-    .item-bottom{
-      height:33vh;
-      background-color: rgba(255, 128, 64,0.5);
+
+    .item-bottom {
+      height: 32vh;
+      background-color: rgba(255, 128, 64, 0.5);
     }
   }
+
   .grid-right {
     width: 25%;
-    .right-item{
-      height:33vh;
-      width:100%;
+
+    .right-item {
+      height: 30vh;
+      width: 100%;
     }
-    .item-top{
-      background-color: rgba(50, 28, 255,0.5);
+
+    .item-top {
+      background-color: rgba(50, 28, 255, 0.5);
     }
-    .item-middle{
-      background-color: rgba(0, 128, 192,0.5);
+
+    .item-middle {
+      background-color: rgba(0, 128, 192, 0.5);
     }
-    .item-bottom{
-      background-color: rgba(128, 128, 255,0.5);
+    .item-bottom {
+      background-color: rgba(128, 128, 255, 0.5);
+      height: 33vh;
     }
   }
 }
