@@ -164,7 +164,7 @@ export default {
 
     .item-bottom {
       background-color: rgba(255, 128, 128, 0.5);
-      height: 33vh;
+      height: 32vh;
     }
 
   }
@@ -177,7 +177,7 @@ export default {
     }
 
     .item-top {
-      height: 61vh;
+      height: 60vh;
       background-color: rgba(194, 198, 57, 0.5);
     }
 
@@ -204,7 +204,7 @@ export default {
     }
     .item-bottom {
       background-color: rgba(128, 128, 255, 0.5);
-      height: 33vh;
+      height: 32vh;
     }
   }
 }
