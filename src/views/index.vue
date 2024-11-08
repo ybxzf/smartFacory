@@ -131,6 +131,7 @@ export default {
   width:100%;
   height:7vh;
   text-align:center;
+  background-color: rgba(33, 255, 28,0.5);
 }
 
 .screen-content {
@@ -148,13 +149,13 @@ export default {
       width:100%;
     }
     .item-top{
-      background-color: rgba(91,0, 0,0.5);
+      background-color: rgba(91, 0, 0,0.5);
     }
     .item-middle{
-      background-color: rgba(255,0, 0,0.5);
+      background-color: rgba(255, 0, 0,0.5);
     }
     .item-bottom{
-      background-color: rgba(255,128, 128,0.5);
+      background-color: rgba(255, 128, 128,0.5);
     }
 
   }
@@ -179,7 +180,7 @@ export default {
       width:100%;
     }
     .item-top{
-      background-color: rgba(0, 128, 255,0.5);
+      background-color: rgba(50, 28, 255,0.5);
     }
     .item-middle{
       background-color: rgba(0, 128, 192,0.5);
