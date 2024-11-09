@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import CuboidBar from './cuboidBar'
-import Cylinder from './cylinder.vue';
+import CuboidBar from './bigScreen/components/cuboidBar'
+import Cylinder from './bigScreen/components/cylinder.vue';
 export default {
   name: "Index",
   components: {
