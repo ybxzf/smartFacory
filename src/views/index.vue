@@ -14,8 +14,8 @@
           <div class="left-item item-middle">
             2
           </div>
-          <div class="left-item item-bottom">
-            3
+          <div class="left-item item-bottom cylinder-container">
+            <cylinder></cylinder>
           </div>
         </el-col>
       </el-col>
@@ -31,8 +31,8 @@
       </el-col>
       <el-col class="grid-content grid-right">
         <el-col :span="24">
-          <div class="right-item item-top">
-            6
+          <div class="right-item item-top bar-container">
+						<CuboidBar></CuboidBar>
           </div>
           <div class="right-item item-middle">
             7
@@ -47,11 +47,14 @@
 </template>
 
 <script>
-
+import CuboidBar from './cuboidBar'
+import Cylinder from './cylinder.vue';
 export default {
   name: "Index",
   components: {
-  },
+		CuboidBar,
+		Cylinder
+	  },
   data() {
     return {
       isFullScreen: false,//全屏
@@ -166,6 +169,10 @@ export default {
       background-color: rgba(255, 128, 128, 0.5);
       height: 32vh;
     }
+		.cylinder-container {
+			width: 100%;
+			height: calc(33vh - 60px);
+		}
 
   }
 
