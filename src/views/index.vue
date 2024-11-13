@@ -12,9 +12,9 @@
             1
           </div>
           <div class="left-item item-middle">
-            2
+            <lineAndStackBar></lineAndStackBar>
           </div>
-          <div class="left-item item-bottom cylinder-container">
+          <div class="left-item item-bottom">
             <cylinder></cylinder>
           </div>
         </el-col>
@@ -31,14 +31,14 @@
       </el-col>
       <el-col class="grid-content grid-right">
         <el-col :span="24">
-          <div class="right-item item-top bar-container">
-						<CuboidBar></CuboidBar>
+          <div class="right-item item-top">
+            <CuboidBar></CuboidBar>
           </div>
           <div class="right-item item-middle">
             7
           </div>
           <div class="right-item item-bottom">
-            8
+            <realTimeMonitor></realTimeMonitor>
           </div>
         </el-col>
       </el-col>
@@ -49,12 +49,16 @@
 <script>
 import CuboidBar from './bigScreen/components/cuboidBar'
 import Cylinder from './bigScreen/components/cylinder.vue';
+import lineAndStackBar from './bigScreen/components/lineAndStackBar.vue';
+import realTimeMonitor from "./bigScreen/components/realTimeMonitor.vue";
 export default {
   name: "Index",
   components: {
-		CuboidBar,
-		Cylinder
-	  },
+    CuboidBar,
+    Cylinder,
+    lineAndStackBar,
+    realTimeMonitor,
+  },
   data() {
     return {
       isFullScreen: false,//全屏
@@ -103,7 +107,7 @@ export default {
   width: 100%;
   min-height: calc(100vh - 84px);
   /* 设置背景图片 */
-  background-image: url('../assets/images/bigScreen-bg.png');
+  background-image: url('../assets/images/bigScreen/bigScreen_bg.png');
   /* 不重复背景图片 */
   background-repeat: no-repeat;
   /* 图片铺满容器 */
@@ -151,6 +155,10 @@ export default {
 
   .grid-left {
     width: 25%;
+    background-image: url("../assets/images/bigScreen/column_bg.png");
+    background-repeat: no-repeat;
+    background-size: 97% 98%;
+    background-position: center center;
 
     .left-item {
       height: 30vh;
@@ -162,18 +170,13 @@ export default {
     }
 
     .item-middle {
-      background-color: rgba(255, 0, 0, 0.5);
+      // background-color: rgba(255, 0, 0, 0.5);
     }
 
     .item-bottom {
-      background-color: rgba(255, 128, 128, 0.5);
+      // background-color: rgba(255, 128, 128, 0.5);
       height: 32vh;
     }
-		.cylinder-container {
-			width: 100%;
-			height: calc(33vh - 60px);
-		}
-
   }
 
   .grid-center {
@@ -196,6 +199,10 @@ export default {
 
   .grid-right {
     width: 25%;
+    background-image: url("../assets/images/bigScreen/column_bg.png");
+    background-repeat: no-repeat;
+    background-size: 97% 98%;
+    background-position: center center;
 
     .right-item {
       height: 30vh;
@@ -203,14 +210,15 @@ export default {
     }
 
     .item-top {
-      background-color: rgba(50, 28, 255, 0.5);
+      // background-color: rgba(50, 28, 255, 0.5);
     }
 
     .item-middle {
       background-color: rgba(0, 128, 192, 0.5);
     }
+
     .item-bottom {
-      background-color: rgba(128, 128, 255, 0.5);
+      // background-color: rgba(128, 128, 255, 0.5);
       height: 32vh;
     }
   }
