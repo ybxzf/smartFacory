@@ -43,7 +43,7 @@
 						<CuboidBar></CuboidBar>
 					</div>
 					<div class="right-item item-middle">
-						7
+						<StatusShow></StatusShow>
 					</div>
 					<div class="right-item item-bottom">
 						<realTimeMonitor></realTimeMonitor>
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import StatusShow from './bigScreen/components/statusShow'
 import moment from 'moment';
 import CuboidBar from './bigScreen/components/cuboidBar'
 import Cylinder from './bigScreen/components/cylinder.vue';
@@ -65,6 +66,7 @@ import Attendance from './bigScreen/components/attendance.vue';
 export default {
 	name: "Index",
 	components: {
+    StatusShow,
 		CuboidBar,
 		Cylinder,
 		lineAndStackBar,
@@ -272,7 +274,7 @@ export default {
 		}
 
 		.item-middle {
-			background-color: rgba(0, 128, 192, 0.5);
+			// background-color: rgba(0, 128, 192, 0.5);
 		}
 
 		.item-bottom {
