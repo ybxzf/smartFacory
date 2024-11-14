@@ -30,7 +30,7 @@
 			<el-col class="grid-content grid-center">
 				<el-col :span="24">
 					<div class="center-item item-top">
-						4
+						<Workshop></Workshop>
 					</div>
 					<div class="center-item item-bottom">
 						<attendance></attendance>
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import Workshop from './bigScreen/components/workshop'
 import StatusShow from './bigScreen/components/statusShow'
 import moment from 'moment';
 import CuboidBar from './bigScreen/components/cuboidBar'
@@ -66,6 +67,7 @@ import Attendance from './bigScreen/components/attendance.vue';
 export default {
 	name: "Index",
 	components: {
+    Workshop,
     StatusShow,
 		CuboidBar,
 		Cylinder,
@@ -244,7 +246,7 @@ export default {
 
 		.item-top {
 			height: 60vh;
-			background-color: rgba(194, 198, 57, 0.5);
+			// background-color: rgba(194, 198, 57, 0.5);
 		}
 
 		.item-bottom {
