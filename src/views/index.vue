@@ -1,16 +1,18 @@
 <template>
 	<div ref="bigScreenHome" class="big-screen-home">
-		<div class="big-screen-header">
-			<svg-icon class="full-screen-icon" :icon-class="isFullScreen ? 'exit-fullscreen' : 'fullscreen'"
-				@click="toggleFullScreen()" />
-		</div>
-		<div class="big-screen-header-logo">
-			<img src="../assets/images/bigScreen/logo.png" alt="">
-		</div>
-		<div class="time-container">
-			{{ dateTime }}
-		</div>
-		<div class="screen-title">数智化工厂智慧物联平台</div>
+    <div class="screen-title">
+      <div class="big-screen-header">
+        <svg-icon class="full-screen-icon" :icon-class="isFullScreen ? 'exit-fullscreen' : 'fullscreen'"
+          @click="toggleFullScreen()" />
+      </div>
+      <div class="big-screen-header-logo">
+        <img src="../assets/images/bigScreen/logo.png" alt="">
+      </div>
+      <span>数智化工厂智慧物联平台</span>
+      <div class="time-container">
+        {{ dateTime }}
+      </div>
+    </div>
 		<div class="screen-content">
 			<el-col class="grid-content grid-left">
 				<el-col :span="24">
@@ -141,29 +143,6 @@ export default {
 	position: relative;
 	color: #ffffff;
 
-	.big-screen-header {
-		position: absolute;
-		top: 3px;
-		right: 5%;
-
-		.full-screen-icon {
-			color: aqua;
-		}
-	}
-
-	.big-screen-header-logo {
-		position: absolute;
-		left: 16px;
-		top: 16px;
-	}
-
-	.time-container {
-		position: absolute;
-		right: 0.875rem;
-		top: 1.5625rem;
-		color: #04c5d2;
-		font-size: 0.875rem;
-	}
 }
 
 .big-screen-home :fullscreen {
@@ -174,11 +153,48 @@ export default {
 .screen-title {
 	width: 100%;
 	height: 7vh;
-	text-align: center;
-	letter-spacing: 12px;
-	font-size: 38px;
-	font-weight: 800;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span{
+    text-align: center;
+    letter-spacing: 12px;
+    vertical-align: bottom;
+    font-size: 30px;
+    font-weight: 800;
+  }
+
 	// background-color: rgba(33, 255, 28, 0.5);
+  .big-screen-header {
+		position: absolute;
+		right: 5%;
+		top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+
+		.full-screen-icon {
+			color: aqua;
+      width: 20px;
+      height: 20px;
+		}
+	}
+
+	.big-screen-header-logo {
+		position: absolute;
+		left: 2%;
+		top: 50%;
+    transform: translateY(-50%);
+	}
+
+	.time-container {
+		position: absolute;
+		right: 0.875rem;
+    bottom: 0;
+		// top: 1.5625rem;
+		color: #04c5d2;
+		font-size: 0.875rem;
+	}
 }
 
 .screen-content {
@@ -231,6 +247,10 @@ export default {
 
 		.item-bottom {
 			height: 32vh;
+      background-image: url("../assets/images/bigScreen/row_bg.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      background-position: center center;
 			// background-color: rgba(255, 128, 64, 0.5);
 		}
 	}

@@ -6,7 +6,7 @@
 		<div class="table-c">
 			<el-table :data="tableData" height="100%" style="width: 100%" header-row-class-name="table-h-bg"
 				:row-class-name="tableRowClassName">
-				<el-table-column prop="number" show-overflow-tooltip label="计单编号">
+				<el-table-column prop="number" width="60" show-overflow-tooltip label="计单编号">
 				</el-table-column>
 				<el-table-column prop="orderType" show-overflow-tooltip label="订单编号">
 				</el-table-column>
@@ -14,7 +14,7 @@
 				</el-table-column>
 				<el-table-column prop="finishNum" show-overflow-tooltip label="完成数量">
 				</el-table-column>
-				<el-table-column prop="status" show-overflow-tooltip label="订单状态">
+				<el-table-column prop="status"  width="60" show-overflow-tooltip label="订单状态">
 				</el-table-column>
 			</el-table>
 		</div>
@@ -64,6 +64,24 @@ export default {
 				orderNum: 1000,
 				finishNum: 200,
 				status: '未处理'
+			}, {
+				number: '7',
+				orderType: "这就是订単状态",
+				orderNum: 1000,
+				finishNum: 200,
+				status: '未处理'
+			}, {
+				number: '8',
+				orderType: "这就是订単状态",
+				orderNum: 1000,
+				finishNum: 200,
+				status: '未处理'
+			}, {
+				number: '9',
+				orderType: "这就是订単状态",
+				orderNum: 1000,
+				finishNum: 200,
+				status: '未处理'
 			}]
 		}
 	},
@@ -82,6 +100,7 @@ export default {
 .section {
 	width: 100%;
 	height: 100%;
+  padding-top: 3%;
 }
 
 .title {
@@ -103,9 +122,9 @@ export default {
 }
 
 .table-c {
-	width: 90%;
-	height: 80%;
-	margin: 0 24px;
+	width: 92%;
+	height: 82%;
+	margin: 0 4%;
 	// overflow: auto;
 }
 </style>
@@ -114,6 +133,7 @@ export default {
 	.table-c {
 		background: transparent;
 		.el-table {
+      background-color: rgba(133, 133, 133, 0.1);
 			tr {
 				color: #fff;
 			}
@@ -137,10 +157,20 @@ export default {
 		.el-table--medium {
 			.el-table__cell {
 				padding: 6px 0 !important;
-				height: 36px;
+				height: 30px;
+        font-size: 10px;
 				border-bottom: none;
 			}
 		}
+    tr:hover > td {
+      background-color: rgba(133, 133, 133, 0.5) !important;
+      color: #0099ff;
+    }
 	}
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
+
 </style>

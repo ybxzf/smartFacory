@@ -10,6 +10,7 @@
 
 <script>
 import * as echarts from 'echarts';
+import { mapGetters } from 'vuex';
 export default {
   props: {
     yData: {
@@ -28,6 +29,18 @@ export default {
   data() {
     return {
       cuboidChart: null,
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'sidebar',
+    ]),
+  },
+  watch:{
+    "sidebar.opened"(newVal){
+      setTimeout(() => {
+        this.chartResize();
+      }, 150);
     }
   },
   mounted() {
@@ -396,6 +409,7 @@ export default {
 .section {
   width: 100%;
   height: 100%;
+  padding-top: 3%;
 }
 
 .title {
@@ -426,6 +440,6 @@ export default {
 
 #cuboidBar {
   width: 100%;
-  height: 80%;
+  height: 77%;
 }
 </style>

@@ -9,6 +9,7 @@
 
 <script>
 import * as echarts from 'echarts';
+import { mapGetters } from 'vuex';
 export default {
   props: {
     yDataLeft: {
@@ -27,6 +28,18 @@ export default {
   data() {
     return {
       myChart: null,
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'sidebar',
+    ]),
+  },
+  watch:{
+    "sidebar.opened"(newVal){
+      setTimeout(() => {
+        this.chartResize();
+      }, 150);
     }
   },
   mounted() {
