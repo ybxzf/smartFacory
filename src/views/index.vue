@@ -245,7 +245,8 @@ export default {
 		}
 
 		.item-top {
-			height: 60vh;
+			height: 55vh;
+			margin-top: 5vh;
 			// background-color: rgba(194, 198, 57, 0.5);
 		}
 
