@@ -55,15 +55,15 @@
 </template>
 
 <script>
-import Workshop from './bigScreen/components/workshop'
-import StatusShow from './bigScreen/components/statusShow'
 import moment from 'moment';
-import CuboidBar from './bigScreen/components/cuboidBar'
-import Cylinder from './bigScreen/components/cylinder.vue';
-import lineAndStackBar from './bigScreen/components/lineAndStackBar.vue';
-import realTimeMonitor from "./bigScreen/components/realTimeMonitor.vue";
-import OrderScheduling from './bigScreen/components/orderScheduling.vue';
-import Attendance from './bigScreen/components/attendance.vue';
+import Workshop from './bigScreen/components/Workshop'
+import StatusShow from './bigScreen/components/StatusShow'
+import CuboidBar from './bigScreen/components/CuboidBar'
+import Cylinder from './bigScreen/components/Cylinder';
+import LineAndStackBar from './bigScreen/components/LineAndStackBar';
+import RealTimeMonitor from "./bigScreen/components/RealTimeMonitor";
+import OrderScheduling from './bigScreen/components/OrderScheduling';
+import Attendance from './bigScreen/components/Attendance';
 export default {
 	name: "Index",
 	components: {
@@ -71,8 +71,8 @@ export default {
     StatusShow,
 		CuboidBar,
 		Cylinder,
-		lineAndStackBar,
-		realTimeMonitor,
+		LineAndStackBar,
+		RealTimeMonitor,
 		OrderScheduling,
 		Attendance
 	},
