@@ -11,3 +11,4 @@ npm run build:prod
 - 文件夹首字母小写，采用小驼峰式命名
 - 文件中如果存在`index.vue`，不做任何修改,就采用`index.vue`的命名方式
 - 公共工具方法抽取到`utils`文件夹下的`tools.js`文件中
+- 公共常量抽取到`utils`文件夹下的`constants.js`文件中

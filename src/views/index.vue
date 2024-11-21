@@ -1,23 +1,23 @@
 <template>
 	<div ref="bigScreenHome" class="big-screen-home">
-    <div class="screen-title">
-      <div class="big-screen-header">
-        <svg-icon class="full-screen-icon" :icon-class="isFullScreen ? 'exit-fullscreen' : 'fullscreen'"
-          @click="toggleFullScreen()" />
-      </div>
-      <div class="big-screen-header-logo">
-        <img src="../assets/images/bigScreen/logo.png" alt="">
-      </div>
-      <span>数智化工厂智慧物联平台</span>
-      <div class="time-container">
-        {{ dateTime }}
-      </div>
-    </div>
+		<div class="screen-title">
+			<div class="big-screen-header">
+				<svg-icon class="full-screen-icon" :icon-class="isFullScreen ? 'exit-fullscreen' : 'fullscreen'"
+					@click="toggleFullScreen()" />
+			</div>
+			<div class="big-screen-header-logo">
+				<img src="../assets/images/bigScreen/logo.png" alt="">
+			</div>
+			<span>数智化工厂智慧物联平台</span>
+			<div class="time-container">
+				{{ dateTime }}
+			</div>
+		</div>
 		<div class="screen-content">
 			<el-col class="grid-content grid-left">
 				<el-col :span="24">
 					<div class="left-item item-top">
-						<order-scheduling></order-scheduling>
+						<order-scheduling :list="planTableData"></order-scheduling>
 					</div>
 					<div class="left-item item-middle">
 						<lineAndStackBar></lineAndStackBar>
@@ -64,11 +64,13 @@ import LineAndStackBar from './bigScreen/components/LineAndStackBar';
 import RealTimeMonitor from "./bigScreen/components/RealTimeMonitor";
 import OrderScheduling from './bigScreen/components/OrderScheduling';
 import Attendance from './bigScreen/components/Attendance';
+import { SUCCESS_CODE } from '@/utils/constants.js';
+import { getPlanTable, getDailyStatistics, getMonthStatistics, getAttendanceData, getCapacityData, getFinishedPassRateData, getLineBodyData } from "@/api/bigScreen/index.js";
 export default {
 	name: "Index",
 	components: {
-    Workshop,
-    StatusShow,
+		Workshop,
+		StatusShow,
 		CuboidBar,
 		Cylinder,
 		LineAndStackBar,
@@ -81,6 +83,13 @@ export default {
 			isFullScreen: false,//全屏
 			dateTime: '',
 			timeId: null,
+			planTableData: [], // 订单排产
+			dailyData: [], // 当日产能
+			monthlyStatisticsData: [], // 月度产能,
+			attendanceData: {}, // 出勤数据
+			capacityData: {}, // 产能数据
+			finishedPassRateData: [], // 成本校验
+			lineBodyData: [], // 线体数据
 		}
 	},
 	created() {
@@ -90,8 +99,82 @@ export default {
 		this.timeId = setInterval(() => { //初始化定时器
 			this.dateTime = this.getNowTime();
 		}, 1000);
+		this.initData();
 	},
 	methods: {
+		initData() {
+			this.getPlanTableList();
+			this.getDailyStatic();
+			this.getMonthStatisticsData();
+			this.getAttendanceList();
+			this.getCapacityList();
+			this.getFinishedPassRateList();
+			this.getLineBodyList();
+		},
+		// 获取当日产能统计
+		getDailyStatic() {
+			getDailyStatistics().then((res) => {
+				if (res.code === SUCCESS_CODE) {
+					this.dailyData = res.data || []
+				}
+			})
+		},
+		// 获取订单计划产能
+		getPlanTableList() {
+			getPlanTable({
+				pageNum: 1,
+				pageSize: 10,
+			}).then(res => {
+				if (res.code === SUCCESS_CODE) {
+					this.planTableData = res.rows || [];
+				}
+			});
+		},
+		// 获取月度数据
+		getMonthStatisticsData() {
+			getMonthStatistics().then((res) => {
+				console.log(res);
+				if (res.code === SUCCESS_CODE) {
+					this.monthStatisticsData = res.data || [];
+				}
+			})
+		},
+		// 获取出勤数据
+		getAttendanceList() {
+			getAttendanceData().then((res) => {
+				console.log(res);
+				if (res.code === SUCCESS_CODE) {
+					this.attendanceData = res.data || [];
+				}
+			})
+		},
+		// 获取产能数据
+		getCapacityList() {
+			getCapacityData().then((res) => {
+				console.log(res);
+				if (res.code === SUCCESS_CODE) {
+					this.capacityData = res.data || [];
+				}
+			})
+		},
+		// 获取成本校验
+		getFinishedPassRateList() {
+			getFinishedPassRateData().then((res) => {
+				console.log(res);
+				if (res.code === SUCCESS_CODE) {
+					this.finishedPassRateData = res.data || [];
+				}
+			})
+		},
+		// 获取线体数据
+		getLineBodyList() {
+			getLineBodyData().then((res) => {
+				console.log(res);
+				if (res.code === SUCCESS_CODE) {
+					this.lineBodyData = res.data || [];
+				}
+			})
+		},
 		toggleFullScreen() {
 			const divElement = this.$refs.bigScreenHome;
 			if (!document.fullscreenElement && !document.webkitFullscreenElement &&
@@ -157,30 +240,31 @@ export default {
 .screen-title {
 	width: 100%;
 	height: 7vh;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  span{
-    text-align: center;
-    letter-spacing: 12px;
-    vertical-align: bottom;
-    font-size: 30px;
-    font-weight: 800;
-  }
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	span {
+		text-align: center;
+		letter-spacing: 12px;
+		vertical-align: bottom;
+		font-size: 30px;
+		font-weight: 800;
+	}
 
 	// background-color: rgba(33, 255, 28, 0.5);
-  .big-screen-header {
+	.big-screen-header {
 		position: absolute;
 		right: 5%;
 		top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
+		transform: translateY(-50%);
+		cursor: pointer;
 
 		.full-screen-icon {
 			color: aqua;
-      width: 20px;
-      height: 20px;
+			width: 20px;
+			height: 20px;
 		}
 	}
 
@@ -188,13 +272,13 @@ export default {
 		position: absolute;
 		left: 2%;
 		top: 50%;
-    transform: translateY(-50%);
+		transform: translateY(-50%);
 	}
 
 	.time-container {
 		position: absolute;
 		right: 0.875rem;
-    bottom: 0;
+		bottom: 0;
 		// top: 1.5625rem;
 		color: #04c5d2;
 		font-size: 0.875rem;
@@ -252,10 +336,10 @@ export default {
 
 		.item-bottom {
 			height: 32vh;
-      background-image: url("../assets/images/bigScreen/row_bg.png");
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      background-position: center center;
+			background-image: url("../assets/images/bigScreen/row_bg.png");
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			background-position: center center;
 			// background-color: rgba(255, 128, 64, 0.5);
 		}
 	}

@@ -7,15 +7,15 @@
 			<el-table :data="tableData" height="100%" ref="scrollTable" @mouseenter.native="handleEnter"
 				@mouseleave.native="handleLevel" style="width: 100%" header-row-class-name="table-h-bg"
 				:row-class-name="tableRowClassName">
-				<el-table-column prop="number" width="60" show-overflow-tooltip label="计单编号">
+				<el-table-column prop="orderNumber" width="80" show-overflow-tooltip label="计单编号">
 				</el-table-column>
 				<el-table-column prop="orderType" show-overflow-tooltip label="订单编号">
 				</el-table-column>
-				<el-table-column prop="orderNum" show-overflow-tooltip label="订单数量">
+				<el-table-column prop="orderQuantity" show-overflow-tooltip label="订单数量">
 				</el-table-column>
-				<el-table-column prop="finishNum" show-overflow-tooltip label="完成数量">
+				<el-table-column prop="completedQuantity" show-overflow-tooltip label="完成数量">
 				</el-table-column>
-				<el-table-column prop="status" show-overflow-tooltip label="订单状态">
+				<el-table-column prop="orderStatus" show-overflow-tooltip label="订单状态">
 				</el-table-column>
 			</el-table>
 		</div>
@@ -25,66 +25,23 @@
 <script>
 export default {
 	props: {
-
+		list: {
+			typeof: Array,
+			default: () => []
+		}
 	},
 	data() {
 		return {
-			tableData: [{
-				number: '1',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}, {
-				number: '2',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}, {
-				number: '3',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}, {
-				number: '4',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}, {
-				number: '5',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}, {
-				number: '6',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}, {
-				number: '7',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}, {
-				number: '8',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}, {
-				number: '9',
-				orderType: "这就是订単状态",
-				orderNum: 1000,
-				finishNum: 200,
-				status: '未处理'
-			}],
-			scrolltimer: null,
+			tableData: [],
+			scrollTimer: null,
+		}
+	},
+	watch: {
+		list: {
+			handler: function (newVal) {
+				this.tableData = newVal;
+			},
+			deep: true
 		}
 	},
 	mounted() {
@@ -107,9 +64,9 @@ export default {
 			// 拿到元素后，对元素进行定时增加距离顶部距离，实现滚动效果(此配置为每100毫秒移动1像素)
 			if (stop) {
 				//再通过事件监听，监听到 组件销毁 后，再执行关闭计时器。
-				window.clearInterval(this.scrolltimer)
+				window.clearInterval(this.scrollTimer)
 			} else {
-				this.scrolltimer = window.setInterval(() => {
+				this.scrollTimer = window.setInterval(() => {
 					// 元素自增距离顶部1像素
 					divData.scrollTop += 1
 					// 判断元素是否滚动到底部(可视高度+距离顶部=整个高度)
@@ -168,9 +125,11 @@ export default {
 
 		.el-table {
 			background-color: transparent;
-			&::before{
+
+			&::before {
 				height: 0px !important;
 			}
+
 			tr {
 				color: #fff;
 			}
