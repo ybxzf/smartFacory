@@ -157,13 +157,39 @@
 <script>
 export default {
 	props: {
-
 	},
 	data() {
 		return {
-
+			fontSizeRatio: 12 / 1920,//缩放比例
+			lightRatio: 34 / 1920,//缩放比例
 		};
-	}
+	},
+	mounted() {
+		// 监听窗口大小变化
+		window.addEventListener('resize', this.handleResize);
+		// 初始执行一次，设置窗口加载时的样式
+		this.handleResize();
+	},
+	methods: {
+		handleResize() {
+			// 获取窗口宽度
+			const width = window.innerWidth;
+			// 获取所有 class="part-h" 的元素
+			const partHelements = document.querySelectorAll('.part-h');
+			const partValueelements = document.querySelectorAll('.part-value');
+			// 根据窗口宽度动态修改样式
+			partHelements.forEach(element => {
+				element.style.fontSize = `${ this.fontSizeRatio * width }px`;
+			});
+			partValueelements.forEach(element => {
+				element.style.width = `${ this.lightRatio * width }px`;
+			});
+		}
+	},
+	destroyed() {
+		// 组件销毁时移除事件监听
+		window.removeEventListener('resize', this.handleResize);
+	},
 }
 </script>
 
@@ -220,10 +246,11 @@ export default {
 
 				.part {
 					height: 100%;
+					position: relative;
 
 					.part-h {
 						height: 40%;
-						font-size: 14px;
+						font-size: 12px;
 
 						div {
 							height: 100%;
@@ -240,10 +267,23 @@ export default {
 					}
 
 					.part-value {
-						height: 60%;
-						display: flex;
-						align-items: center;
-						justify-content: center
+						// height: 60%;
+						// display: flex;
+						// align-items: center;
+						// justify-content: center
+						width: 34px;
+						height: 34px;
+						position: absolute;
+						left: 50%;
+						transform: translateX(-50%);
+						top: 55%;
+
+					}
+					// .part-value :first-child {
+					// 	width: 34px;
+					// }
+					img{
+						width: 100%;
 					}
 				}
 			}
