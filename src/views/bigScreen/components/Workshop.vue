@@ -46,12 +46,12 @@ export default {
 	},
 	methods: {
 		handleClick(type) {
-			console.log(type, this.active);
-			// if (type === this.active) {
-			// 	this.active = "";
-			// 	return;
-			// }
+			if (type === this.active) {
+				this.active = "";
+				return;
+			}
 			this.active = type;
+			this.$emit('update', this.active);
 		},
 	},
 }

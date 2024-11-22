@@ -1,170 +1,110 @@
 <template>
 	<div class="status-container">
-		<div class="top">
-			<div class="part">
-				<img src="../../../assets/images/bigScreen/yellow_lamp.png" alt="">
-				<span>停线</span>
-			</div>
-			<div class="part">
-				<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-				<span>运行</span>
-			</div>
-			<div class="part">
-				<img src="../../../assets/images/bigScreen/red_lamp.png" alt="">
-				<span>故障</span>
-			</div>
-		</div>
-		<div class="content">
-			<div class="content-part">
-				<div class="content-t">
+		<template v-if="!isEmpty">
+			<div class="top">
+				<div class="part">
+					<img src="../../../assets/images/bigScreen/yellow_lamp.png" alt="">
+					<span>停线</span>
 				</div>
-				<div class="content-b">
-					<div class="part">
-						<div class="part-h">
-							<div>SMT</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
+				<div class="part">
+					<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
+					<span>运行</span>
+				</div>
+				<div class="part">
+					<img src="../../../assets/images/bigScreen/red_lamp.png" alt="">
+					<span>故障</span>
+				</div>
+			</div>
+			<div class="content">
+				<div class="content-part">
+					<div class="content-t">
 					</div>
-					<div class="part">
-						<div class="part-h">
-							<div>DIP</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
-					</div>
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title">
-								<span>四楼组装线</span>
-								<span>(自动)</span>
+					<div class="content-b">
+						<div class="part" :style="{
+			'--width': `calc(100% / ${topList.length})`
+		}" v-for="item in topList" :key="item.lineNumber">
+							<div class="part-h">
+								<div>{{ item.lineName }}</div>
+							</div>
+							<div class="part-value">
+								<img :src="item.status | getLineStatus" alt="">
 							</div>
 						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
 					</div>
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title">
-								<span>四楼组装线</span>
-								<span>(手动)</span>
-							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/red_lamp.png" alt="">
-						</div>
+				</div>
+				<div class="content-part">
+					<div class="content-t">
 					</div>
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title"> <span>四楼包装线</span>
-								<span>(自动)</span>
+					<div class="content-b">
+						<div class="part" :style="{
+			'--width': `calc(100% / ${topList.length})`
+		}" v-for="item in bottomList" :key="item.lineNumber">
+							<div class="part-h">
+								<div>{{ item.lineName }}</div>
 							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
-					</div>
-					<div class="part">
-						<div class="part-h">
-
-							<div class="more-title"> <span>四楼包装线</span>
-								<span>(手动)</span>
+							<div class="part-value">
+								<img :src="item.status | getLineStatus" alt="">
 							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="content-part">
-				<div class="content-t">
-				</div>
-				<div class="content-b">
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title">
-								<span>国内检定线</span>
-								<span>(自动)</span>
-							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
-					</div>
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title"><span>国内检定线</span>
-								<span>(手动)</span>
-							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
-					</div>
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title">
-								<span>海外检定线</span>
-								<span>(自动)</span>
-							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
-					</div>
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title">
-								<span>海外检定线</span>
-								<span>(手动)</span>
-							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
-					</div>
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title"> <span>五楼</span>
-								<span>组装线</span>
-							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/green_lamp.png" alt="">
-						</div>
-					</div>
-					<div class="part">
-						<div class="part-h">
-							<div class="more-title">
-								<span>五楼</span>
-								<span>包装线</span>
-							</div>
-						</div>
-						<div class="part-value">
-							<img src="../../../assets/images/bigScreen/yellow_lamp.png" alt="">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		</template>
+		<Empty v-else></Empty>
 	</div>
 </template>
 
 <script>
+import Empty from './empty'
+import RedLampUrl from "../../../assets/images/bigScreen/red_lamp.png";
+import YellowLampUrl from "../../../assets/images/bigScreen/yellow_lamp.png";
+import GreenLampUrl from "../../../assets/images/bigScreen/green_lamp.png";
 export default {
+	components: { Empty },
 	props: {
+		list: {
+			typeof: Array,
+			default: () => []
+		}
+	},
+	filters: {
+		getLineStatus(status) {
+			const statusMap = {
+				"故障": RedLampUrl,
+				"运行": GreenLampUrl,
+				"停线": YellowLampUrl,
+			};
+			return statusMap[status];
+		}
 	},
 	data() {
 		return {
 			fontSizeRatio: 12 / 1920,//缩放比例
 			lightRatio: 34 / 1920,//缩放比例
+			topList: [],
+			bottomList: [],
+			isEmpty: false,
 		};
 	},
+	watch: {
+		list: {
+			handler: function (newVal) {
+				this.isEmpty = !newVal.length;
+				if (newVal.length) {
+					const len = newVal.length;
+					const remainder = len % 2;
+					const argv = parseInt(len / 2);
+					const index = remainder ? argv + remainder : argv;
+					this.topList = newVal.slice(0, index);
+					this.bottomList = newVal.slice(index);
+				}
+			},
+			deep: true,
+			immediate: true
+		}
+	},
 	mounted() {
+		console.log(this.list);
 		// 监听窗口大小变化
 		window.addEventListener('resize', this.handleResize);
 		// 初始执行一次，设置窗口加载时的样式
@@ -179,10 +119,10 @@ export default {
 			const partValueelements = document.querySelectorAll('.part-value');
 			// 根据窗口宽度动态修改样式
 			partHelements.forEach(element => {
-				element.style.fontSize = `${ this.fontSizeRatio * width }px`;
+				element.style.fontSize = `${this.fontSizeRatio * width}px`;
 			});
 			partValueelements.forEach(element => {
-				element.style.width = `${ this.lightRatio * width }px`;
+				element.style.width = `${this.lightRatio * width}px`;
 			});
 		}
 	},
@@ -247,6 +187,7 @@ export default {
 				.part {
 					height: 100%;
 					position: relative;
+					width: var(--width);
 
 					.part-h {
 						height: 40%;
@@ -279,10 +220,11 @@ export default {
 						top: 55%;
 
 					}
+
 					// .part-value :first-child {
 					// 	width: 34px;
 					// }
-					img{
+					img {
 						width: 100%;
 					}
 				}

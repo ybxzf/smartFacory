@@ -20,30 +20,32 @@
 						<order-scheduling :list="planTableData"></order-scheduling>
 					</div>
 					<div class="left-item item-middle">
-						<lineAndStackBar></lineAndStackBar>
+						<lineAndStackBar :xData="dailyObj.xData" :yDataLeft="dailyObj.yDataLeft" :yDataRight="dailyObj.yDataRight">
+						</lineAndStackBar>
 					</div>
 					<div class="left-item item-bottom">
-						<cylinder></cylinder>
+						<cylinder :xData="monthlyStatisticsObj.xData" :yData="monthlyStatisticsObj.yData"></cylinder>
 					</div>
 				</el-col>
 			</el-col>
 			<el-col class="grid-content grid-center">
 				<el-col :span="24">
 					<div class="center-item item-top">
-						<Workshop></Workshop>
+						<Workshop @update="handleUpdate"></Workshop>
 					</div>
 					<div class="center-item item-bottom">
-						<attendance></attendance>
+						<attendance :attendance="attendanceData" :capacity="capacityData"></attendance>
 					</div>
 				</el-col>
 			</el-col>
 			<el-col class="grid-content grid-right">
 				<el-col :span="24">
 					<div class="right-item item-top">
-						<CuboidBar></CuboidBar>
+						<CuboidBar :xData="finishedPassRateObj.xData" :homeData="finishedPassRateObj.homeData"
+							:overseasData="finishedPassRateObj.overseasData" :targetData="finishedPassRateObj.targetData"></CuboidBar>
 					</div>
 					<div class="right-item item-middle">
-						<StatusShow></StatusShow>
+						<StatusShow :list="lineBodyData"></StatusShow>
 					</div>
 					<div class="right-item item-bottom">
 						<realTimeMonitor></realTimeMonitor>
@@ -84,11 +86,23 @@ export default {
 			dateTime: '',
 			timeId: null,
 			planTableData: [], // 订单排产
-			dailyData: [], // 当日产能
-			monthlyStatisticsData: [], // 月度产能,
+			dailyObj: {// 当日产能
+				xData: [],
+				yDataLeft: [],
+				yDataRight: [],
+			},
+			monthlyStatisticsObj: {// 月度产能,
+				xData: [],
+				yData: []
+			},
 			attendanceData: {}, // 出勤数据
 			capacityData: {}, // 产能数据
-			finishedPassRateData: [], // 成本校验
+			finishedPassRateObj: { // 成本校验
+				homeData: [],
+				overseasData: [],
+				targetData: [],
+				xData: [],
+			},
 			lineBodyData: [], // 线体数据
 		}
 	},
@@ -111,11 +125,30 @@ export default {
 			this.getFinishedPassRateList();
 			this.getLineBodyList();
 		},
+		handleUpdate(data){
+			this.initData();
+		},
+		// 处理当日数据
+		dealDailyData(dailyList) {
+			const xData = [], yDataLeft = [], yDataRight = [];
+			dailyList.map((item) => {
+				xData.push(item.lineType);
+				yDataLeft.push(item.passRate);
+				yDataRight.push(item.capacity);
+			});
+			return {
+				xData, yDataLeft, yDataRight
+			}
+		},
 		// 获取当日产能统计
 		getDailyStatic() {
 			getDailyStatistics().then((res) => {
 				if (res.code === SUCCESS_CODE) {
-					this.dailyData = res.data || []
+					this.dailyObj = res.data && res.data.length ? this.dealDailyData(res.data) : {
+						xData: [],
+						yDataLeft: [],
+						yDataRight: []
+					}
 				}
 			})
 		},
@@ -130,46 +163,87 @@ export default {
 				}
 			});
 		},
+
+		/**
+		 * @description 处理月度数据
+		 * @param {*} monthData
+		 */
+		dealMonthData(monthData) {
+			const xData = [], yData = [];
+			monthData.map(item => {
+				const date = Object.keys(item)[0];
+				const value = item[date];
+				xData.push(date);
+				yData.push(value);
+			})
+			return {
+				xData, yData
+			}
+		},
 		// 获取月度数据
 		getMonthStatisticsData() {
 			getMonthStatistics().then((res) => {
-				console.log(res);
 				if (res.code === SUCCESS_CODE) {
-					this.monthStatisticsData = res.data || [];
+					this.monthlyStatisticsObj = res.data && res.data.length ? this.dealMonthData(res.data) : {
+						xData: [],
+						yData: [],
+					};
 				}
 			})
 		},
 		// 获取出勤数据
 		getAttendanceList() {
 			getAttendanceData().then((res) => {
-				console.log(res);
 				if (res.code === SUCCESS_CODE) {
-					this.attendanceData = res.data || [];
+					this.attendanceData = res.data || {};
 				}
 			})
 		},
 		// 获取产能数据
 		getCapacityList() {
 			getCapacityData().then((res) => {
-				console.log(res);
 				if (res.code === SUCCESS_CODE) {
-					this.capacityData = res.data || [];
+					this.capacityData = res.data || {};
 				}
 			})
+		},
+		setFinishRate(finishData) {
+			const homeData = [],
+				overseasData = [],
+				targetData = [],
+				xData = [];
+			finishData.map(item => {
+				const date = Object.keys(item)[0];
+				const value = item[date];
+				const valueList = value ? value.split("|") : [];
+				xData.push(date);
+				targetData.push(valueList[0] || 0);
+				homeData.push(valueList[1] || 0);
+				overseasData.push(valueList[2] || 0);
+			})
+			return {
+				xData,
+				homeData,
+				targetData,
+				overseasData
+			}
 		},
 		// 获取成本校验
 		getFinishedPassRateList() {
 			getFinishedPassRateData().then((res) => {
-				console.log(res);
 				if (res.code === SUCCESS_CODE) {
-					this.finishedPassRateData = res.data || [];
+					this.finishedPassRateObj = res.data && res.data.length ? this.setFinishRate(res.data) : {
+						homeData: [],
+						overseasData: [],
+						targetData: [],
+						xData: [],
+					};
 				}
 			})
 		},
 		// 获取线体数据
 		getLineBodyList() {
 			getLineBodyData().then((res) => {
-				console.log(res);
 				if (res.code === SUCCESS_CODE) {
 					this.lineBodyData = res.data || [];
 				}
