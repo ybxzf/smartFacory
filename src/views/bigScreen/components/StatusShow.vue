@@ -116,12 +116,16 @@ export default {
 			const width = window.innerWidth;
 			// 获取所有 class="part-h" 的元素
 			const partHelements = document.querySelectorAll('.part-h');
-			const partValueelements = document.querySelectorAll('.part-value');
+			const spanElements = document.querySelectorAll('.top .part span');
+			const partValueElements = document.querySelectorAll('.part-value');
 			// 根据窗口宽度动态修改样式
 			partHelements.forEach(element => {
 				element.style.fontSize = `${this.fontSizeRatio * width}px`;
 			});
-			partValueelements.forEach(element => {
+			spanElements.forEach(element => {
+				element.style.fontSize = `${this.fontSizeRatio * 1.3 * width}px`;
+			});
+			partValueElements.forEach(element => {
 				element.style.width = `${this.lightRatio * width}px`;
 			});
 		}
@@ -188,16 +192,20 @@ export default {
 					height: 100%;
 					position: relative;
 					width: var(--width);
+					display: flex;
+					flex-direction: column;
+					align-items: center;
 
 					.part-h {
 						height: 40%;
 						font-size: 12px;
-
+						max-width: 10ch; /* 限制最大宽度 */
 						div {
 							height: 100%;
 							display: flex;
 							align-items: center;
 							justify-content: center;
+							text-align: center;
 
 							&.more-title {
 								display: flex;
