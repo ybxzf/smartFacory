@@ -90,6 +90,8 @@ export default {
 	},
 	data() {
 		return {
+			fontSizeRatio: 12 / 1920,//缩放比例
+			iconRatio: 40 / 1920,//缩放比例
 			date: '',
 			time: '',
 			timerId: null,
@@ -99,6 +101,7 @@ export default {
 					name: '当日计划产能',
 					key: 'plannedQuantity',
 					value: 20000,
+					realValue:50,
 					itemStyle: {
 						// opacity: 1,
 						color: 'rgb(43, 177, 241, 1)',
@@ -109,6 +112,7 @@ export default {
 					name: '当日完成产能',
 					key: 'currentQuantity',
 					value: 10500,
+					realValue:50,
 					itemStyle: {
 						// opacity: 1,
 						color: 'rgb(0, 215, 233, 1)',
@@ -138,6 +142,10 @@ export default {
 	},
 	mounted() {
 		this.init();
+		// 监听窗口大小变化
+		window.addEventListener('resize', this.handleResize);
+		// 初始执行一次，设置窗口加载时的样式
+		this.handleResize();
 	},
 	methods: {
 		init() {
@@ -150,13 +158,30 @@ export default {
 			}, 1000);
 		},
 		drawChart() {
-			//设置柱体高度，最大值越大时，boxHeight应越小，10000-0.01
-			const maxVal = (this.optionsData.reduce((max, current) => {
-				return current.value > max.value ? current : max;
-			}, this.optionsData[0])).value;
+			this.optionsData.forEach(item => {
+				item.value = this.capacity[item.key] || 0;
+				item.realValue = this.capacity[item.key] || 0;
+			});
 			//获取最小值
 			const minVal = (this.optionsData.reduce((min, current) => {
 				return current.value < min.value ? current : min;
+			}, this.optionsData[0])).value;
+			//如果最小值为0或不存在
+			if ( this.optionsData[0].value === 0 && this.optionsData[1].value !== 0) {
+				this.optionsData[0].value = 2;
+				this.optionsData[1].value = 9999;
+			}
+			if ( this.optionsData[0].value !== 0 && this.optionsData[1].value === 0) {
+				this.optionsData[0].value = 9999;
+				this.optionsData[1].value = 2;
+			}
+			if (this.optionsData[0].value === 0 && this.optionsData[1].value === 0) {
+				this.optionsData[0].value = 50;
+				this.optionsData[1].value = 50;
+			}
+			//设置柱体高度，最大值越大时，boxHeight应越小，10000-0.01
+			const maxVal = (this.optionsData.reduce((max, current) => {
+				return current.value > max.value ? current : max;
 			}, this.optionsData[0])).value;
 			//数据<1时图像渲染异常,所以用value去画图，realValue用于显示
 			let minNum = minVal;
@@ -182,7 +207,12 @@ export default {
 						fontSize: '12px',
 						color: '#fff',
 					},
-					formatter: '{b}\n{d}%',
+					// formatter: '{b}\n{d}%',
+					formatter: (params) => {
+						return `${ params.data.name }
+							${ params.data.realValue }
+						`
+					}
 				},
 				labelLine: {
 					length: '10rem',
@@ -232,9 +262,10 @@ export default {
 							params.seriesName !== 'pie2d'
 						) {
 							// console.log(params);
-							const value = option.series[params.seriesIndex]?.pieData.realValue ?
-								option.series[params.seriesIndex]?.pieData.realValue :
-								option.series[params.seriesIndex]?.pieData.value
+							// const value = option.series[params.seriesIndex]?.pieData.realValue ?
+							// 	option.series[params.seriesIndex]?.pieData.realValue :
+							// 	option.series[params.seriesIndex]?.pieData.value
+							const value = option.series[params.seriesIndex]?.pieData.realValue
 							return `${params.seriesName}<br/>
                   <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color};">
                   </span>
@@ -326,6 +357,17 @@ export default {
 			return {
 				date, time
 			}
+		},
+		handleResize() {
+			const width = window.innerWidth;
+			const descElements = document.querySelectorAll('.data-content .desc');
+			const imgIconElements = document.querySelectorAll('.img-icon img');
+			descElements.forEach(element => {
+				element.style.fontSize = `${this.fontSizeRatio * width}px`;
+			});
+			imgIconElements.forEach(element => {
+				element.style.width = `${this.iconRatio * width}px`;
+			});
 		}
 	}
 }
@@ -422,7 +464,7 @@ export default {
 		flex-wrap: wrap;
 
 		.common-part {
-			width: 42%;
+			width: 49%;
 			display: flex;
 			align-items: center;
 			padding-left: 40px;

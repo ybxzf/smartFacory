@@ -2,36 +2,36 @@
 	<div class="workshop-container">
 		<div :class="active === 'aging' ? 'active-box' : ''" class="workshop-common workshop_aging"
 			@click="handleClick('aging')">
-			<img class="img" v-if="active !== 'aging'" src="@/assets/images/bigScreen/workshop_aging.png" alt="">
-			<img class="img" v-if="active === 'aging'" src="@/assets/images/bigScreen/workshop_aging_selected.png"
+			<img class="img" v-show="active !== 'aging'" src="@/assets/images/bigScreen/workshop_aging.png" alt="">
+			<img class="img" v-show="active === 'aging'" src="@/assets/images/bigScreen/workshop_aging_selected.png"
 				alt="">
 		</div>
 		<div :class="active === 'assemble' ? 'active-box' : ''" class="workshop-common workshop_assemble"
 			@click="handleClick('assemble')">
-			<img class="img" v-if="active !== 'assemble'" src="@/assets/images/bigScreen/workshop_assemble.png" alt="">
-			<img class="img" v-if="active === 'assemble'" src="@/assets/images/bigScreen/workshop_assemble_selected.png"
+			<img class="img" v-show="active !== 'assemble'" src="@/assets/images/bigScreen/workshop_assemble.png" alt="">
+			<img class="img" v-show="active === 'assemble'" src="@/assets/images/bigScreen/workshop_assemble_selected.png"
 				alt="">
 		</div>
 		<div :class="active === 'smt' ? 'active-box' : ''" class="workshop-common workshop_smt"
 			@click="handleClick('smt')">
-			<img class="img" v-if="active !== 'smt'" src="@/assets/images/bigScreen/workshop_smt.png" alt="">
-			<img class="img" v-if="active === 'smt'" src="@/assets/images/bigScreen/workshop_smt_selected.png" alt="">
+			<img class="img" v-show="active !== 'smt'" src="@/assets/images/bigScreen/workshop_smt.png" alt="">
+			<img class="img" v-show="active === 'smt'" src="@/assets/images/bigScreen/workshop_smt_selected.png" alt="">
 		</div>
 		<div :class="active === 'check' ? 'active-box' : ''" class="workshop-common workshop_check"
 			@click="handleClick('check')">
-			<img class="img" v-if="active !== 'check'" src="@/assets/images/bigScreen/workshop_check.png" alt="">
-			<img class="img" v-if="active === 'check'" src="@/assets/images/bigScreen/workshop_check_selected.png"
+			<img class="img" v-show="active !== 'check'" src="@/assets/images/bigScreen/workshop_check.png" alt="">
+			<img class="img" v-show="active === 'check'" src="@/assets/images/bigScreen/workshop_check_selected.png"
 				alt="">
 		</div>
 		<div :class="active === 'auto' ? 'active-box' : ''" class="workshop-common workshop_auto"
 			@click="handleClick('auto')">
-			<img class="img" v-if="active !== 'auto'" src="@/assets/images/bigScreen/workshop_auto.png" alt="">
-			<img class="img" v-if="active === 'auto'" src="@/assets/images/bigScreen/workshop_auto_selected.png" alt="">
+			<img class="img" v-show="active !== 'auto'" src="@/assets/images/bigScreen/workshop_auto.png" alt="">
+			<img class="img" v-show="active === 'auto'" src="@/assets/images/bigScreen/workshop_auto_selected.png" alt="">
 		</div>
 		<div :class="active === 'package' ? 'active-box' : ''" class="workshop-common workshop_package"
 			@click="handleClick('package')">
-			<img class="img" v-if="active !== 'package'" src="@/assets/images/bigScreen/workshop_package.png" alt="">
-			<img class="img" v-if="active === 'package'" src="@/assets/images/bigScreen/workshop_package_selected.png"
+			<img class="img" v-show="active !== 'package'" src="@/assets/images/bigScreen/workshop_package.png" alt="">
+			<img class="img" v-show="active === 'package'" src="@/assets/images/bigScreen/workshop_package_selected.png"
 				alt="">
 		</div>
 	</div>
