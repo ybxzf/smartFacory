@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import Empty from './empty'
+import Empty from './empty.vue'
 import RedLampUrl from "../../../assets/images/bigScreen/red_lamp.png";
 import YellowLampUrl from "../../../assets/images/bigScreen/yellow_lamp.png";
 import GreenLampUrl from "../../../assets/images/bigScreen/green_lamp.png";
