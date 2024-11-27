@@ -1,6 +1,6 @@
 <template>
     <div :class="{'has-logo':showLogo}" :style="{ backgroundColor: settings.sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
-        <logo v-if="showLogo" :collapse="isCollapse" />
+        <!-- <logo v-if="showLogo" :collapse="isCollapse" /> -->
         <el-scrollbar :class="settings.sideTheme" wrap-class="scrollbar-wrapper">
             <el-menu
                 :default-active="activeMenu"
@@ -25,8 +25,8 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Logo from "./Logo";
-import SidebarItem from "./SidebarItem";
+import Logo from "./Logo.vue";
+import SidebarItem from "./SidebarItem.vue";
 import variables from "@/assets/styles/variables.scss";
 
 export default {

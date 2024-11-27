@@ -64,8 +64,10 @@ export default {
 	},
 	methods: {
 		init() {
-			this.myChart = echarts.init(document.getElementById('myChart'));
-			this.drawChart();
+			if (this.xData.length) {
+				this.myChart = echarts.init(document.getElementById('myChart'));
+				this.drawChart();
+			}
 			window.addEventListener('resize', this.chartResize);
 		},
 		drawChart() {
