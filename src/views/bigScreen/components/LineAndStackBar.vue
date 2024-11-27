@@ -10,7 +10,7 @@
 
 <script>
 import * as echarts from 'echarts';
-import DataEmpty from './empty.vue'
+import DataEmpty from './Empty.vue'
 import { mapGetters } from 'vuex';
 export default {
 	components: {
