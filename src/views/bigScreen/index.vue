@@ -85,6 +85,7 @@ export default {
 			isFullScreen: false,//全屏
 			dateTime: '',
 			timeId: null,
+			bigScreenTimeId: null,
 			planTableData: [], // 订单排产
 			dailyObj: {// 当日产能
 				xData: [],
@@ -103,7 +104,8 @@ export default {
 				targetData: [],
 				xData: [],
 			},
-			lineBodyData: [], // 线体数据
+			lineBodyData: [], // 线体数据,
+			bigScreenRefreshTime: 7.5 * 60000
 		}
 	},
 	created() {
@@ -113,7 +115,12 @@ export default {
 		this.timeId = setInterval(() => { //初始化定时器
 			this.dateTime = this.getNowTime();
 		}, 1000);
-		this.initData();
+		if(!this.bigScreenTimeId) {
+			this.initData();
+		}
+		this.bigScreenTimeId = setInterval(() => {
+			this.initData();
+		}, this.bigScreenRefreshTime)
 	},
 	methods: {
 		initData() {
@@ -125,7 +132,7 @@ export default {
 			this.getFinishedPassRateList();
 			this.getLineBodyList();
 		},
-		handleUpdate(data){
+		handleUpdate(data) {
 			this.initData();
 		},
 		// 处理当日数据
@@ -282,7 +289,10 @@ export default {
 			const now = Date.now();
 			return moment(now).format("YYYY年MM月DD日  HH:mm:ss");
 		},
-	}
+	},
+	beforeDestroy() {
+		this.bigScreenTimeId && clearInterval(this.bigScreenTimeId);
+	},
 };
 </script>
 

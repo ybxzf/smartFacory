@@ -133,6 +133,26 @@ export default {
 			echarts.graphic.registerShape("topShape", topShape);
 			this.drawChart();
 		},
+		getFinalDom(params) {
+			const labelValue = params[0].axisValue;
+			const label = `<span>${labelValue}</span>`;
+			const map = {
+				'国内': '#22a3f3',
+				'国外': '#ff831f',
+				'目标值': '#06C039',
+			};
+			let str = '';
+			let len = params.length;
+			params.map((item, index) => {
+				let marker = `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${map[item['seriesName']]};"></span>`;
+				let dom = `${marker}${item['seriesName']}：${item.value}`;
+				if (index !== len - 1) {
+					dom = dom + '<br/>'
+				}
+				str += dom;
+			})
+			return `${label}<br/>${str}`;
+		},
 		drawChart() {
 			const that = this;
 			const option = {
@@ -142,20 +162,25 @@ export default {
 							name: "国内",
 							textStyle: {
 								color: "#fff"
-							}
+							},
+							itemStyle: {
+								color: "#22a3f3"
+							},
 						},
 						{
 							name: "国外",
 							textStyle: {
 								color: "#fff"
-							}
+							},
+							itemStyle: {
+								color: "#ff831f"
+							},
 						}, {
 							name: '目标值',
-							lineStyle: {
-								// type: 'dotted',
-								width: 3,
+							itemStyle: {
 								color: '#06C039'
 							},
+							icon: 'path://m0.010277,5.945418l24.979446,0l0,2.109164l-24.979446,0l0,-2.109164z',
 							textStyle: {
 								color: "#fff"
 							}
@@ -196,6 +221,10 @@ export default {
 				},
 				tooltip: {
 					trigger: "axis",
+					formatter: (params) => {
+						const renderDom = that.getFinalDom(params);
+						return renderDom;
+					}
 				},
 				series: [
 					{
@@ -225,16 +254,16 @@ export default {
 											fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 												{
 													offset: 0,
-													color: 'rgb(0, 192, 238,0.8)',
+													color: 'rgb(23,192,251)',
 												},
 
 												{
 													offset: 0.8,
-													color: 'rgb(0, 194, 239,0.2)',
+													color: 'rgb(25,171,233)',
 												},
 												{
 													offset: 1,
-													color: 'rgb(0, 194, 239,0)',
+													color: 'rgb(26,84,150)',
 												},
 											]),
 											emphasis: {
@@ -253,16 +282,18 @@ export default {
 											fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 												{
 													offset: 0,
-													color: '#00CCF5',
+													// color: '#278ee7',
+													color: 'rgb(15,51,99)',
 												},
 
 												{
 													offset: 0.8,
-													color: 'rgb(4, 88, 115,0.8)',
+													color: 'rgb(18,82,135)',
 												},
 												{
 													offset: 1,
-													color: 'rgb(4, 88, 115,0.6)',
+													// color: 'rgb(15,51,99)',
+													color: '#278ee7',
 												},
 											]),
 										},
@@ -278,11 +309,11 @@ export default {
 											fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 												{
 													offset: 0.3,
-													color: '#6DF0FF',
+													color: '#22a3f3',
 												},
 												{
 													offset: 1,
-													color: '#6DF0FF',
+													color: '#22a3f3',
 												},
 											]),
 										},
@@ -318,16 +349,17 @@ export default {
 											fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 												{
 													offset: 0,
-													color: 'rgb(0, 29, 24,0.8)',
+													color: '#ff831f',
 												},
 
 												{
 													offset: 0.8,
-													color: 'rgb(0, 34, 24,0.2)',
+													color: 'rgb(235,124,37)',
 												},
 												{
 													offset: 1,
-													color: 'rgb(0, 34, 24,0)',
+													// color: 'rgb(255,131,31)',
+													color: '#604e51',
 												},
 											]),
 											emphasis: {
@@ -346,16 +378,16 @@ export default {
 											fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 												{
 													offset: 0,
-													color: '#00DCF5 ',
+													color: 'rgb(34,44,78)',
 												},
 
 												{
 													offset: 0.8,
-													color: 'rgb(4, 55, 24,0.8)',
+													color: '#b4662f',
 												},
 												{
 													offset: 1,
-													color: 'rgb(4, 55, 24,0.6)',
+													color: 'rgb(248,128,32)',
 												},
 											]),
 										},
@@ -371,11 +403,11 @@ export default {
 											fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 												{
 													offset: 0.3,
-													color: '#6EFFFF',
+													color: '#ff831f',
 												},
 												{
 													offset: 1,
-													color: '#6EFFFF',
+													color: '#ff831f',
 												},
 											]),
 										},
@@ -389,6 +421,14 @@ export default {
 						symbol: 'none',
 						name: '目标值',
 						data: this.targetData,
+						itemStyle: {
+							normal: {
+								color: '#06C039',
+								lineStyle: {
+									color: '#06C039',
+								}
+							}
+						},
 						// markLine: {
 						// 	symbol: "none",   //是否显示首尾箭头
 						// 	data: [

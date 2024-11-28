@@ -129,9 +129,9 @@ export default {
 				// 	item.value = newValue[item.key] || 0;
 				// 	return item;
 				// })
-				// this.$nextTick(()=>{
-				// 	this.init();
-				// })
+				this.$nextTick(()=>{
+					this.init();
+				})
 			},
 			immediate: true,
 			deep: true,
@@ -152,7 +152,6 @@ export default {
 			this.myChart = echarts.init(document.getElementById('chart3DRef'));
 			this.drawChart();
 			window.addEventListener('resize', this.chartResize);
-
 			this.timeId = setInterval(() => { //初始化定时器
 				this.setDateTime();
 			}, 1000);
