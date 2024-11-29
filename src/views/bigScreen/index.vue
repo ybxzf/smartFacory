@@ -58,7 +58,7 @@
 
 <script>
 import moment from 'moment';
-import Workshop from './components/WorkShop.vue'
+import Workshop from './components/Workshop.vue'
 import StatusShow from './components/StatusShow.vue'
 import CuboidBar from './components/CuboidBar.vue'
 import Cylinder from './components/Cylinder.vue';
