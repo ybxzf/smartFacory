@@ -46,6 +46,7 @@ export default {
 	.left {
 		flex: 1;
 		line-height: 15px;
+		padding-left: 20px;
 	}
 
 	.center {

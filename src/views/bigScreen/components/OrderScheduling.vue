@@ -7,13 +7,13 @@
 			<el-table :data="tableData" height="100%" ref="scrollTable" @mouseenter.native="handleEnter"
 				@mouseleave.native="handleLevel" style="width: 100%" header-row-class-name="table-h-bg"
 				:row-class-name="tableRowClassName">
-				<el-table-column prop="orderNumber" width="80" show-overflow-tooltip label="计单编号">
+				<el-table-column prop="orderNumber" width="115" show-overflow-tooltip label="计单编号">
 				</el-table-column>
 				<el-table-column prop="orderType" show-overflow-tooltip label="订单编号">
 				</el-table-column>
-				<el-table-column prop="orderQuantity" show-overflow-tooltip label="订单数量">
+				<el-table-column prop="orderQuantity" width="60" show-overflow-tooltip label="订单数量">
 				</el-table-column>
-				<el-table-column prop="completedQuantity" show-overflow-tooltip label="完成数量">
+				<el-table-column prop="completedQuantity" width="60" show-overflow-tooltip label="完成数量">
 				</el-table-column>
 				<el-table-column prop="orderStatus" show-overflow-tooltip label="订单状态">
 				</el-table-column>
@@ -115,7 +115,7 @@ export default {
 	width: 93%;
 	height: 82%;
 	// margin: 0 4%;
-	// overflow: auto;
+	overflow: hidden;
 }
 </style>
 <style lang="scss">
