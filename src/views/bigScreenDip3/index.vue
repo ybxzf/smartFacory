@@ -1,12 +1,10 @@
 <template>
-  <div class="app-container home">
-    <h1>欢迎来到智慧工厂管理系统！</h1>
-  </div>
+    <div class="">DIP三级看板</div>
 </template>
 
 <script>
 export default {
-    name: "BigScreen",
+    name: "",
     data() {
         return {
 
@@ -20,4 +18,4 @@ export default {
     },
 }
 </script>
-<style scoped></style>
+<style lang="scss" scoped></style>

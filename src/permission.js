@@ -11,6 +11,10 @@ NProgress.configure({ showSpinner: false })
 const whiteList = ['/login', '/register']
 
 router.beforeEach((to, from, next) => {
+  //关闭注册
+  if (to.path === '/register') {
+    next({ path: '/login' })
+  }
   NProgress.start()
   if (getToken()) {
     to.meta.title && store.dispatch('settings/setTitle', to.meta.title)
