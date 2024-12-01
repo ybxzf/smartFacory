@@ -1,15 +1,17 @@
 <template>
 	<div class="dip-three-container">
 		<custom-header class="header-container">
-			DIP-3生产线可视化看板
+			<template #title>
+                DIP-03生产线可视化看板
+            </template>
 		</custom-header>
 		<custom-content class="custom-content-container"></custom-content>
 	</div>
 </template>
 
 <script>
-import CustomHeader from './components/layout/header';
-import CustomContent from './components/layout/content';
+import CustomHeader from '@/components/layout/header.vue';
+import CustomContent from './components/layout/content.vue';
 export default {
 	name: "bigScreenDip3",
 	components: {

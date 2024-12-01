@@ -64,3 +64,5 @@ function xxx() {
 - `状态管理`：vuex
 - `时间工具`: 'moment'
 - `工具方法`: lodash
+- `header组件`: 已封装至@/components/layout/header路径下，可以直接使用
+- `图表组件`: 基础图表部分已封装至@/components/chart路径下，可以直接使用，后续也可以根据需求进行扩展

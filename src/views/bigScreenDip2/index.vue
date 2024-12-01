@@ -1,7 +1,12 @@
 <template>
     <div class="dip-two-container">
         <custom-header class="header-container">
-            DIP-02生产线可视化看板
+            <template #title>
+                DIP-02生产线可视化看板
+            </template>
+            <template #button>
+                <el-button type="success" round size="mini" @click="nextLevel">下一级</el-button>
+            </template>
         </custom-header>
         <custom-content class="content-container"></custom-content>
 
@@ -9,7 +14,7 @@
 </template>
 
 <script>
-import CustomHeader from './components/layout/header.vue';
+import CustomHeader from '@/components/layout/header.vue';
 import CustomContent from './components/layout/content.vue';
 
 export default {
@@ -27,7 +32,9 @@ export default {
 
     },
     methods: {
-
+        nextLevel() {
+            this.$router.push('BigScreenDip3')
+        },
     },
 }
 </script>
