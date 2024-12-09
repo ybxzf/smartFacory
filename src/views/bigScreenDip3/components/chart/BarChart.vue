@@ -59,50 +59,138 @@ export default {
 	methods: {
 		initChart() {
 			this.chart = echarts.init(this.$el, 'macarons')
-
-			this.chart.setOption({
+			const option = {
+				grid: {
+					top: 30,
+					left: 20,
+					right: 20,
+					bottom: 25,
+					containLabel: true,
+				},
 				tooltip: {
-					trigger: 'axis',
-					axisPointer: { // 坐标轴指示器，坐标轴触发有效
-						type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-					}
+					trigger: 'item',
 				},
 				title: {
 					text: '不良数量',
 					left: 'center',
 					textStyle: {
-					  color: '#fff',
+						color: '#fff',
 						fontSize: 16
 					}
 				},
-				grid: {
-					top: "10%",
-					left: '2%',
-					right: '2%',
-					bottom: '3%',
-					containLabel: true
-				},
-				xAxis: [{
+				xAxis: {
 					type: 'category',
+					show: true,
 					data: this.chartData.xData,
 					axisTick: {
-						alignWithLabel: true
+						show: false
+					},
+					axisLine: {
+						show: true,
+						lineStyle: {
+							color: 'rgba(255, 255, 255, 0.15)'
+						}
+					},
+					axisLabel: {
+						// interval: 0,
+						color: '#ffffff',
+						fontSize: 12,
 					}
-				}],
-				yAxis: [{
+				},
+				yAxis: {
 					type: 'value',
 					axisTick: {
 						show: false
+					},
+					axisLine: {
+						show: false
+					},
+					axisLabel: {
+						color: '#fff',
+						fontSize: 12
+					},
+					splitLine: {
+						lineStyle: {
+							color: 'rgba(255, 255, 255, 0.15)'
+						}
 					}
-				}],
-				series: [{
-					name: '不良数量',
-					type: 'bar',
-					barWidth: 30,
-					data: this.chartData.yData,
-					animationDuration
-				}]
-			})
+				},
+				series: [
+					{
+						type: 'pictorialBar',
+						symbolSize: [15, 10],
+						symbolOffset: [0, 5],
+						z: 12,
+						itemStyle: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+								{
+									offset: 0,
+									color: 'rgba(31, 155, 255, 1)'
+								},
+								{
+									offset: 1,
+									color: 'rgba(0, 229, 255, 1)'
+								}
+							])
+						},
+						data: this.chartData.yData
+					},
+					{
+						type: 'bar',
+						barWidth: 15,
+						barGap: '0%',
+						itemStyle: {
+							color: {
+								x: 0,
+								y: 0,
+								x2: 0,
+								y2: 1,
+								type: 'linear',
+								global: false,
+								colorStops: [
+									{
+										offset: 0,
+										color: 'rgba(0, 229, 255, 0.5)'
+									},
+									{
+										offset: 0,
+										color: '#1F9BFF'
+									}
+								]
+							}
+						},
+						data: this.chartData.yData
+					},
+					{
+						type: 'pictorialBar',
+						symbolSize: [15, 10],
+						symbolOffset: [0, -5],
+						symbolPosition: 'end',
+						z: 12,
+						itemStyle: {
+							color: new echarts.graphic.LinearGradient(
+								0,
+								0,
+								0,
+								1,
+								[
+									{
+										offset: 0,
+										color: 'rgba(31, 155, 255, 1)'
+									},
+									{
+										offset: 1,
+										color: 'rgba(0, 229, 255, 1)'
+									}
+								],
+								false
+							)
+						},
+						data: this.chartData.yData
+					}
+				]
+			};
+			this.chart.setOption(option)
 		}
 	}
 }

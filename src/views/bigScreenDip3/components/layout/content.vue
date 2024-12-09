@@ -111,7 +111,7 @@
 		</el-row>
 		<el-row :gutter="20" class="bottom-info">
 			<el-col :span="12" class="table-c">
-				<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" height="300"
+				<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" height="100%"
 					header-row-class-name="table-h-bg">
 					<el-table-column prop="pcb" label="PCB板号">
 					</el-table-column>
@@ -123,7 +123,7 @@
 					</el-table-column>
 				</el-table>
 			</el-col>
-			<el-col :span="12">
+			<el-col :span="12" class="data-info-c">
 				<el-row>
 					<el-col :span="24">
 						<div class="data-info">
@@ -149,8 +149,8 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="24">
-						<LineChart height="200px" :chart-data="lineData"></LineChart>
+					<el-col :span="24" class="line-chart-c">
+						<LineChart height="100%" :chart-data="lineData"></LineChart>
 					</el-col>
 				</el-row>
 			</el-col>
@@ -187,9 +187,27 @@ export default {
 			pieData: {
 				legendData: ['物料异常', '设备异常', '软件异常'],
 				yData: [
-					{ value: 1.5, name: '软件异常' },
-					{ value: 1, name: '物料异常' },
-					{ value: 0.5, name: '设备异常' },
+					{
+						val: 1.5,
+						name: '软件异常',
+						itemStyle: {
+							color: 'rgba(18, 76, 154, 1)',
+						}
+					},
+					{
+						val: 1,
+						name: '物料异常',
+						itemStyle: {
+							color: 'rgba(15, 176, 255, 1)',
+						}
+					},
+					{
+						val: 0.5,
+						name: '设备异常',
+						itemStyle: {
+							color: 'rgba(0, 244, 188, 1)',
+						}
+					},
 				]
 			},
 			projectInfo: [
@@ -270,7 +288,6 @@ $minHeight: 300px;
 			color: #fff;
 			font-size: 14px;
 			background-color: rgba(25, 129, 246, 0.5);
-			// box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.7);
 			border: 1px solid transparent;
 
 			label {
@@ -323,7 +340,6 @@ $minHeight: 300px;
 				margin-top: 16px;
 				line-height: 36px;
 				background-color: rgba(25, 129, 246, 0.5);
-				// box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.7);
 				border: 1px solid transparent;
 
 				label {
@@ -383,11 +399,12 @@ $minHeight: 300px;
 	}
 
 	.bottom-info {
-		height: calc(100% - 468px);
+		height: calc(100% - 472px);
 		margin-top: 16px;
 
 		.table-c {
 			background: transparent;
+			height: 100%;
 
 			::v-deep.el-table {
 				background: transparent;
@@ -422,6 +439,12 @@ $minHeight: 300px;
 				}
 			}
 		}
+		.data-info-c {
+			height: 100%;
+			.line-chart-c {
+				height: calc(100% - 100px);
+			}
+		}
 
 		.data-info {
 			color: #fff;
@@ -441,6 +464,8 @@ $minHeight: 300px;
 </style>
 <style lang='scss'>
 .content-container {
+	height: calc(100% - 40px);
+
 	::-webkit-scrollbar {
 		// display: none; 
 	}
