@@ -168,7 +168,8 @@
 						</el-tag>
 					</div>
 					<div class="item-chart">
-						<PieChart height="100%" :chartData="pieData"></PieChart>
+						<!-- <PieChart height="100%" :chartData="pieData"></PieChart> -->
+						<pieChart3D height="100%" :chartData="pieData"></pieChart3D>
 					</div>
 				</div>
 			</el-col>
@@ -179,11 +180,13 @@
 <script>
 import LineChart from '@/components/chart/LineChart.vue'
 import PieChart from '@/components/chart/PieChart.vue'
+import pieChart3D from '../chart/pieChart3D.vue'
 
 export default {
 	components: {
 		LineChart,
 		PieChart,
+		pieChart3D,
 	},
 	name: "",
 	data() {
@@ -220,20 +223,30 @@ export default {
 				],
 				xData: ['0时', '1时', '2时', '3时', '4时', '5时', '6时', '7时', '8时', '9时', '10时', '11时', '12时', '13时', '14时', '15时', '16时', '17时', '18时', '19时', '20时', '21时', '22时', '23时']
 			},
-			pieData: {
-				title: '不良占比',
-				showLabel: true, //是否显示标签
-				yData: [
-					{ value: 23, name: '项目1' },
-					{ value: 3, name: '项目2' },
-					{ value: 17, name: '项目3' },
-					{ value: 26, name: '项目4' },
-					{ value: 11, name: '项目5' },
-					{ value: 3, name: '项目6' },
-					{ value: 9, name: '项目7' },
-					{ value: 8, name: '项目8' },
-				]
-			},
+			pieData: [
+				{ value: 23, name: '项目1', itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } },
+				{ value: 3, name: '项目2', itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } },
+				{ value: 17, name: '项目3', itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } },
+				{ value: 26, name: '项目4', itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } },
+				{ value: 11, name: '项目5', itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } },
+				{ value: 3, name: '项目6', itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } },
+				{ value: 9, name: '项目7', itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } },
+				{ value: 8, name: '项目8', itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } },
+			],
+			// pieData: {
+			// 	title: '不良占比',
+			// 	showLabel: true, //是否显示标签
+			// 	yData: [
+			// 		{ value: 23, name: '项目1', },
+			// 		{ value: 3, name: '项目2' ,},
+			// 		{ value: 17, name: '项目3', },
+			// 		{ value: 26, name: '项目4', },
+			// 		{ value: 11, name: '项目5', },
+			// 		{ value: 3, name: '项目6' ,},
+			// 		{ value: 9, name: '项目7' ,},
+			// 		{ value: 8, name: '项目8' ,},
+			// 	]
+			// },
 		}
 	},
 	mounted() {
@@ -306,18 +319,18 @@ export default {
 				display: flex;
 
 				.item-key {
-					border-right: 3px solid rgb(0, 250, 240);
+					border-right: 3px solid rgb(54, 102, 227);
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					width: 50%;
+					width: 40%;
 				}
 
 				.item-value {
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					width: 50%;
+					width: 60%;
 				}
 			}
 		}
@@ -330,7 +343,7 @@ export default {
 			padding: 5px 0 5px 10px;
 
 			.item-value-progress {
-				width: 90%;
+				width: 60%;
 				height: 80%;
 				border: 1px solid rgb(255, 255, 255);
 				border-radius: 5px;
