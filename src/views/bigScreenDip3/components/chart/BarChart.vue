@@ -62,8 +62,8 @@ export default {
 			const option = {
 				grid: {
 					top: 30,
-					left: 20,
-					right: 20,
+					left: 5,
+					right: 0,
 					bottom: 25,
 					containLabel: true,
 				},

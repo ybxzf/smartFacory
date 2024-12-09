@@ -34,7 +34,16 @@
 			<el-col :span="4">
 				<div class="com-part">
 					<label>完成率</label>
-					<span>{{ baseInfo.no || '-' }}</span>
+					<!-- <span>{{ baseInfo.no || '-' }}</span> -->
+					<div class="item-value-progress">
+						<transition name="expand" @before-enter="beforeEnter" @enter="enter">
+							<div class="progress" v-if="completionRateWidth > 0" :style="{
+			width: `${completionRateWidth}%`,
+			backgroundColor: `rgb(${completionRateColor.r},${completionRateColor.g},${completionRateColor.b})`
+		}"></div>
+						</transition>
+						<div class="value">{{ completionRateValue }}%</div>
+					</div>
 				</div>
 			</el-col>
 		</el-row>
@@ -77,7 +86,7 @@
 					</el-col>
 					<el-col :span="8">
 						<div class="person-base-info">
-							<img src="../../../../assets/images/bigScreen/logo.png" alt="">
+							<img src="../../../../assets/images/devices/device1.png" alt="">
 							<div class="info-container">
 								<div class="item">
 									<label>姓名</label>
@@ -174,6 +183,15 @@ export default {
 			baseInfo: {},
 			personInfo: {},
 			tableData: [],
+			completionRateWidth: 0, // 初始宽度为 0
+			completionRateValue: 0, // 完成率初始值为 0
+			intervalId: null,
+			//初始背景色
+			completionRateColor: {
+				r: 255,
+				g: 0,
+				b: 0,
+			},
 			barData: {
 				xData: ['项目1', '项目2', '项目3', '项目4', '项目5', '项目6', '项目7', '项目8'],
 				yData: [3, 8, 1, 6, 9, 4, 1, 3]
@@ -264,14 +282,43 @@ export default {
 			}
 			this.tableData.push(obj);
 		}
+		setInterval(() => {
+			this.completionRateWidth = 87;
+			this.getcompletionRate(this.completionRateWidth);
+		}, 1000);
 	},
 	methods: {
 		tableRowClassName({ row, rowIndex }) {
 			return rowIndex % 2 === 0 ? 'odd-row' : 'even-row';
+		},
+		getcompletionRate(targetValue = 0) {
+			const duration = 1000;  // 动画时长 2 秒
+			const stepValue = Math.round(targetValue / (duration / 20));  // 每次增加的值
+			const colorValue = (255 / (duration / 20));  // 每次增加的值
+
+			this.intervalId = setInterval(() => {
+				if (this.completionRateValue < targetValue) {
+					this.completionRateValue = Math.min(this.completionRateValue + stepValue, targetValue);  // 防止超出目标值
+					this.completionRateColor.r -= colorValue;
+					this.completionRateColor.g += colorValue;
+				} else {
+					clearInterval(this.intervalId);  // 停止定时器
+				}
+			}, 20);
+		},
+		beforeEnter(el) {
+			el.style.width = '0%'; // 在进入之前先把宽度设为 0
+		},
+		// 进入过渡动画
+		enter(el, done) {
+			el.offsetHeight; // 触发重绘
+			el.style.transition = 'width 1s ease-in-out'; // 动画生效
+			el.style.width = `${this.completionRateWidth}%`; // 设置目标宽度
+			done(); // 完成过渡
 		}
 	},
 	beforeDestroy() {
-
+		this.intervalId && clearInterval(this.intervalId);
 	}
 }
 </script>
@@ -287,7 +334,7 @@ $minHeight: 300px;
 			line-height: 40px;
 			color: #fff;
 			font-size: 14px;
-			background-color: rgba(25, 129, 246, 0.5);
+			background-color: rgba(25, 129, 246, 0.2);
 			border: 1px solid transparent;
 
 			label {
@@ -301,6 +348,27 @@ $minHeight: 300px;
 				flex: 1;
 				padding-left: 4px;
 			}
+
+			.item-value-progress {
+				width: 90%;
+				border: 1px solid rgb(255, 255, 255);
+				border-radius: 5px;
+				position: relative;
+
+				.progress {
+					height: 100%;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+
+				.value {
+					position: absolute;
+					left: 50%;
+					top: 50%;
+					transform: translate(-50%, -50%);
+				}
+			}
 		}
 	}
 
@@ -309,17 +377,28 @@ $minHeight: 300px;
 		justify-content: space-between;
 		margin-top: 16px;
 
+		::deep(.el-row) {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
 		.com-part {
-			min-height: 40px;
+			min-height: 80px;
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
+			justify-content: space-between;
 			align-items: center;
-			line-height: 40px;
 			color: #fff;
 			font-size: 14px;
-			background-color: rgba(25, 129, 246, 0.5);
-			border: 1px solid transparent;
+
+			label,
+			span {
+				line-height: 36px;
+				width: 100%;
+				text-align: center;
+				background-color: rgba(25, 129, 246, 0.2);
+				border: 1px solid transparent;
+			}
 		}
 	}
 
@@ -339,7 +418,7 @@ $minHeight: 300px;
 				height: 36px;
 				margin-top: 16px;
 				line-height: 36px;
-				background-color: rgba(25, 129, 246, 0.5);
+				background-color: rgba(25, 129, 246, 0.2);
 				border: 1px solid transparent;
 
 				label {
@@ -377,8 +456,7 @@ $minHeight: 300px;
 					height: 27px;
 					line-height: 27px;
 					margin-top: 8px;
-					background-color: rgba(25, 129, 246, 0.5);
-					// box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.7);
+					background-color: rgba(25, 129, 246, 0.2);
 					border: 1px solid transparent;
 
 					label {
@@ -425,7 +503,7 @@ $minHeight: 300px;
 
 				.table-h-bg {
 					th {
-						background: rgba(25, 129, 246, 0.5);
+						background: rgba(25, 129, 246, 0.2);
 						color: #fff;
 					}
 				}
@@ -454,7 +532,7 @@ $minHeight: 300px;
 
 		.data-info {
 			color: #fff;
-			background-color: rgba(25, 129, 246, 0.5);
+			background-color: rgba(25, 129, 246, 0.2);
 			margin-bottom: 4px;
 
 			.item-col {

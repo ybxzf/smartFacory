@@ -536,7 +536,7 @@ export default {
 					bottom: '10%',
 					top: "10%",
 					viewControl: {
-						distance: 250,
+						distance: 300,
 						alpha: 25,
 						beta: 60,
 						autoRotate: false, // 自动旋转
