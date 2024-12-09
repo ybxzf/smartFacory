@@ -148,8 +148,8 @@
 						</div>
 					</el-col>
 				</el-row>
-				<el-row>
-					<el-col :span="24" class="line-chart-c">
+				<el-row class="line-chart-c-row">
+					<el-col :span="24" class="line-chart-c-col">
 						<LineChart height="100%" :chart-data="lineData"></LineChart>
 					</el-col>
 				</el-row>
@@ -439,10 +439,16 @@ $minHeight: 300px;
 				}
 			}
 		}
+
 		.data-info-c {
 			height: 100%;
-			.line-chart-c {
+
+			.line-chart-c-row {
 				height: calc(100% - 100px);
+
+				.line-chart-c-col {
+					height: 100%;
+				}
 			}
 		}
 
