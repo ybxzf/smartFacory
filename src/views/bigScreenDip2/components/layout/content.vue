@@ -299,8 +299,8 @@ export default {
 
 			.base-item {
 				background-color: rgba(25, 129, 246, 0.2);
-				box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
-				border: 1px solid transparent;
+				// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+				// border: 1px solid transparent;
 				width: 100%;
 				height: 100%;
 				display: flex;
@@ -385,8 +385,8 @@ export default {
 					height: 174px;
 					width: 100%;
 					background-color: rgba(25, 129, 246, 0.2);
-					box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
-					border: 1px solid transparent;
+					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+					border: 1px solid rgba(25, 129, 246, 0.8);
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -403,8 +403,8 @@ export default {
 					height: 38px;
 					width: 100%;
 					background-color: rgba(25, 129, 246, 0.2);
-					box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
-					border: 1px solid transparent;
+					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+					// border: 1px solid transparent;
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -441,8 +441,8 @@ export default {
 					th,
 					td {
 						background-color: rgba(25, 129, 246, 0.2);
-						box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.5);
-						border: 1px solid transparent;
+						// box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.5);
+						// border: 1px solid transparent;
 						text-align: center;
 						vertical-align: middle;
 						height: 35px;
@@ -467,8 +467,8 @@ export default {
 
 			.base-item {
 				background-color: rgba(25, 129, 246, 0.2);
-				box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
-				border: 1px solid transparent;
+				// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+				// border: 1px solid transparent;
 				width: 100%;
 				height: 100%;
 				display: flex;
@@ -488,8 +488,8 @@ export default {
 				.item-right {
 					height: 35px;
 					background-color: rgba(25, 129, 246, 0.2);
-					box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
-					border: 1px solid transparent;
+					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+					// border: 1px solid transparent;
 					display: flex;
 					align-items: center;
 				}
@@ -512,8 +512,8 @@ export default {
 					margin-top: 20px;
 					height: calc(100% - 56px);
 					background-color: rgba(25, 129, 246, 0.2);
-					box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
-					border: 1px solid transparent;
+					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+					// border: 1px solid transparent;
 				}
 			}
 		}
