@@ -1,3 +1,10 @@
+/*
+ * @Author: mujinzjh
+ * @Description: 
+ * @Date: 2024-11-18 20:16:50
+ * @LastEditTime: 2024-12-17 22:24:14
+ * @FilePath: \smartFacory\src\api\bigScreen\index.js
+ */
 import request from "@/utils/request";
 
 // 查询订单计划表

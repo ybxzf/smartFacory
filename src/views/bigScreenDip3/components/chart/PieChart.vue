@@ -39,6 +39,25 @@ export default {
 			this.initChart()
 		})
 	},
+	watch: {
+		chartData: {
+			deep: true,
+			handler(val) {
+				this.$nextTick(() => {
+					this.initChart();
+				})
+			}
+		}
+	},
+	methods: {
+		initChart() {
+			this.chart = echarts.init(this.$el, 'macarons')
+			this.setOptions(this.chartData)
+		},
+		setOptions({ data } = {}) {
+			let total = this.getTotal(data)
+		}
+	},
 	beforeDestroy() {
 		if (!this.chart) {
 			return

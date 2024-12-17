@@ -4,19 +4,19 @@
 			<el-col :span="4">
 				<div class="com-part">
 					<label>当前工单</label>
-					<span>{{ baseInfo.no || '-' }}</span>
+					<span>{{ baseInfo.workOrder || '-' }}</span>
 				</div>
 			</el-col>
-			<el-col :span="4">
+			<el-col :span="3">
 				<div class="com-part">
 					<label>工单数量</label>
-					<span>{{ baseInfo.orderNum || '-' }}</span>
+					<span>{{ baseInfo.workOrderQuantity || '-' }}</span>
 				</div>
 			</el-col>
-			<el-col :span="4">
+			<el-col :span="5">
 				<div class="com-part">
 					<label>客户</label>
-					<span>{{ baseInfo.orderNum || '-' }}</span>
+					<span>{{ baseInfo.customer || '-' }}</span>
 				</div>
 			</el-col>
 			<el-col :span="4">
@@ -28,7 +28,7 @@
 			<el-col :span="4">
 				<div class="com-part">
 					<label>产品型号规格</label>
-					<span>{{ baseInfo.no || '-' }}</span>
+					<span>{{ baseInfo.productModel || '-' }}</span>
 				</div>
 			</el-col>
 			<el-col :span="4">
@@ -48,7 +48,7 @@
 			</el-col>
 		</el-row>
 		<el-row :gutter="20" class="project-info">
-			<el-col :span="2" v-for="item, index in projectInfo" :key="index">
+			<el-col :span="Math.floor(24/projectInfo.length)" v-for="item, index in projectInfo" :key="index">
 				<div class="com-part">
 					<label>{{ item.name }}</label>
 					<span>{{ item.value || '0' }}</span>
@@ -68,49 +68,49 @@
 						<div class="person-info">
 							<div class="person-info-item">
 								<label>组长</label>
-								<span>{{ personInfo.name || '-' }}</span>
+								<span>{{ personInfo.teamLeader || '-' }}</span>
 							</div>
 							<div class="person-info-item">
 								<label>标准定员</label>
-								<span>{{ personInfo.no || '-' }}</span>
+								<span>{{ personInfo.standardStaffCount || '-' }}</span>
 							</div>
 							<div class="person-info-item">
 								<label>实际出勤</label>
-								<span>{{ personInfo.station || '-' }}</span>
+								<span>{{ personInfo.actualAttendance || '-' }}</span>
 							</div>
 							<div class="person-info-item">
 								<label>人均产能</label>
-								<span>{{ personInfo.station || '-' }}</span>
+								<span>{{ personInfo.perCapitaCapacity || '-' }}</span>
 							</div>
 						</div>
 					</el-col>
 					<el-col :span="8">
 						<div class="person-base-info">
-							<img src="../../../../assets/images/devices/device1.png" alt="">
+							<img :src="imageUrl" alt="">
 							<div class="info-container">
 								<div class="item">
 									<label>姓名</label>
-									<span>{{ personInfo.name || '-' }}</span>
+									<span>{{ baseInfo.name || '-' }}</span>
 								</div>
 								<div class="item">
 									<label>工单</label>
-									<span>{{ personInfo.name || '-' }}</span>
+									<span>{{ baseInfo.workOrder || '-' }}</span>
 								</div>
 								<div class="item">
 									<label>工单数量</label>
-									<span>{{ personInfo.name || '-' }}</span>
+									<span>{{ baseInfo.workOrderQuantity || '-' }}</span>
 								</div>
 								<div class="item">
 									<label>已生产数量</label>
-									<span>{{ personInfo.name || '-' }}</span>
+									<span>{{ baseInfo.productNum || '-' }}</span>
 								</div>
 								<div class="item">
 									<label>合格数量</label>
-									<span>{{ personInfo.name || '-' }}</span>
+									<span>{{ baseInfo.qualifiedNum || '-' }}</span>
 								</div>
 								<div class="item">
 									<label>不合格数量</label>
-									<span>{{ personInfo.name || '-' }}</span>
+									<span>{{ baseInfo.noQualifiedNum || '-' }}</span>
 								</div>
 							</div>
 						</div>
@@ -122,13 +122,13 @@
 			<el-col :span="12" class="table-c">
 				<el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" height="100%"
 					header-row-class-name="table-h-bg">
-					<el-table-column prop="pcb" label="PCB板号">
+					<el-table-column prop="pcbNumber" label="PCB板号">
 					</el-table-column>
-					<el-table-column prop="bad" label="不良项目">
+					<el-table-column prop="defectProject" label="不良项目">
 					</el-table-column>
-					<el-table-column prop="order" label="对应工单">
+					<el-table-column prop="correspondingWorkOrder" label="对应工单">
 					</el-table-column>
-					<el-table-column prop="time" label="生产时间">
+					<el-table-column prop="productionTime" label="生产时间">
 					</el-table-column>
 				</el-table>
 			</el-col>
@@ -144,22 +144,23 @@
 							</el-row>
 							<el-row :gutter="20" class="item">
 								<el-col :span="6" class="item-col">每小时产能</el-col>
-								<el-col :span="6" class="item-col">0</el-col>
-								<el-col :span="6" class="item-col">0</el-col>
-								<el-col :span="6" class="item-col">0</el-col>
+								<el-col :span="6" class="item-col">{{ productivityAnalysis.hour.targetValue || 0 }}</el-col>
+								<el-col :span="6" class="item-col">{{ productivityAnalysis.hour.actualValue || 0 }}</el-col>
+								<el-col :span="6" class="item-col">{{ productivityAnalysis.hour.achievementRate || 0 }}</el-col>
 							</el-row>
 							<el-row :gutter="20" class="item">
 								<el-col :span="6" class="item-col">当日产能</el-col>
-								<el-col :span="6" class="item-col">0</el-col>
-								<el-col :span="6" class="item-col">0</el-col>
-								<el-col :span="6" class="item-col">0</el-col>
+								<el-col :span="6" class="item-col">{{ productivityAnalysis.day.targetValue || 0 }}</el-col>
+								<el-col :span="6" class="item-col">{{ productivityAnalysis.day.actualValue || 0 }}</el-col>
+								<el-col :span="6" class="item-col">{{ productivityAnalysis.day.achievementRate || 0 }}</el-col>
 							</el-row>
 						</div>
 					</el-col>
 				</el-row>
 				<el-row class="line-chart-c-row">
 					<el-col :span="24" class="line-chart-c-col">
-						<LineChart height="100%" :chart-data="lineData"></LineChart>
+						<LineChart height="100%" :chart-data="lineData" v-if="lineData.xData.length"></LineChart>
+						<Empty v-else></Empty>
 					</el-col>
 				</el-row>
 			</el-col>
@@ -168,11 +169,24 @@
 </template>
 
 <script>
-import LineChart from '../chart/LineChart'
-import PieChart from '../chart/PieChart'
-import BarChart from '../chart/BarChart'
+import Empty from '../../../bigScreen/components/Empty'
+import LineChart from '../chart/LineChart';
+import PieChart from '../chart/PieChart';
+import BarChart from '../chart/BarChart';
+import {
+	getDip3BasicInfo,
+	getImageUrl,
+	getListData,
+	getGroupInfo,
+	getHourData,
+	getBadData,
+	getPieData,
+	getCompareData
+} from '@/api/bigScreen/dip3';
+import { SUCCESS_CODE } from '@/utils/constants.js';
 export default {
 	components: {
+    Empty,
 		LineChart,
 		PieChart,
 		BarChart
@@ -193,101 +207,158 @@ export default {
 				b: 0,
 			},
 			barData: {
-				xData: ['项目1', '项目2', '项目3', '项目4', '项目5', '项目6', '项目7', '项目8'],
-				yData: [3, 8, 1, 6, 9, 4, 1, 3]
+				xData: [],
+				yData: []
 			},
 			lineData: {
 				legendData: ['实际产能', '目标产能'],
-				expectedData: [120, 200, 150, 80, 70, 110, 130, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150],
-				actualData: [60, 80, 70, 110, 130, 120, 200, 150, 80, 70, 110, 130, 120, 200, 150, 80, 70, 110, 130, 120, 200, 150, 80, 70, 110, 130],
-				xData: ['0时', '1时', '2时', '3时', '4时', '5时', '6时', '7时', '8时', '9时', '10时', '11时', '12时', '13时', '14时', '15时', '16时', '17时', '18时', '19时', '20时', '21时', '22时', '23时']
+				expectedData: [],
+				actualData: [],
+				xData: []
+			},
+			productivityAnalysis: {
+				hour: {},
+				day: {}
 			},
 			pieData: {
-				legendData: ['物料异常', '设备异常', '软件异常'],
-				yData: [
-					{
-						val: 1.5,
-						name: '软件异常',
-						itemStyle: {
-							color: 'rgba(18, 76, 154, 1)',
-						}
-					},
-					{
-						val: 1,
-						name: '物料异常',
-						itemStyle: {
-							color: 'rgba(15, 176, 255, 1)',
-						}
-					},
-					{
-						val: 0.5,
-						name: '设备异常',
-						itemStyle: {
-							color: 'rgba(0, 244, 188, 1)',
-						}
-					},
-				]
+				legendData: [],
+				yData: []
+				// legendData: ['物料异常', '设备异常', '软件异常'],
+				// yData: [
+				// 	{
+				// 		val: 1.5,
+				// 		name: '软件异常',
+				// 		itemStyle: {
+				// 			color: 'rgba(18, 76, 154, 1)',
+				// 		}
+				// 	},
+				// 	{
+				// 		val: 1,
+				// 		name: '物料异常',
+				// 		itemStyle: {
+				// 			color: 'rgba(15, 176, 255, 1)',
+				// 		}
+				// 	},
+				// 	{
+				// 		val: 0.5,
+				// 		name: '设备异常',
+				// 		itemStyle: {
+				// 			color: 'rgba(0, 244, 188, 1)',
+				// 		}
+				// 	},
+				// ]
 			},
-			projectInfo: [
-				{
-					name: '测试项目1',
-					value: 100
-				},
-				{
-					name: '测试项目2',
-					value: 100
-				},
-				{
-					name: '测试项目3',
-					value: 100
-				},
-				{
-					name: '测试项目4',
-					value: 100
-				},
-				{
-					name: '测试项目5',
-					value: 100
-				},
-				{
-					name: '测试项目6',
-					value: 100
-				},
-				{
-					name: '测试项目7',
-					value: 100
-				},
-				{
-					name: '测试项目8',
-					value: 100
-				},
-				{
-					name: '不良总数',
-					value: 100
-				},
-				{
-					name: '不良比例',
-					value: "100%"
-				}
-			],
+			projectInfo: [],
+			imageUrl: ''
 		}
 	},
 	mounted() {
-		for (let index = 0; index < 100; index++) {
-			const obj = {
-				pcb: 'xxx',
-				bad: 'xxx',
-				order: 'xxx',
-				time: "xxxx"
-			}
-			this.tableData.push(obj);
-		}
-		setInterval(() => {
-			this.completionRateWidth = 87;
-			this.getcompletionRate(this.completionRateWidth);
-		}, 1000);
+		this.getAllData();
 	},
 	methods: {
+		getAllData() {
+			this.getBasicInfo();
+			this.getPersonUrl();
+			this.getTableData();
+			this.getGroupData();
+			this.getHourlyData();
+			this.getBadListData();
+			this.getPieCharData();
+			this.getCompareInfo();
+		},
+		getCompareInfo() {
+			getCompareData().then(res => {
+				if (res.code === SUCCESS_CODE) {
+					const result = res.data.length ? res.data.filter(item => item) : [];
+					if (result.length) {
+						this.productivityAnalysis.hour = result.filter(item => item.type === '小时');
+						this.productivityAnalysis.day = result.filter(item => item.type === '当日');
+					}
+				}
+			})
+		},
+		getPieCharData() {
+			getPieData().then(res => {
+				if (res.code === SUCCESS_CODE) {
+					const colorMap = ['rgba(18, 76, 154, 1)', 'rgba(15, 176, 255, 1)', 'rgba(0, 244, 188, 1)']
+					this.pieData.legendData = res.data.map(item => item.name);
+					this.pieData.yData = res.data.map((item, index) => {
+						return {
+							val: item.lossCount,
+							name: item.name,
+							itemStyle: {
+								color: colorMap[index]
+							}
+						}
+					});
+				}
+			})
+		},
+		getBadListData() {
+			getBadData().then((res) => {
+				if (res.code === SUCCESS_CODE) {
+					const count = res.data.reduce((acc, curr) => {
+						return acc + curr.defectCount;
+					}, 0);
+					const defectObj = {
+						name: '不良总数',
+						value: count
+					};
+					const defectScale = {
+						name: '不良比例',
+						value: ((count / this.baseInfo.workOrderQuantity) * 100).toFixed(2) + '%'
+					}
+					let result = res.data.map(item => ({ name: item.projectName, value: item.defectCount }));
+					this.barData.xData = res.data.map(item => item.projectName);
+					this.barData.yData = res.data.map(item => item.defectCount);
+					result.push(defectObj);
+					result.push(defectScale);
+					this.projectInfo = result;
+				}
+			});
+		},
+		getHourlyData() {
+			getHourData().then((res) => {
+				if (res.code === SUCCESS_CODE) {
+					this.lineData.xData = res.data.map(item => item.belongingTime);
+					this.lineData.actualData = res.data.map(item => item.actualValue);
+					this.lineData.expectedData = res.data.map(item => item.targetValue);
+				}
+			});
+		},
+		getGroupData() {
+			getGroupInfo().then(res => {
+				if (res.code === SUCCESS_CODE) {
+					this.personInfo = res.data[0] || {};
+				}
+			})
+		},
+		getTableData() {
+			getListData().then((res) => {
+				if (res.code === SUCCESS_CODE) {
+					this.tableData = res.data;
+				}
+			});
+		},
+		getPersonUrl() {
+			getImageUrl({
+				name: 'dip03'
+			}).then(res => {
+				const blob = new Blob([res], { type: 'image/png' });
+				this.imageUrl = window.URL.createObjectURL(blob);
+			})
+		},
+		getBasicInfo() {
+			getDip3BasicInfo().then(res => {
+				if (res.code === SUCCESS_CODE) {
+					this.baseInfo = res.data[0] || {};
+					setInterval(() => {
+						this.completionRateWidth = this.baseInfo.completionRate;
+						this.getcompletionRate(this.completionRateWidth);
+					}, 1000);
+				}
+			})
+		},
 		tableRowClassName({ row, rowIndex }) {
 			return rowIndex % 2 === 0 ? 'odd-row' : 'even-row';
 		},
@@ -347,6 +418,10 @@ $minHeight: 300px;
 			span {
 				flex: 1;
 				padding-left: 4px;
+				width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 
 			.item-value-progress {
