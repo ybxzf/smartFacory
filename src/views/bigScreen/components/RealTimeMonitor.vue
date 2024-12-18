@@ -3,10 +3,13 @@
     <div class="title">
       <span>实时监控</span>
       <div class="button">
-        <button @click="login">登录</button>
-        <button @click="handlePort">获取可用通道</button>
-        <button @click="see">预览</button>
-        <!-- <button @click="destruction">退出</button> -->
+        <!-- <el-tooltip content="配置更多" placement="top">
+          <el-button class="button" type="primary" icon="el-icon-more" size="mini" circle
+            @click="handleConfig"></el-button>
+        </el-tooltip> -->
+        <el-button class="el-button" size="mini" @click="login">登录</el-button>
+        <el-button class="el-button" size="mini" @click="handlePort">获取可用通道</el-button>
+        <el-button class="el-button" size="mini" @click="see">预览</el-button>
       </div>
     </div>
     <div class="monitor">
@@ -19,8 +22,6 @@
 </template>
 
 <script>
-// import {WebVideoCtrl} from "@/api/webVideoCtrl.js";
-
 export default {
   props: {},
   data() {
@@ -76,6 +77,9 @@ export default {
           that.$message.error("监控登录失败，请检查配置" + err);
         }
       });
+    },
+    handleConfig() {
+
     },
     handlePort() {
       const szDeviceIdentify = this.szIP + '_' + this.iPort;
@@ -188,6 +192,26 @@ export default {
     top: 50%;
     right: 8%;
     transform: translateY(-50%);
+
+    .el-button {
+      background-color: #1890ff00;
+      border-color: #1890ff47;
+      color: #ffffff;
+    }
+
+    .el-button--primary {
+      background-color: #1890ff00;
+      border-color: #1890ff47;
+      color: #ffffff;
+    }
+  }
+
+  .el-icon-more {
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    cursor: pointer;
   }
 
 }
