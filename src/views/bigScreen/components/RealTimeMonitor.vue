@@ -53,12 +53,12 @@ export default {
             // 检查插件是否最新
             WebVideoCtrl.I_CheckPluginVersion().then((bFlag) => {
               if (bFlag) {
-                console.log("152检测到新的插件版本，双击开发包目录里的HCWebSDKPlugin.exe升级！");
+                that.$message.error("检测到新的插件版本，双击开发包目录里的HCWebSDKPlugin.exe升级！");
               }
             });
             that.login();
           }, () => {
-            console.log("152插件初始化失败，请确认是否已安装插件；如果未安装，请双击开发包目录里的HCWebSDKPlugin.exe安装！");
+            that.$message.error("插件初始化失败，请确认是否已安装插件；如果未安装，请双击'public/webControls/LocalServiceComponents.exe'安装！");
           });
         },
       });

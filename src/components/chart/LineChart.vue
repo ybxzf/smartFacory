@@ -108,10 +108,16 @@ export default {
 						show: false
 					}
 				},
+        dataZoom: {
+          start: 0,
+          end: 100,
+          type: "inside",
+          realtime: true,
+        },
 				grid: {
 					left: 20,
-					right: 20,
-					bottom: 20,
+					right: 45,
+					bottom: 40,
 					top: "20%",
 					containLabel: true
 				},
@@ -138,7 +144,8 @@ export default {
 				},
 				legend: {
 					data: chartData.data.map(item => item.name),
-					top: 'bottom',
+          left: 'center',
+					bottom: 10,
 					textStyle: {
 						color: '#fff'
 					}
