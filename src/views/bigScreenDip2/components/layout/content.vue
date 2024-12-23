@@ -83,7 +83,7 @@
 		<el-row class="base-info row2">
 			<el-col :span="18" class="base-info-col col1">
 				<div class="base-item" v-for="(item, index) in processList" :key="index">
-					<div class="item-image">
+					<div class="item-image" v-loading="item.load">
 						<!-- <img :src="`/assets/images/devices/${'device1.png'}`" alt=""> -->
 						<!-- <img v-if="item.imageUrl" :src="item.imageUrl" alt=""> -->
 						<el-image v-if="item.imageUrl" :src="item.imageUrl" fit="fit"></el-image>
@@ -343,12 +343,20 @@ export default {
 		getProcessList() {
 			getDip2ProcessList().then(res => {
 				if (res.code == SUCCESS_CODE) {
-					this.processList = res.data || [];
+					this.processList = JSON.parse(JSON.stringify(res.data) || []);
 					this.processList.forEach(item => {
+					    item.load = false; // 添加一个加载状态
+					})
+					console.log('this.processList', this.processList);
+					
+					this.processList.forEach(item => {
+						item.load = true;
 						getDip2Picture(item.processName).then(res => {
 							const blob = new Blob([res], { type: 'image/png' });
 							const imageUrl = window.URL.createObjectURL(blob);
 							item.imageUrl = imageUrl;
+						}).finally(() => {
+						    item.load = false;
 						})
 					})
 				}
