@@ -74,3 +74,17 @@ export function getLineBodyData() {
     method: "get",
   });
 }
+
+/**
+ * @description 获取监控信息
+ * @returns
+ */
+export function getCameraData(lineBody) {
+  return request({
+    url: "/smartfactory/camera/list",
+    method: "get",
+    params: {
+      lineBody,
+    },
+  });
+}

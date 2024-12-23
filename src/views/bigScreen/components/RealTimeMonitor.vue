@@ -8,7 +8,7 @@
             @click="handleConfig"></el-button>
         </el-tooltip> -->
         <el-button class="el-button" size="mini" @click="login">登录</el-button>
-        <el-button class="el-button" size="mini" @click="handlePort">获取可用通道</el-button>
+        <!-- <el-button class="el-button" size="mini" @click="handlePort">获取可用通道</el-button> -->
         <el-button class="el-button" size="mini" @click="see">预览</el-button>
       </div>
     </div>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { getCameraData } from '@/api/bigScreen/index.js';
 export default {
   props: {},
   data() {
@@ -29,16 +30,30 @@ export default {
       // videoSrc: require("../../../assets/images/bigScreen/monitor_demo.mp4"),
       szIP: '192.168.1.64',     //IP地址
       iPrototocol: 1,
-      iPort: '80',               //端口号
+      iPort: '8023',               //端口号
       szUserName: 'admin',        //用户名
       szPassword: 'zzn85626688',   //管理员密码
       ids: [],
     }
   },
-  mounted() {
-    this.init();
-    // this.autoPlayVideo();
-    window.addEventListener('resize', this.monitorResize);
+  async mounted() {
+    try {
+      const res = await getCameraData('DIP');
+      if (res.code === 200 && res.rows && res.rows.length > 0) {
+        this.szIP = res.rows[0].reserved1;
+        this.iPort = res.rows[0].reserved2;
+        this.szUserName = res.rows[0].reserved3;
+        this.szPassword = res.rows[0].reserved4;
+      } else {
+        // this.$message.error("监控登录失败，请检查配置！");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.init();
+      window.addEventListener('resize', this.monitorResize);
+      // this.autoPlayVideo();
+    }
 
   },
   methods: {
@@ -74,7 +89,14 @@ export default {
           that.see();
         },
         error: function (err) {
-          that.$message.error("监控登录失败，请检查配置" + err);
+          if (err.errorCode === 2001) {
+            that.$message.error("监控已登录！");
+          }
+          else if (err.errorCode === 2002) {
+          }
+          else {
+            that.$message.error("监控登录失败，请检查配置！" + err.errorMsg);
+          }
         }
       });
     },
@@ -109,6 +131,16 @@ export default {
             type: 'success',
             message: '监控预览成功!'
           });
+        },
+        error: function (err) {
+          if (err.errorCode === 3001) {
+            that.$message.error("监控已预览！");
+          }
+          else if (err.errorCode === 3002) {
+          }
+          else {
+            that.$message.error("监控预览失败，请先登录！" + err.errorMsg);
+          }
         }
       })
     },
@@ -142,7 +174,6 @@ export default {
       }
     },
     monitorResize() {
-      console.log('xxxxxx');
       // 获取窗口宽度
       const width = window.innerWidth;
       const height = window.innerHeight;

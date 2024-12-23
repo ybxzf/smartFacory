@@ -48,7 +48,7 @@
 						<StatusShow :list="lineBodyData"></StatusShow>
 					</div>
 					<div class="right-item item-bottom">
-						<realTimeMonitor></realTimeMonitor>
+						<realTimeMonitor v-if="nowRoute === 'BigScreen'"></realTimeMonitor>
 					</div>
 				</el-col>
 			</el-col>
@@ -107,6 +107,12 @@ export default {
 			lineBodyData: [], // 线体数据,
 			bigScreenRefreshTime: 7.5 * 60000
 		}
+	},
+	computed: {
+		nowRoute() {
+			console.log(this.$route.name);
+			return this.$route.name;
+		},
 	},
 	created() {
 		this.dateTime = this.getNowTime();

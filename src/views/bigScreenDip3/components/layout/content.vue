@@ -4,45 +4,79 @@
 			<el-col :span="4">
 				<div class="com-part">
 					<label>当前工单</label>
-					<span>{{ baseInfo.workOrder || '-' }}</span>
+					<el-tooltip effect="dark" v-if="baseInfo.workOrder && baseInfo.workOrder.length > 10"
+						:content="baseInfo.workOrder" placement="top">
+						<div class="item-value">
+							{{ baseInfo.workOrder.slice(0, 10) + '...' || '-' }}
+						</div>
+					</el-tooltip>
+					<div class="item-value" v-else>
+						{{ baseInfo.workOrder || '-' }}
+					</div>
 				</div>
 			</el-col>
 			<el-col :span="3">
 				<div class="com-part">
 					<label>工单数量</label>
-					<span>{{ baseInfo.workOrderQuantity || '-' }}</span>
+          			<div class="item-value">{{ baseInfo.workOrderQuantity || '-' }}</div>
 				</div>
 			</el-col>
 			<el-col :span="5">
 				<div class="com-part">
 					<label>客户</label>
-					<span>{{ baseInfo.customer || '-' }}</span>
+					<el-tooltip effect="dark" v-if="baseInfo.customer && baseInfo.customer.length > 10"
+						:content="baseInfo.customer" placement="top">
+						<div class="item-value">
+							{{ baseInfo.customer.slice(0, 10) + '...' || '-' }}
+						</div>
+					</el-tooltip>
+					<div class="item-value" v-else>
+						{{ baseInfo.customer || '-' }}
+					</div>
 				</div>
 			</el-col>
 			<el-col :span="4">
 				<div class="com-part">
 					<label>产品名称</label>
-					<span>{{ baseInfo.productName || '-' }}</span>
+					<el-tooltip effect="dark" v-if="baseInfo.productName && baseInfo.productName.length > 10"
+						:content="baseInfo.productName" placement="top">
+						<div class="item-value">
+							{{ baseInfo.productName.slice(0, 10) + '...' || '-' }}
+						</div>
+					</el-tooltip>
+					<div class="item-value" v-else>
+						{{ baseInfo.productName || '-' }}
+					</div>
 				</div>
 			</el-col>
 			<el-col :span="4">
 				<div class="com-part">
 					<label>产品型号规格</label>
-					<span>{{ baseInfo.productModel || '-' }}</span>
+					<el-tooltip effect="dark" v-if="baseInfo.productModel && baseInfo.productModel.length > 10"
+						:content="baseInfo.productModel" placement="top">
+						<div class="item-value">
+							{{ baseInfo.productModel.slice(0, 10) + '...' || '-' }}
+						</div>
+					</el-tooltip>
+					<div class="item-value" v-else>
+						{{ baseInfo.productModel || '-' }}
+          			</div>
 				</div>
 			</el-col>
 			<el-col :span="4">
 				<div class="com-part">
 					<label>完成率</label>
 					<!-- <span>{{ baseInfo.no || '-' }}</span> -->
-					<div class="item-value-progress">
-						<transition name="expand" @before-enter="beforeEnter" @enter="enter">
-							<div class="progress" v-if="completionRateWidth > 0" :style="{
-			width: `${completionRateWidth}%`,
-			backgroundColor: `rgb(${completionRateColor.r},${completionRateColor.g},${completionRateColor.b})`
-		}"></div>
-						</transition>
-						<div class="value">{{ completionRateValue }}%</div>
+					<div class="item-value">
+						<div class="item-value-progress">
+							<transition name="expand" @before-enter="beforeEnter" @enter="enter">
+								<div class="progress" v-if="completionRateWidth > 0" :style="{
+									width: `${completionRateWidth}%`,
+									backgroundColor: `rgb(${completionRateColor.r},${completionRateColor.g},${completionRateColor.b})`
+								}"></div>
+							</transition>
+							<div class="value">{{ completionRateValue }}%</div>
+						</div>
 					</div>
 				</div>
 			</el-col>
@@ -414,6 +448,11 @@ $minHeight: 300px;
 				margin-right: 4px;
 				border-right: 3px solid #3666e3;
 			}
+			.item-value {
+				width: 100%;
+				font-size: 12px;
+				text-align: center;
+			}
 
 			span {
 				flex: 1;
@@ -424,8 +463,19 @@ $minHeight: 300px;
 				white-space: nowrap;
 			}
 
+			.item-value {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 60%;
+				font-size: 12px;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+
 			.item-value-progress {
-				width: 90%;
+				width: 60%;
+				height: 80%;
 				border: 1px solid rgb(255, 255, 255);
 				border-radius: 5px;
 				position: relative;
