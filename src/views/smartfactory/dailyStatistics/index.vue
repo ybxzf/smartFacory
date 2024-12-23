@@ -74,6 +74,9 @@
     <!-- 添加或修改当日产能统计对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="线体类型" prop="lineType">
+          <el-input v-model="form.lineType" placeholder="请输入线体类型" />
+        </el-form-item>
         <el-form-item label="产能(个)" prop="capacity">
           <el-input v-model="form.capacity" placeholder="请输入产能(个)" />
         </el-form-item>

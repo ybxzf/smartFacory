@@ -110,7 +110,6 @@ export default {
 	},
 	computed: {
 		nowRoute() {
-			console.log(this.$route.name);
 			return this.$route.name;
 		},
 	},
