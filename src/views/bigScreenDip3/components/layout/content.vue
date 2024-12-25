@@ -257,30 +257,6 @@ export default {
 			pieData: {
 				legendData: [],
 				yData: []
-				// legendData: ['物料异常', '设备异常', '软件异常'],
-				// yData: [
-				// 	{
-				// 		val: 1.5,
-				// 		name: '软件异常',
-				// 		itemStyle: {
-				// 			color: 'rgba(18, 76, 154, 1)',
-				// 		}
-				// 	},
-				// 	{
-				// 		val: 1,
-				// 		name: '物料异常',
-				// 		itemStyle: {
-				// 			color: 'rgba(15, 176, 255, 1)',
-				// 		}
-				// 	},
-				// 	{
-				// 		val: 0.5,
-				// 		name: '设备异常',
-				// 		itemStyle: {
-				// 			color: 'rgba(0, 244, 188, 1)',
-				// 		}
-				// 	},
-				// ]
 			},
 			projectInfo: [],
 			imageUrl: ''
@@ -676,7 +652,7 @@ $minHeight: 300px;
 	height: calc(100% - 40px);
 
 	::-webkit-scrollbar {
-		// display: none; 
+		// display: none;
 	}
 
 	.bottom-info {

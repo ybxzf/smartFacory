@@ -348,7 +348,7 @@ export default {
 					    item.load = false; // 添加一个加载状态
 					})
 					console.log('this.processList', this.processList);
-					
+
 					this.processList.forEach(item => {
 						item.load = true;
 						getDip2Picture(item.processName).then(res => {
