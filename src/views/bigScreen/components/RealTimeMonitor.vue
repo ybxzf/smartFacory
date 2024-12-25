@@ -1,7 +1,13 @@
 <template>
   <div class="section">
     <div class="title">
-      <span>实时监控</span>
+      <span>实时监控
+        <el-select v-model="selectCamera" placeholder="请选择" clearable style="width:100px;height: 30px;"
+          @change="changeCamera">
+          <el-option v-for="item in cameraList" :key="item.id" :label="item.lineBody" :value="item">
+          </el-option>
+        </el-select>
+      </span>
       <div class="button">
         <!-- <el-tooltip content="配置更多" placement="top">
           <el-button class="button" type="primary" icon="el-icon-more" size="mini" circle
@@ -12,8 +18,8 @@
         <el-button class="el-button" size="mini" @click="see">预览</el-button>
       </div>
     </div>
-    <div class="monitor">
-      <div ref="divPlugin" id="divPlugin" class="video"></div>
+    <div class="monitor" v-loading="!cameraShow">
+      <div ref="divPlugin" id="divPlugin" class="video" v-if="cameraShow"></div>
       <!-- <video ref="videoPlayer" class="video" autoplay preload="metadata" @ended="autoPlayVideo()">
         <source type="video/mp4" :src="videoSrc">
       </video> -->
@@ -34,18 +40,18 @@ export default {
       szUserName: 'admin',        //用户名
       szPassword: 'zzn85626688',   //管理员密码
       ids: [],
+      cameraList: [],
+      selectCamera: {},
+      cameraShow: true,
     }
   },
   async mounted() {
     try {
-      const res = await getCameraData('DIP');
+      const res = await getCameraData();
       if (res.code === 200 && res.rows && res.rows.length > 0) {
-        this.szIP = res.rows[0].reserved1;
-        this.iPort = res.rows[0].reserved2;
-        this.szUserName = res.rows[0].reserved3;
-        this.szPassword = res.rows[0].reserved4;
+        this.cameraList = res.rows;
       } else {
-        // this.$message.error("监控登录失败，请检查配置！");
+        this.$message.error("监控信息获取失败！");
       }
     } catch (error) {
       console.log(error);
@@ -57,6 +63,35 @@ export default {
 
   },
   methods: {
+    //监控改变
+    changeCamera(val) {
+      this.cameraShow = false;
+      console.log("val", val);
+      console.log("this.cameraList", this.cameraList);
+      console.log("this.selectCamera", this.selectCamera);
+      this.selectCamera = val;
+      if (val) {
+        this.szIP = this.selectCamera.reserved1;
+        this.iPort = this.selectCamera.reserved2;
+        this.szUserName = this.selectCamera.reserved3;
+        this.szPassword = this.selectCamera.reserved4;
+      } else {
+        this.szIP = '192.168.1.64';
+        this.iPort = '8023';
+        this.szUserName = 'admin';
+        this.szPassword = 'zzn85626688';
+      }
+      this.stopSee();
+      this.logout();
+      setTimeout(() => {
+        this.destruction();
+      }, 1000)
+      setTimeout(() => {
+        this.cameraShow = true;
+        this.init();
+      }, 5000);
+    },
+    //初始化
     init() {
       const that = this;
       WebVideoCtrl.I_InitPlugin({
@@ -73,7 +108,17 @@ export default {
             });
             that.login();
           }, () => {
-            that.$message.error("插件初始化失败，请确认是否已安装插件；如果未安装，请双击'public/webControls/LocalServiceComponents.exe'安装！");
+            const h = that.$createElement;
+            that.$message({
+              type: 'error',
+              message: h('a', {
+                attrs: {
+                  href: '/webControls/LocalServiceComponents.exe',
+                  style: 'color: teal;text-decoration: none;'
+                },
+              },
+                "插件初始化失败，请确认是否已安装插件；如果未安装，请点击此处安装！")
+            });
           });
         },
       });
@@ -89,12 +134,13 @@ export default {
           that.see();
         },
         error: function (err) {
-          if (err.errorCode === 2001) {
+          if (err.errorCode === 2000) {
+            that.$message.error("监控未登录！");
+          } else if (err.errorCode === 2001) {
             that.$message.error("监控已登录！");
-          }
-          else if (err.errorCode === 2002) {
-          }
-          else {
+          } else if (err.errorCode === 2002) {
+
+          } else {
             that.$message.error("监控登录失败，请检查配置！" + err.errorMsg);
           }
         }
@@ -132,7 +178,7 @@ export default {
             message: '监控预览成功!'
           });
         },
-        error: function (err) {
+        error: (err) => {
           if (err.errorCode === 3001) {
             that.$message.error("监控已预览！");
           }
