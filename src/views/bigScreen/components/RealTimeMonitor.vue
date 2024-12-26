@@ -2,7 +2,7 @@
   <div class="section">
     <div class="title">
       <span>实时监控
-        <el-select v-model="selectCamera" placeholder="请选择" clearable style="width:100px;height: 30px;"
+        <el-select v-model="selectCamera" placeholder="请选择" clearable size="mini" popper-class="camera-popper" class="camera-select"
           @change="changeCamera">
           <el-option v-for="item in cameraList" :key="item.id" :label="item.lineBody" :value="item">
           </el-option>
@@ -84,7 +84,7 @@ export default {
       this.stopSee();
       this.logout();
       setTimeout(() => {
-        this.destruction();
+        // this.destruction();
       }, 1000)
       setTimeout(() => {
         this.cameraShow = true;
@@ -245,6 +245,28 @@ export default {
 .section {
   width: 100%;
   height: 100%;
+}
+
+.camera-select {
+  position: fixed;
+  width: 100px;
+  top:-3px;
+  left: 80px;
+  ::v-deep .el-input__inner{
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #11a6ff;
+  }
+  ::v-deep .el-select__caret{
+    color: #ffffff;
+  }
+
+}
+.camera-popper{
+    background-color: transparent !important;
+  .el-select-dropdown__item {
+    // color: #ff2727;
+  }
 }
 
 .title {
