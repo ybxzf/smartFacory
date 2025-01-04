@@ -1,8 +1,8 @@
 <template>
-  <div class="hw04-content-container">
+  <div class="hw06-content-container">
     <custom-header class="header-container">
       <template #title>
-        国内包装生产线可视化看板
+        海外调试生产线可视化看板
       </template>
     </custom-header>
     <div class="content-container">
@@ -176,7 +176,7 @@ import Empty from '../bigScreen/components/Empty'
 import LineChart from '@/components/chart/LineChart.vue';
 import BarChart from './components/chart/BarChart.vue';
 import CustomHeader from '@/components/layout/header.vue';
-import pieChart3D from './components//chart/pieChart3D.vue';
+import pieChart3D from './components/chart/pieChart3D.vue';
 import {
   getDip2FctDefectStatsList,
 } from '@/api/bigScreen/dip2.js';
@@ -274,7 +274,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.hw04-content-container {
+.hw06-content-container {
   width: 100%;
   height: calc(100vh - 84px);
   /* 设置背景图片 */
@@ -499,7 +499,7 @@ export default {
 }
 </style>
 <style lang="scss">
-.hw04-content-container {
+.hw06-content-container {
   .base-info {
     .el-row {
       &:first-child {

@@ -52,22 +52,32 @@ export default {
       }), 0, 240, 28, 26, 1);
       const option = {
         legend: {
+          type: 'scroll',//设置图例翻页
+          pageIconColor: '#ff781f', // 设置翻页箭头颜色
           // selected: {//设置默认选择
           //     '办公费': true,
           //     '差旅费': false,
           // },
+          width: '80%',//图例宽度
+          pageIconSize: 20,//箭头大小
+          pageButtonItemGap: 172,//箭头间隔
+          pageButtonGap: -350,//图例拓展位置
+          pageTextStyle: {
+            color: 'transparent' // 设置翻页数字颜色
+          },
+
           selected: legendsSelected,
           tooltip: {
             show: true,
           },
           data: this.chartData.map(item => item.name),
-          orient: 'vertical',
-          top: 'center',
-          right: '5%',
+          orient: 'horizontal',
+          top: '10%',
+          left: '14%',
           icon: 'circle',
           textStyle: {
             color: '#fff',
-            fontSize: 14,
+            fontSize: 13,
           },
         },
         tooltip: {
@@ -142,8 +152,8 @@ export default {
         grid3D: {
           show: false,
           boxHeight: 12,
-          width: "80%",
-          top: "15%",
+          width: "100%",
+          top: "20%",
           viewControl: {
             distance: 300,
             alpha: 30,

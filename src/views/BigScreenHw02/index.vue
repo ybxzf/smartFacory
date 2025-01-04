@@ -2,7 +2,7 @@
   <div class="hw02-content-container">
     <custom-header class="header-container">
       <template #title>
-        国内、海外调试生产线可视化看板
+        国内调试生产线可视化看板
       </template>
     </custom-header>
     <div class="content-container">
@@ -78,76 +78,6 @@
 
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :span="4">
-            <div class="com-part">
-              <label>当前工单(海外)</label>
-              <el-tooltip effect="dark" v-if="baseInfo.workOrder && baseInfo.workOrder.length > 10"
-                :content="baseInfo.workOrder" placement="top">
-                <div class="item-value">
-                  {{ baseInfo.workOrder.slice(0, 10) + '...' || '-' }}
-                </div>
-              </el-tooltip>
-              <div class="item-value" v-else>
-                {{ baseInfo.workOrder || '-' }}
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="3">
-            <div class="com-part">
-              <label>工单数量</label>
-              <div class="item-value">{{ baseInfo.workOrderQuantity || '-' }}</div>
-            </div>
-          </el-col>
-          <el-col :span="5">
-            <div class="com-part">
-              <label>客户</label>
-              <el-tooltip effect="dark" v-if="baseInfo.customer && baseInfo.customer.length > 10"
-                :content="baseInfo.customer" placement="top">
-                <div class="item-value">
-                  {{ baseInfo.customer.slice(0, 10) + '...' || '-' }}
-                </div>
-              </el-tooltip>
-              <div class="item-value" v-else>
-                {{ baseInfo.customer || '-' }}
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="4">
-            <div class="com-part">
-              <label>产品名称</label>
-              <el-tooltip effect="dark" v-if="baseInfo.productName && baseInfo.productName.length > 10"
-                :content="baseInfo.productName" placement="top">
-                <div class="item-value">
-                  {{ baseInfo.productName.slice(0, 10) + '...' || '-' }}
-                </div>
-              </el-tooltip>
-              <div class="item-value" v-else>
-                {{ baseInfo.productName || '-' }}
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="4">
-            <div class="com-part">
-              <label>产品型号规格</label>
-              <el-tooltip effect="dark" v-if="baseInfo.productModel && baseInfo.productModel.length > 10"
-                :content="baseInfo.productModel" placement="top">
-                <div class="item-value">
-                  {{ baseInfo.productModel.slice(0, 10) + '...' || '-' }}
-                </div>
-              </el-tooltip>
-              <div class="item-value" v-else>
-                {{ baseInfo.productModel || '-' }}
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="4">
-            <div class="com-part">
-              <label>完成率</label>
-              <span>{{ baseInfo.no || '-' }}</span>
-            </div>
-          </el-col>
-        </el-row>
       </div>
       <el-row :gutter="20" type="flex" class="chart-container-info">
         <el-col :span="12">
@@ -163,7 +93,7 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <pieChart3D v-if="fctDefectStatsList.length" height="100%" :chartData="fctDefectStatsList">
+          <pieChart3D class="chart-content" v-if="fctDefectStatsList.length" height="100%" :chartData="fctDefectStatsList">
           </pieChart3D>
           <div class="chart-content" v-else style="height: 100%;">
             <Empty></Empty>
@@ -217,7 +147,9 @@
         </el-col>
         <el-col :span="4">
           <div class="person-base-info">
-            <img :src="imageUrl" alt="">
+            <div class="info-img">
+              <img :src="imageUrl" alt="">
+            </div>
             <div class="info-container">
               <div class="item">
                 <label>标准定员</label>
@@ -436,7 +368,7 @@ export default {
 
   .chart-container-info {
     margin-top: 16px;
-    min-height: 300px;
+    min-height: 420px;
 
 
   }
@@ -447,19 +379,19 @@ export default {
 
   .bottom-info {
     margin-top: 16px;
-    height: calc(100% - 432px);
+    height: calc(100% - 500px);
 
     .data-info {
       color: #fff;
-      background-color: rgba(25, 129, 246, 0.2);
       margin-bottom: 4px;
-
+      margin-left: 6px;
       .item {
         margin-bottom: 16px;
-
         .item-col {
-          height: 32px;
-          line-height: 32px;
+          margin: 0 5px;
+          background-color: rgba(25, 129, 246, 0.2);
+          height: 50px;
+          line-height: 50px;
           text-align: center;
         }
       }
@@ -510,14 +442,24 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: center;
+      background-color: rgba(25, 129, 246, 0.2);
 
-      img {
-        width: 60px;
-        height: 90px;
-        object-fit: contain;
+      .info-img{
+        flex: 1;
+        width: 100%;
+        height:100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 50%;
+          height: 80%;
+          object-fit: contain;
+        }
       }
 
       .info-container {
+        flex: 1;
         width: 100%;
         height: calc(100% - 90px);
         display: flex;
@@ -526,7 +468,7 @@ export default {
         justify-content: space-around;
 
         .item {
-          width: 100%;
+          width: 90%;
           display: flex;
           justify-content: space-between;
 
