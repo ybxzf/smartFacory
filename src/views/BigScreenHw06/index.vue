@@ -452,14 +452,14 @@ export default {
         justify-content: center;
         align-items: center;
         img {
-          width: 50%;
-          height: 80%;
+          width: 100px;
           object-fit: contain;
         }
       }
 
       .info-container {
         flex: 1;
+        height:100%;
         width: 100%;
         height: calc(100% - 90px);
         display: flex;
