@@ -1,9 +1,7 @@
 <template>
   <div class="hw02-content-container">
     <custom-header class="header-container">
-      <template #title>
-        国内调试生产线可视化看板
-      </template>
+      <template #title> 国内调试生产线可视化看板 </template>
     </custom-header>
     <div class="content-container">
       <div class="base-info">
@@ -11,91 +9,104 @@
           <el-col :span="4">
             <div class="com-part">
               <label>当前工单(国内)</label>
-              <el-tooltip effect="dark" v-if="baseInfo.workOrder && baseInfo.workOrder.length > 10"
-                :content="baseInfo.workOrder" placement="top">
+              <!-- <el-tooltip effect="dark" v-if="baseInfo.currentWorkOrder && baseInfo.currentWorkOrder.length > 10"
+                :content="baseInfo.currentWorkOrder" placement="top">
                 <div class="item-value">
-                  {{ baseInfo.workOrder.slice(0, 10) + '...' || '-' }}
+                  {{ baseInfo.currentWorkOrder.slice(0, 10) + '...' || '-' }}
                 </div>
-              </el-tooltip>
-              <div class="item-value" v-else>
-                {{ baseInfo.workOrder || '-' }}
+              </el-tooltip> -->
+              <div class="item-value">
+                {{ baseInfo.currentWorkOrder || "-" }}
               </div>
             </div>
           </el-col>
           <el-col :span="3">
             <div class="com-part">
               <label>工单数量</label>
-              <div class="item-value">{{ baseInfo.workOrderQuantity || '-' }}</div>
+              <div class="item-value">
+                {{ baseInfo.workOrderQuantity || "-" }}
+              </div>
             </div>
           </el-col>
           <el-col :span="5">
             <div class="com-part">
               <label>客户</label>
-              <el-tooltip effect="dark" v-if="baseInfo.customer && baseInfo.customer.length > 10"
+              <!-- <el-tooltip effect="dark" v-if="baseInfo.customer && baseInfo.customer.length > 10"
                 :content="baseInfo.customer" placement="top">
                 <div class="item-value">
                   {{ baseInfo.customer.slice(0, 10) + '...' || '-' }}
                 </div>
-              </el-tooltip>
-              <div class="item-value" v-else>
-                {{ baseInfo.customer || '-' }}
+              </el-tooltip> -->
+              <div class="item-value">
+                {{ baseInfo.customer || "-" }}
               </div>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="com-part">
               <label>产品名称</label>
-              <el-tooltip effect="dark" v-if="baseInfo.productName && baseInfo.productName.length > 10"
+              <el-tooltip effect="dark" v-if="baseInfo.productName && baseInfo.productName.length > 20"
                 :content="baseInfo.productName" placement="top">
                 <div class="item-value">
-                  {{ baseInfo.productName.slice(0, 10) + '...' || '-' }}
+                  {{ baseInfo.productName.slice(0, 20) + "..." || "-" }}
                 </div>
               </el-tooltip>
               <div class="item-value" v-else>
-                {{ baseInfo.productName || '-' }}
+                {{ baseInfo.productName || "-" }}
               </div>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="com-part">
               <label>产品型号规格</label>
-              <el-tooltip effect="dark" v-if="baseInfo.productModel && baseInfo.productModel.length > 10"
-                :content="baseInfo.productModel" placement="top">
+              <el-tooltip effect="dark" v-if="
+                baseInfo.productModel && baseInfo.productModel.length > 20
+              " :content="baseInfo.productModel" placement="top">
                 <div class="item-value">
-                  {{ baseInfo.productModel.slice(0, 10) + '...' || '-' }}
+                  {{ baseInfo.productModel.slice(0, 20) + "..." || "-" }}
                 </div>
               </el-tooltip>
               <div class="item-value" v-else>
-                {{ baseInfo.productModel || '-' }}
+                {{ baseInfo.productModel || "-" }}
               </div>
             </div>
           </el-col>
           <el-col :span="4">
             <div class="com-part">
               <label>完成率</label>
-              <span>{{ baseInfo.no || '-' }}</span>
+              <div class="item-value">
+                <div class="item-value-progress">
+                  <transition name="expand" @before-enter="beforeEnter" @enter="enter">
+                    <div class="progress" v-if="completionRateWidth > 0" :style="{
+                      width: `${completionRateWidth}%`,
+                      backgroundColor: `rgb(${completionRateColor.r},${completionRateColor.g},${completionRateColor.b})`,
+                    }"></div>
+                  </transition>
+                  <div class="value">{{ completionRateValue }}%</div>
+                </div>
+              </div>
             </div>
-
           </el-col>
         </el-row>
       </div>
       <el-row :gutter="20" type="flex" class="chart-container-info">
         <el-col :span="12">
           <LineChart class="chart-content" v-if="lineData.xData.length" height="100%" :chartData="lineData"></LineChart>
-          <div class="chart-content" v-else style="height: 100%;">
+          <div class="chart-content" v-else style="height: 100%">
             <Empty></Empty>
           </div>
         </el-col>
         <el-col :span="6">
           <BarChart class="chart-content" v-if="barData.xData.length" :chartData="barData" height="100%"></BarChart>
-          <div class="chart-content" v-else style="height: 100%;">
+          <div class="chart-content" v-else style="height: 100%">
             <Empty></Empty>
           </div>
         </el-col>
         <el-col :span="6">
-          <pieChart3D class="chart-content" v-if="fctDefectStatsList.length" height="100%" :chartData="fctDefectStatsList">
+          <pieChart3D class="chart-content" v-if="fctDefectStatsList.length" height="100%"
+            :chartData="fctDefectStatsList">
           </pieChart3D>
-          <div class="chart-content" v-else style="height: 100%;">
+          <div class="chart-content" v-else style="height: 100%">
             <Empty></Empty>
           </div>
         </el-col>
@@ -111,57 +122,73 @@
             </el-row>
             <el-row :gutter="20" class="item" type="flex">
               <el-col :span="6" class="item-col">每小时产能</el-col>
-              <el-col :span="6" class="item-col">{{ productivityAnalysis.hour.targetValue || 0 }}</el-col>
-              <el-col :span="6" class="item-col">{{ productivityAnalysis.hour.actualValue || 0 }}</el-col>
-              <el-col :span="6" class="item-col">{{ productivityAnalysis.hour.achievementRate || 0 }}</el-col>
+              <el-col :span="6" class="item-col">{{
+                productivityAnalysis.hour.targetValue || 0
+                }}</el-col>
+              <el-col :span="6" class="item-col">{{
+                productivityAnalysis.hour.actualValue || 0
+                }}</el-col>
+              <el-col :span="6" class="item-col">{{
+                productivityAnalysis.hour.achievementRate || 0
+                }}</el-col>
             </el-row>
             <el-row :gutter="20" class="item" type="flex">
               <el-col :span="6" class="item-col">当日产能</el-col>
-              <el-col :span="6" class="item-col">{{ productivityAnalysis.day.targetValue || 0 }}</el-col>
-              <el-col :span="6" class="item-col">{{ productivityAnalysis.day.actualValue || 0 }}</el-col>
-              <el-col :span="6" class="item-col">{{ productivityAnalysis.day.achievementRate || 0 }}</el-col>
+              <el-col :span="6" class="item-col">{{
+                productivityAnalysis.day.targetValue || 0
+                }}</el-col>
+              <el-col :span="6" class="item-col">{{
+                productivityAnalysis.day.actualValue || 0
+                }}</el-col>
+              <el-col :span="6" class="item-col">{{
+                productivityAnalysis.day.achievementRate || 0
+                }}</el-col>
             </el-row>
           </div>
         </el-col>
         <el-col :span="6">
           <BarChart class="chart-content" v-if="barData1.xData.length" :chartData="barData1" height="100%"></BarChart>
-          <div class="chart-content" v-else style="height: 100%;">
+          <div class="chart-content" v-else style="height: 100%">
             <Empty></Empty>
           </div>
         </el-col>
         <el-col :span="8" class="table-c">
-          <el-table v-if="tableData.length" :data="tableData" style="width: 100%; height: 100%;"
+          <el-table v-if="tableData.length" :data="tableData" style="width: 100%; height: 100%"
             :row-class-name="tableRowClassName" height="100%" header-row-class-name="table-h-bg">
-            <el-table-column prop="pcbNumber" label="工单号">
+            <el-table-column prop="workOrderNumber" label="工单号">
             </el-table-column>
-            <el-table-column prop="defectProject" label="生产">
+            <el-table-column prop="productionType" label="生产表型">
             </el-table-column>
-            <el-table-column prop="correspondingWorkOrder" label="目标产能">
+            <el-table-column prop="targetCapacity" label="目标产能">
             </el-table-column>
-            <el-table-column prop="productionTime" label="实际产能">
+            <el-table-column prop="actualCapacity" label="实际产能">
             </el-table-column>
           </el-table>
-          <div class="chart-content" v-else style="height: 100%;">
+          <div class="chart-content" v-else style="height: 100%">
             <Empty></Empty>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="person-base-info">
             <div class="info-img">
-              <img :src="imageUrl" alt="">
+              <img :src="imageUrl" alt="" />
             </div>
             <div class="info-container">
               <div class="item">
+                <label>组长</label>
+                <span>{{ groupInfo.teamLeader || "-" }}</span>
+              </div>
+              <div class="item">
                 <label>标准定员</label>
-                <span>{{ baseInfo.name || '-' }}</span>
+                <span>{{ groupInfo.standardStaffCount || "-" }}</span>
               </div>
               <div class="item">
                 <label>实际出勤</label>
-                <span>{{ baseInfo.workOrder || '-' }}</span>
+                <span>{{ groupInfo.actualAttendance || "-" }}</span>
               </div>
               <div class="item">
                 <label>人均产能</label>
-                <span>{{ baseInfo.workOrderQuantity || '-' }}</span>
+                <span>{{ groupInfo.perCapitaCapacity || "-" }}</span>
               </div>
             </div>
           </div>
@@ -172,105 +199,237 @@
 </template>
 
 <script>
-import Empty from '../bigScreen/components/Empty'
-import LineChart from '@/components/chart/LineChart.vue';
-import BarChart from './components/chart/BarChart.vue';
-import CustomHeader from '@/components/layout/header.vue';
-import pieChart3D from './components//chart/pieChart3D.vue';
+import Empty from "../bigScreen/components/Empty";
+import LineChart from "@/components/chart/LineChart.vue";
+import BarChart from "./components/chart/BarChart.vue";
+import CustomHeader from "@/components/layout/header.vue";
+import pieChart3D from "./components//chart/pieChart3D.vue";
 import {
-  getDip2FctDefectStatsList,
-} from '@/api/bigScreen/dip2.js';
-import {
+  getInfoData,
+  getTableData,
+  getGroupInfo,
   getImageUrl,
-} from '@/api/bigScreen/dip3';
-import { SUCCESS_CODE } from '@/utils/constants.js';
+  getProjectInfoList,
+  getLossTime,
+  getCapacityList,
+  getHourList
+} from "@/api/bigScreen/hw";
+import { SUCCESS_CODE } from "@/utils/constants.js";
 export default {
   components: {
     Empty,
     CustomHeader,
     LineChart,
     pieChart3D,
-    BarChart
+    BarChart,
   },
   data() {
     return {
-      imageUrl: '',
+      completionRateValue: 0, // 完成率初始值为 0
+      completionRateWidth: 0, // 初始宽度为 0
+      //初始背景色
+      completionRateColor: {
+        r: 255,
+        g: 0,
+        b: 0,
+      },
+      imageUrl: "",
       baseInfo: {},
       fctDefectStatsList: [],
       lineData: {
-        title: '每日产能',
+        title: "小时产能",
         data: [
           {
-            name: '每日产能',
-            color: '#FF005A',
-            // seriesData: [],
-            seriesData: [120, 200, 150, 80, 70, 110, 130, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150],
+            name: "小时产能",
+            color: "#FF005A",
+            seriesData: [],
+            // seriesData: [
+            //   120, 200, 150, 80, 70, 110, 130, 150, 150, 150, 150, 150, 150,
+            //   150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150,
+            // ],
             // }, {
             // 	name: '目标产能',
             // 	color: '#3888fa',
             // 	seriesData: [60, 80, 70, 110, 130, 120, 200, 150, 80, 70, 110, 130, 120, 200, 150, 80, 70, 110, 130, 120, 200, 150, 80, 70, 110, 130],
-          }
+          },
         ],
-        // xData: [],
-        xData: ['0时', '1时', '2时', '3时', '4时', '5时', '6时', '7时', '8时', '9时', '10时', '11时', '12时', '13时', '14时', '15时', '16时', '17时', '18时', '19时', '20时', '21时', '22时', '23时']
+        xData: [],
+        // xData: [
+        //   "0时",
+        //   "1时",
+        //   "2时",
+        //   "3时",
+        //   "4时",
+        //   "5时",
+        //   "6时",
+        //   "7时",
+        //   "8时",
+        //   "9时",
+        //   "10时",
+        //   "11时",
+        //   "12时",
+        //   "13时",
+        //   "14时",
+        //   "15时",
+        //   "16时",
+        //   "17时",
+        //   "18时",
+        //   "19时",
+        //   "20时",
+        //   "21时",
+        //   "22时",
+        //   "23时",
+        // ],
       },
       productivityAnalysis: {
         hour: {},
-        day: {}
+        day: {},
       },
-      tableData: [
-        {
-          pcbNumber: 'PCB-20210101',
-          defectProject: 1200,
-          correspondingWorkOrder: 1000,
-          productionTime: 1000
-        }
-      ],
+      tableData: [],
 
       barData: {
         title: "不良数量",
-        xData: ['项目1', '项目2', '项目3', '项目4', '项目5', '项目6', '项目7', '项目8'],
-        yData: [3, 8, 1, 6, 9, 4, 1, 3]
+        xData: [],
+        yData: [],
       },
       barData1: {
         title: "损失时间",
-        xData: ['项目1', '项目2', '项目3', '项目4', '项目5', '项目6', '项目7', '项目8'],
-        yData: [3, 8, 1, 6, 9, 4, 1, 3]
-      }
-    }
+        xData: [],
+        yData: [],
+      },
+      groupInfo: {},
+      requestParams: {
+        processType: "调试",
+        workshop: "国内",
+      },
+    };
   },
   mounted() {
-    this.getFctDefectStatsList();
-    this.getPersonUrl();
+    this.getInfoList();
+    this.getTableList();
+    this.getGroupInfoList();
+    this.getProjectList();
+    this.getLossTimeList();
+    this.getCapacityData();
+    this.getHourData();
   },
   methods: {
-    tableRowClassName({ row, rowIndex }) {
-      return rowIndex % 2 === 0 ? 'odd-row' : 'even-row';
-    },
-    getPersonUrl() {
-      getImageUrl({
-        name: 'dip03'
-      }).then(res => {
-        const blob = new Blob([res], { type: 'image/png' });
-        this.imageUrl = window.URL.createObjectURL(blob);
-      })
-    },
-    getFctDefectStatsList() {
-      getDip2FctDefectStatsList().then(res => {
-        if (res.code == SUCCESS_CODE) {
-          res.data.forEach(item => {
-            this.fctDefectStatsList.push({
-              name: item.projectName,
-              value: item.defectCount,
-              realValue: item.defectCount,
-              itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } // 随机颜色
-            });
-          })
+    getHourData() {
+      getHourList(this.requestParams).then((res) => {
+        if (res.code === SUCCESS_CODE) {
+          const data = res.data;
+          this.lineData.xData = data.map((item) => item.belongingTime);
+          this.lineData.data[0].seriesData = data.map((item) => item.actualValue);
         }
-      })
+      });
     },
-  }
-}
+    getCapacityData() {
+      getCapacityList(this.requestParams).then((res) => {
+        if (res.code === SUCCESS_CODE) {
+          const result = res.data.length ? res.data.filter(item => item) : [];
+          if (result.length) {
+            const hour = result.filter(item => item.type === '小时');
+            const day = result.filter(item => item.type === '当日');
+            this.productivityAnalysis.hour = hour[0] || {};
+            this.productivityAnalysis.day = day[0] || {};
+          }
+        }
+      });
+    },
+    getLossTimeList() {
+      getLossTime(this.requestParams).then((res) => {
+        if (res.code === SUCCESS_CODE) {
+          const data = res.data;
+          this.barData1.xData = data.map((item) => item.name);
+          this.barData1.yData = data.map((item) => item.lossCount);
+        }
+      });
+    },
+    getProjectList() {
+      getProjectInfoList(this.requestParams).then((res) => {
+        if (res.code === SUCCESS_CODE) {
+          const data = res.data;
+          this.barData.xData = data.map((item) => item.projectName);
+          this.barData.yData = data.map((item) => item.defectCount);
+          this.fctDefectStatsList = data.map((item) => ({
+            name: item.projectName,
+            value: item.defectRatio,
+            realValue: item.defectRatio,
+            itemStyle: {
+              color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255
+                })`,
+            }, // 随机颜色
+          }));
+        }
+      });
+    },
+    getGroupInfoList() {
+      getGroupInfo(this.requestParams).then((res) => {
+        if (res.code === SUCCESS_CODE) {
+          this.groupInfo = res.data.length ? res.data[0] : {};
+          Object.keys(this.groupInfo) && this.getPersonUrl(this.groupInfo.teamLeader);
+        }
+      });
+    },
+    getTableList() {
+      getTableData(this.requestParams).then((res) => {
+        if (res.code == SUCCESS_CODE) {
+          this.tableData = res.data;
+        }
+      });
+    },
+    beforeEnter(el) {
+      el.style.width = "0%"; // 在进入之前先把宽度设为 0
+    },
+    // 进入过渡动画
+    enter(el, done) {
+      el.offsetHeight; // 触发重绘
+      el.style.transition = "width 1s ease-in-out"; // 动画生效
+      el.style.width = `${this.completionRateWidth}%`; // 设置目标宽度
+      done(); // 完成过渡
+    },
+    getcompletionRate(targetValue = 0) {
+      const duration = 1000; // 动画时长 2 秒
+      const stepValue = Math.round(targetValue / (duration / 20)); // 每次增加的值
+      const colorValue = 255 / (duration / 20); // 每次增加的值
+
+      this.intervalId = setInterval(() => {
+        if (this.completionRateValue < targetValue) {
+          this.completionRateValue = Math.min(
+            this.completionRateValue + stepValue,
+            targetValue
+          ); // 防止超出目标值
+          this.completionRateColor.r -= colorValue;
+          this.completionRateColor.g += colorValue;
+        } else {
+          clearInterval(this.intervalId); // 停止定时器
+        }
+      }, 20);
+    },
+    getInfoList() {
+      getInfoData(this.requestParams).then((res) => {
+        if (res.code == SUCCESS_CODE) {
+          this.baseInfo = res.data.length ? res.data[0] : {};
+          setInterval(() => {
+            this.completionRateWidth = this.baseInfo.completionRate;
+            this.getcompletionRate(this.completionRateWidth);
+          }, 1000);
+        }
+      });
+    },
+    tableRowClassName({ row, rowIndex }) {
+      return rowIndex % 2 === 0 ? "odd-row" : "even-row";
+    },
+    getPersonUrl(name) {
+      getImageUrl({
+        groupLeader: name,
+      }).then((res) => {
+        const blob = new Blob([res], { type: "image/png" });
+        this.imageUrl = window.URL.createObjectURL(blob);
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -278,7 +437,7 @@ export default {
   width: 100%;
   height: calc(100vh - 84px);
   /* 设置背景图片 */
-  background-image: url('../../assets/images/bigScreen/bigScreen_bg.png');
+  background-image: url("../../assets/images/bigScreen/bigScreen_bg.png");
   /* 不重复背景图片 */
   background-repeat: no-repeat;
   /* 图片铺满容器 */
@@ -299,7 +458,6 @@ export default {
   }
 
   .base-info {
-
     .com-part {
       min-height: 40px;
       display: flex;
@@ -335,9 +493,6 @@ export default {
       .item-value {
         display: flex;
         align-items: center;
-        justify-content: center;
-        width: 60%;
-        font-size: 12px;
         white-space: nowrap;
         overflow: hidden;
       }
@@ -369,8 +524,6 @@ export default {
   .chart-container-info {
     margin-top: 16px;
     min-height: 420px;
-
-
   }
 
   .chart-content {
@@ -385,18 +538,19 @@ export default {
       color: #fff;
       margin-bottom: 4px;
       margin-left: 6px;
+
       .item {
         margin-bottom: 16px;
+
         .item-col {
           margin: 0 5px;
           background-color: rgba(25, 129, 246, 0.2);
           height: 50px;
+          font-size: 14px;
           line-height: 50px;
           text-align: center;
         }
       }
-
-
     }
 
     .table-c {
@@ -444,13 +598,14 @@ export default {
       align-items: center;
       background-color: rgba(25, 129, 246, 0.2);
 
-      .info-img{
+      .info-img {
         flex: 1;
         width: 100%;
-        height:100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+
         img {
           width: 100px;
           object-fit: contain;
@@ -459,7 +614,7 @@ export default {
 
       .info-container {
         flex: 1;
-        height:100%;
+        height: 100%;
         width: 100%;
         height: calc(100% - 90px);
         display: flex;
@@ -471,13 +626,14 @@ export default {
           width: 90%;
           display: flex;
           justify-content: space-between;
+          margin-bottom: 8px;
 
           label {
             display: inline-block;
             min-width: 100px;
             text-align: center;
             font-weight: 500;
-            line-height: 40px;
+            line-height: 30px;
             font-size: 14px;
             padding: 0 8px;
             background-color: rgba(25, 129, 246, 0.2);
@@ -487,14 +643,13 @@ export default {
           span {
             flex: 1;
             display: inline-block;
-            line-height: 40px;
+            line-height: 30px;
             background-color: rgba(25, 129, 246, 0.2);
             padding-left: 8px;
           }
         }
       }
     }
-
   }
 }
 </style>
@@ -509,17 +664,16 @@ export default {
   }
 
   .bottom-info {
-
     .el-col {
       height: 100%;
     }
 
     .el-table th.gutter {
       display: none;
-      width: 0
+      width: 0;
     }
 
-    .el-table colgroup col[name='gutter'] {
+    .el-table colgroup col[name="gutter"] {
       display: none;
       width: 0;
     }
@@ -545,7 +699,6 @@ export default {
         background-color: #3c4f72 !important;
         color: #478ddb;
       }
-
     }
   }
 }
