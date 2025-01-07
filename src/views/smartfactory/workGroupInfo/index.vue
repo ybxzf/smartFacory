@@ -1,18 +1,26 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属线体" prop="lineBody">
+      <el-form-item label="车间" prop="workShopName">
         <el-input
-          v-model="queryParams.lineBody"
-          placeholder="请输入所属线体"
+          v-model="queryParams.workShopName"
+          placeholder="请输入车间"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="监控位置" prop="monitoringPosition">
+      <el-form-item label="小组" prop="workGroupName">
         <el-input
-          v-model="queryParams.monitoringPosition"
-          placeholder="请输入监控位置"
+          v-model="queryParams.workGroupName"
+          placeholder="请输入小组"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="组长" prop="groupLeader">
+        <el-input
+          v-model="queryParams.groupLeader"
+          placeholder="请输入组长"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -31,7 +39,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['smartfactory:camera:add']"
+          v-hasPermi="['smartfactory:workGroupInfo:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -42,7 +50,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['smartfactory:camera:edit']"
+          v-hasPermi="['smartfactory:workGroupInfo:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -53,32 +61,33 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['smartfactory:camera:remove']"
+          v-hasPermi="['smartfactory:workGroupInfo:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
+<!--      <el-col :span="1.5">
         <el-button
           type="warning"
           plain
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['smartfactory:camera:export']"
+          v-hasPermi="['smartfactory:workGroupInfo:export']"
         >导出</el-button>
-      </el-col>
+      </el-col>-->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="cameraList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="workGroupInfoList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" />
-      <el-table-column label="所属线体" align="center" prop="lineBody" />
-      <el-table-column label="监控位置" align="center" prop="monitoringPosition" />
-      <el-table-column label="监控品牌" align="center" prop="monitoringBrand" />
-      <el-table-column label="ip" align="center" prop="reserved1" />
-      <el-table-column label="端口" align="center" prop="reserved2" />
-      <el-table-column label="用户名" align="center" prop="reserved3" />
-      <el-table-column label="密码" align="center" prop="reserved4" />
+      <el-table-column label="车间" align="center" prop="workShopName" />
+      <el-table-column label="小组" align="center" prop="workGroupName" />
+      <el-table-column label="组长" align="center" prop="groupLeader" />
+      <el-table-column label="组长照片" align="center" prop="groupLeaderPicture" width="100">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.groupLeaderPicture" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -86,14 +95,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['smartfactory:camera:edit']"
+            v-hasPermi="['smartfactory:workGroupInfo:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['smartfactory:camera:remove']"
+            v-hasPermi="['smartfactory:workGroupInfo:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -107,33 +116,24 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改摄像头对话框 -->
+    <!-- 添加或修改工厂小组信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属线体" prop="lineBody">
-          <el-input v-model="form.lineBody" placeholder="请输入所属线体" />
+        <el-form-item label="车间" prop="workShopName">
+          <el-input v-model="form.workShopName" placeholder="请输入车间" />
         </el-form-item>
-        <el-form-item label="监控位置" prop="monitoringPosition">
-          <el-input v-model="form.monitoringPosition" placeholder="请输入监控位置" />
+        <el-form-item label="小组" prop="workGroupName">
+          <el-input v-model="form.workGroupName" placeholder="请输入小组" />
         </el-form-item>
-        <el-form-item label="监控品牌" prop="monitoringBrand">
-          <el-input v-model="form.monitoringBrand" placeholder="请输入监控品牌" />
+        <el-form-item label="组长" prop="groupLeader">
+          <el-input v-model="form.groupLeader" placeholder="请输入组长" />
         </el-form-item>
-        <el-form-item label="ip" prop="reserved1">
-          <el-input v-model="form.reserved1" placeholder="请输入ip" />
+        <el-form-item label="组长照片" prop="groupLeaderPicture">
+          <image-upload v-model="form.groupLeaderPicture"/>
         </el-form-item>
-        <el-form-item label="端口" prop="reserved2">
-          <el-input v-model="form.reserved2" placeholder="请输入端口" />
-        </el-form-item>
-        <el-form-item label="用户名" prop="reserved3">
-          <el-input v-model="form.reserved3" placeholder="请输入用户名" />
-        </el-form-item>
-        <el-form-item label="密码" prop="reserved4">
-          <el-input v-model="form.reserved4" placeholder="请输入密码" />
-        </el-form-item>
-        <el-form-item label="预留5" prop="reserved5">
-          <el-input v-model="form.reserved5" placeholder="请输入预留5" />
-        </el-form-item>
+<!--        <el-form-item label="预留01" prop="field01">
+          <el-input v-model="form.field01" placeholder="请输入预留01" />
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -144,10 +144,10 @@
 </template>
 
 <script>
-import { listCamera, getCamera, delCamera, addCamera, updateCamera } from "@/api/smartfactory/camera";
+import { listWorkGroupInfo, getWorkGroupInfo, delWorkGroupInfo, addWorkGroupInfo, updateWorkGroupInfo } from "@/api/smartfactory/workGroupInfo";
 
 export default {
-  name: "Camera",
+  name: "WorkGroupInfo",
   data() {
     return {
       // 遮罩层
@@ -162,8 +162,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 摄像头表格数据
-      cameraList: [],
+      // 工厂小组信息表格数据
+      workGroupInfoList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -172,8 +172,10 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        lineBody: null,
-        monitoringPosition: null,
+        workShopName: null,
+        workGroupName: null,
+        groupLeader: null,
+        groupLeaderPicture: null,
       },
       // 表单参数
       form: {},
@@ -186,11 +188,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询摄像头列表 */
+    /** 查询工厂小组信息列表 */
     getList() {
       this.loading = true;
-      listCamera(this.queryParams).then(response => {
-        this.cameraList = response.rows;
+      listWorkGroupInfo(this.queryParams).then(response => {
+        this.workGroupInfoList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -204,14 +206,11 @@ export default {
     reset() {
       this.form = {
         id: null,
-        lineBody: null,
-        monitoringPosition: null,
-        monitoringBrand: null,
-        reserved1: null,
-        reserved2: null,
-        reserved3: null,
-        reserved4: null,
-        reserved5: null
+        workShopName: null,
+        workGroupName: null,
+        groupLeader: null,
+        groupLeaderPicture: null,
+        field01: null
       };
       this.resetForm("form");
     },
@@ -235,16 +234,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加摄像头";
+      this.title = "添加工厂小组信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getCamera(id).then(response => {
+      getWorkGroupInfo(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改摄像头";
+        this.title = "修改工厂小组信息";
       });
     },
     /** 提交按钮 */
@@ -252,13 +251,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateCamera(this.form).then(response => {
+            updateWorkGroupInfo(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addCamera(this.form).then(response => {
+            addWorkGroupInfo(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -270,8 +269,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除摄像头编号为"' + ids + '"的数据项？').then(function() {
-        return delCamera(ids);
+      this.$modal.confirm('是否确认删除工厂小组信息编号为"' + ids + '"的数据项？').then(function() {
+        return delWorkGroupInfo(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -279,9 +278,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('smartfactory/camera/export', {
+      this.download('smartfactory/workGroupInfo/export', {
         ...this.queryParams
-      }, `camera_${new Date().getTime()}.xlsx`)
+      }, `workGroupInfo_${new Date().getTime()}.xlsx`)
     }
   }
 };
