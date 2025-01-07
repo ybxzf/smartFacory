@@ -20,7 +20,7 @@ export default {
 		},
 		height: {
 			type: String,
-			default: 'calc(100% - 100px)'
+			default: '100%'
 		},
 		autoResize: {
 			type: Boolean,
@@ -70,25 +70,20 @@ export default {
 						show: false
 					}
 				},
-				dataZoom: {
-					start: 0,
-					end: 100,
-					type: "inside",
-					realtime: true,
-				},
-				grid: {
-					left: 10,
-					right: 10,
-					bottom: 20,
-					top: "20%",
-					containLabel: true
-				},
+			 grid: {
+          top: "10%",
+          left: "2%",
+          right: "2%",
+          bottom: "2%",
+          containLabel: true,
+        },
 				title: {
-					text: '产能达成目标',
+					text: '线体损失工时（小时）',
 					left: 'center',
 					textStyle: {
-						color: '#fff',
-						fontSize: 16
+            color: "#ffffff",
+            fontSize: 18,
+            fontWeight: "bold",
 					}
 				},
 				tooltip: {
@@ -112,38 +107,20 @@ export default {
 				},
 				series: [
 					{
-						name: '目标产能',
 						itemStyle: {
-							normal: {
-								color: '#FF005A',
-								lineStyle: {
-									color: '#FF005A',
-									width: 2
-								}
-							}
+							// normal: {
+							// 	color: '#FF005A',
+							// 	lineStyle: {
+							// 		color: '#FF005A',
+							// 		width: 2
+							// 	}
+							// }
 						},
 						smooth: true,
 						type: 'line',
 						data: expectedData,
 						animationDuration: 2800,
 						animationEasing: 'cubicInOut'
-					},
-					{
-						name: '实际产能',
-						smooth: true,
-						type: 'line',
-						itemStyle: {
-							normal: {
-								color: '#3888fa',
-								lineStyle: {
-									color: '#3888fa',
-									width: 2
-								},
-							}
-						},
-						data: actualData,
-						animationDuration: 2800,
-						animationEasing: 'quadraticOut'
 					}]
 			})
 		}

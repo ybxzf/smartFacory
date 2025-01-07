@@ -37,12 +37,22 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         // target: `http://localhost:18080`,
+        // target: `http://172.17.4.120:18080`,
         target: `http://121.37.246.92:18080`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
-      }
+      },
+      "/api": {
+        target: "http://172.16.8.217:5000",
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          // 路径重写，
+          "^/api": "" // 替换target中的请求地址
+        }
+      },
     },
     disableHostCheck: true
   },

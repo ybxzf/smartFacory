@@ -20,7 +20,7 @@ export default {
 		},
 		height: {
 			type: String,
-			default: 'calc(100% - 100px)'
+			default: '350px'
 		},
 		autoResize: {
 			type: Boolean,
@@ -69,12 +69,6 @@ export default {
 					axisTick: {
 						show: false
 					}
-				},
-				dataZoom: {
-					start: 0,
-					end: 100,
-					type: "inside",
-					realtime: true,
 				},
 				grid: {
 					left: 10,

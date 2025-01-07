@@ -2,14 +2,13 @@
     <div class="dip-two-container">
         <!-- <custom-header class="header-container">
             <template #title>
-                DIP-02生产线可视化看板
+                SMT-02生产线可视化看板
             </template>
             <template #button>
                 <el-button type="success" round size="mini" @click="nextLevel">下一级</el-button>
             </template>
         </custom-header> -->
         <custom-content class="content-container"></custom-content>
-
     </div>
 </template>
 
@@ -33,7 +32,7 @@ export default {
     },
     methods: {
         nextLevel() {
-            this.$router.push('BigScreenDip3')
+            this.$router.push('BigScreenSmt3')
         },
     },
 }

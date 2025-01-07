@@ -2,7 +2,7 @@
 	<div class="dip-three-container">
 		<!-- <custom-header class="header-container">
 			<template #title>
-                DIP-03生产线可视化看板
+                SMT-03生产线可视化看板
             </template>
 		</custom-header> -->
 		<custom-content class="custom-content-container"></custom-content>
@@ -13,7 +13,7 @@
 import CustomHeader from '@/components/layout/header.vue';
 import CustomContent from './components/layout/content.vue';
 export default {
-	name: "bigScreenDip3",
+	name: "bigScreenSmt3",
 	components: {
 		CustomHeader,
 		CustomContent,

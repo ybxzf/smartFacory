@@ -332,7 +332,7 @@ export default {
     getHourlyData() {
       getHourData().then((res) => {
         if (res.code === SUCCESS_CODE) {
-          this.lineData.xData = res.data.map(item => item.belongingTime);
+          this.lineData.xData = res.data.map(item => item.belongingTime.split(' ')[1]);
           this.lineData.actualData = res.data.map(item => item.actualValue);
           this.lineData.expectedData = res.data.map(item => item.targetValue);
         }

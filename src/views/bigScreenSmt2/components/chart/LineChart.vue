@@ -20,7 +20,7 @@ export default {
 		},
 		height: {
 			type: String,
-			default: 'calc(100% - 100px)'
+			default: '100%'
 		},
 		autoResize: {
 			type: Boolean,
@@ -61,7 +61,7 @@ export default {
 			this.chart = echarts.init(this.$el, 'macarons')
 			this.setOptions(this.chartData)
 		},
-		setOptions({ expectedData, actualData } = {}) {
+		setOptions({ hlhData, spiData,aoiData } = {}) {
 			this.chart.setOption({
 				xAxis: {
 					data: this.chartData.xData,
@@ -70,21 +70,15 @@ export default {
 						show: false
 					}
 				},
-				dataZoom: {
-					start: 0,
-					end: 100,
-					type: "inside",
-					realtime: true,
-				},
 				grid: {
-					left: 10,
-					right: 10,
-					bottom: 20,
-					top: "20%",
+					top: "10%",
+					left: '2%',
+					right: '2%',
+					bottom: '20',
 					containLabel: true
 				},
 				title: {
-					text: '产能达成目标',
+					text: '产量曲线图',
 					left: 'center',
 					textStyle: {
 						color: '#fff',
@@ -112,36 +106,53 @@ export default {
 				},
 				series: [
 					{
-						name: '目标产能',
+						name: '回流焊',
 						itemStyle: {
 							normal: {
-								color: '#FF005A',
+								color: '#06b1fa',
 								lineStyle: {
-									color: '#FF005A',
-									width: 2
+									color: '#06b1fa',
+									width:3
 								}
 							}
 						},
 						smooth: true,
 						type: 'line',
-						data: expectedData,
+						data: hlhData,
 						animationDuration: 2800,
 						animationEasing: 'cubicInOut'
 					},
 					{
-						name: '实际产能',
+						name: 'SPI',
 						smooth: true,
 						type: 'line',
 						itemStyle: {
 							normal: {
-								color: '#3888fa',
+								color: '#ED7D31',
 								lineStyle: {
-									color: '#3888fa',
-									width: 2
+									color: '#ED7D31',
+									width: 3
 								},
 							}
 						},
-						data: actualData,
+						data: spiData,
+						animationDuration: 2800,
+						animationEasing: 'quadraticOut'
+					},
+					{
+						name: 'AOI',
+						smooth: true,
+						type: 'line',
+						itemStyle: {
+							normal: {
+								color: '#c1232b',
+								lineStyle: {
+									color: '#c1232b',
+									width: 3
+								},
+							}
+						},
+						data: aoiData,
 						animationDuration: 2800,
 						animationEasing: 'quadraticOut'
 					}]

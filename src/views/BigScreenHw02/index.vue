@@ -1,8 +1,8 @@
 <template>
   <div class="hw02-content-container">
-    <custom-header class="header-container">
+    <!-- <custom-header class="header-container">
       <template #title> 国内调试生产线可视化看板 </template>
-    </custom-header>
+    </custom-header> -->
     <div class="content-container">
       <div class="base-info">
         <el-row :gutter="20">
