@@ -318,7 +318,7 @@ export default {
       getHourList(this.requestParams).then((res) => {
         if (res.code === SUCCESS_CODE) {
           const data = res.data;
-          this.lineData.xData = data.map((item) => item.belongingTime);
+          this.lineData.xData = data.map((item) => item.belongingTime.split(' ')[1]);
           this.lineData.data[0].seriesData = data.map((item) => item.actualValue);
         }
       });
