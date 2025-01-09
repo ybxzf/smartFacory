@@ -14,7 +14,11 @@ export default {
     chartData: {
       type: Array,
       default: () => []
-    }
+    },
+    title: {
+      type: String,
+      default: () => ""
+    },
   },
   data() {
     return {
@@ -51,6 +55,15 @@ export default {
         return item
       }), 0, 240, 28, 26, 1);
       const option = {
+        title: {
+					text: this.title,
+					left: 'center',
+					top: 10,
+					textStyle: {
+						color: '#fff',
+						fontSize: 16
+					}
+				},
         legend: {
           // selected: {//设置默认选择
           //     '办公费': true,

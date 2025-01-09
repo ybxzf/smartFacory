@@ -123,7 +123,7 @@ export default {
 				},
 				title: {
 					text: chartData.title,
-					left: 'center',
+					left: '20',
 					top: 10,
 					textStyle: {
 						color: '#fff',
@@ -144,8 +144,9 @@ export default {
 				},
 				legend: {
 					data: chartData.data.map(item => item.name),
-					left: 'center',
-					bottom: 10,
+					right: '20',
+					top: '10',
+					// bottom: 10,
 					textStyle: {
 						color: '#fff'
 					}

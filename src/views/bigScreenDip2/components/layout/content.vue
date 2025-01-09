@@ -68,12 +68,12 @@
 					<div class="item-key">完成率</div>
 					<div class="item-value">
 						<div class="item-value-progress">
-							<transition name="expand" @before-enter="beforeEnter" @enter="enter">
+							<!-- <transition name="expand" @before-enter="beforeEnter" @enter="enter">
 								<div class="progress" v-if="completionRateWidth > 0" :style="{
 									width: `${completionRateWidth}%`,
 									backgroundColor: `rgb(${completionRateColor.r},${completionRateColor.g},${completionRateColor.b})`
 								}"></div>
-							</transition>
+							</transition> -->
 							<div class="value">{{ completionRateValue }}%</div>
 						</div>
 					</div>
@@ -88,8 +88,14 @@
 						<!-- <img v-if="item.imageUrl" :src="item.imageUrl" alt=""> -->
 						<el-image v-if="item.imageUrl" :src="item.imageUrl" fit="fit"></el-image>
 					</div>
-					<div class="item-key">{{ item.processName }}</div>
-					<div class="item-value">{{ item.correspondingValue }}</div>
+					<div class="item-key" :style="{width: index === processList.length - 1 ? 'calc(100% - 20px)' : '100%'}">
+            <el-image
+              style="width: 19px; height: 19px;margin-right: 5px;"
+              :src="`/assets/icons/icon_${index + 1}.svg`"
+              :fit="fit"></el-image>
+            {{ item.processName }}
+          </div>
+					<div class="item-value" :style="{width: index === processList.length - 1 ? 'calc(100% - 20px)' : '100%'}">{{ item.correspondingValue }}</div>
 				</div>
 				<!-- <div class="base-item">
           <div class="item-image">
@@ -197,9 +203,9 @@
 			</el-col>
 			<el-col :span="8" class="base-info-col col2">
 				<div class="base-item">
-					<div class="item-left">
+					<!-- <div class="item-left">
 						FCT测试不良统计
-					</div>
+					</div> -->
 					<div class="item-right">
 						<div>
 							线体设备运行状态
@@ -211,7 +217,7 @@
 					</div>
 					<div class="item-chart">
 						<!-- <PieChart height="100%" :chartData="pieData"></PieChart> -->
-						<pieChart3D v-if="fctDefectStatsList.length" height="100%" :chartData="fctDefectStatsList">
+						<pieChart3D v-if="fctDefectStatsList.length" height="100%" :title="'FCT测试不良统计'" :chartData="fctDefectStatsList">
 						</pieChart3D>
 					</div>
 				</div>
@@ -460,7 +466,7 @@ export default {
 			padding: 5px 10px;
 
 			.base-item {
-				background-color: rgba(25, 129, 246, 0.2);
+				// background-color: rgba(25, 129, 246, 0.2);
 				// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
 				// border: 1px solid transparent;
 				width: 100%;
@@ -468,14 +474,17 @@ export default {
 				display: flex;
 
 				.item-key {
-					border-right: 3px solid rgb(54, 102, 227);
+					// border-right: 3px solid rgb(54, 102, 227);
 					display: flex;
 					align-items: center;
-					justify-content: center;
-					width: 40%;
+					justify-content: end;
+					width: 35%;
+          margin-right: 5%;
+          font-size: 15px;
 				}
 
 				.item-value {
+				  background-color: rgba(25, 129, 246, 0.2);
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -483,6 +492,7 @@ export default {
 					font-size: 12px;
 					white-space: nowrap;
 					overflow: hidden;
+          font-weight: 400;
 				}
 			}
 		}
@@ -497,7 +507,7 @@ export default {
 			.item-value-progress {
 				width: 60%;
 				height: 80%;
-				border: 1px solid rgb(255, 255, 255);
+				// border: 1px solid rgb(255, 255, 255);
 				border-radius: 5px;
 				position: relative;
 
@@ -540,7 +550,7 @@ export default {
 			display: flex;
 
 			.base-item {
-				margin: 0 20px 0 0;
+				// margin: 0 20px 0 0;
 				width: 100%;
 				height: 100%;
 				display: flex;
@@ -549,12 +559,14 @@ export default {
 				.item-image {
 					height: 174px;
 					width: 100%;
+          width: calc(100% - 20px);
 					background-color: rgba(25, 129, 246, 0.2);
 					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
 					border: 1px solid rgba(25, 129, 246, 0.8);
 					display: flex;
 					align-items: center;
 					justify-content: center;
+          margin-bottom: 20px;
 
 					img {
 						width: 100%;
@@ -569,16 +581,24 @@ export default {
 
 				.item-key,
 				.item-value {
-					margin-top: 20px;
-					height: 38px;
+          // margin-top: 20px;
 					width: 100%;
-					background-color: rgba(25, 129, 246, 0.2);
+					// background-color: rgba(25, 129, 246, 0.2);
 					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
 					// border: 1px solid transparent;
 					display: flex;
 					align-items: center;
 					justify-content: center;
 				}
+        .item-key {
+					height: 38px;
+          border-top: 1px solid rgba(255, 255, 255);
+        }
+        .item-value {
+					height: 58px;
+          font-size: 40px;
+          border-bottom: 1px solid rgba(255, 255, 255);
+        }
 			}
 		}
 
@@ -600,9 +620,12 @@ export default {
 					width: 100%;
 					height: 100%;
 					/* 设置单元格之间的间隔为 10px */
-					border-spacing: 10px;
+					// border-spacing: 10px;
 					/* 使用 separate 模式来启用单元格之间的间隔 */
-					border-collapse: separate;
+					// border-collapse: separate;
+          border-spacing: 0; /* 移除单元格之间的空隙 */
+          border-collapse: collapse; /* 合并表格边框 */
+          font-size: 15px;
 
 					th {
 						padding: 10px 0;
@@ -610,6 +633,7 @@ export default {
 
 					th,
 					td {
+            border: 1px solid rgba(255, 255, 255, 0.8);
 						background-color: rgba(25, 129, 246, 0.2);
 						// box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.5);
 						// border: 1px solid transparent;
@@ -617,7 +641,13 @@ export default {
 						vertical-align: middle;
 						height: 35px;
 					}
+          .table-body  {
 
+            tr > :not(:first-child) {
+              font-size: 12px;
+              font-weight: 400;
+            }
+          }
 
 				}
 
@@ -653,11 +683,12 @@ export default {
 				height: 100%;
 				display: flex;
 				flex-wrap: wrap;
+        font-size: 15px;
 
 				.item-left,
 				.item-right {
 					height: 35px;
-					background-color: rgba(25, 129, 246, 0.2);
+					// background-color: rgba(25, 129, 246, 0.2);
 					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
 					// border: 1px solid transparent;
 					display: flex;
@@ -672,7 +703,12 @@ export default {
 
 				.item-right {
 					flex: 2;
-					margin-left: 10px;
+          width: 100%;
+					// margin-left: 10px;
+          background-image: url('../../../../assets/images/bigScreen/title_bg.png');
+          background-repeat: no-repeat;
+          background-size: 110% 100%;
+          background-position: 0 center;
 					justify-content: space-between;
 					padding: 0 20px;
 				}
