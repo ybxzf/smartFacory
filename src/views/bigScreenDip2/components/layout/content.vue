@@ -92,7 +92,7 @@
             <el-image
               style="width: 19px; height: 19px;margin-right: 5px;"
               :src="`/assets/icons/icon_${index + 1}.svg`"
-              :fit="fit"></el-image>
+              fit="fit"></el-image>
             {{ item.processName }}
           </div>
 					<div class="item-value" :style="{width: index === processList.length - 1 ? 'calc(100% - 20px)' : '100%'}">{{ item.correspondingValue }}</div>

@@ -42,10 +42,10 @@ export default {
       this.chartData.map(item => {
         total += item.value
       })
-      const cdata = this.chartData.map(item => {
-        item.value = Number((item.value / total * 100).toFixed(2))
-        return item
-      })
+      // const cdata = this.chartData.map(item => {
+      //   item.value = Number((item.value / total * 100).toFixed(2))
+      //   return item
+      // })
       const series = getPie3D(this.chartData.map(item => {
         item.value = Number((item.value / total * 100).toFixed(2))
         return item
