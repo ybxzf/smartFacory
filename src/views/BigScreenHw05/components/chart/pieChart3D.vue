@@ -11,6 +11,10 @@ import { getPie3D } from './pieChart.js';
 export default {
   name: "",
   props: {
+    title: {
+      type: String,
+      default: () => ""
+    },
     chartData: {
       type: Array,
       default: () => []
@@ -51,6 +55,15 @@ export default {
         return item
       }), 0, 240, 28, 26, 1);
       const option = {
+        title: {
+					text: this.title,
+					left: 'center',
+					top: 10,
+					textStyle: {
+						color: '#fff',
+						fontSize: 16,
+					}
+				},
         legend: {
           type: 'scroll',//设置图例翻页
           pageIconColor: '#ff781f', // 设置翻页箭头颜色

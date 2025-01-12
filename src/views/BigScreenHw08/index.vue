@@ -76,12 +76,6 @@
               <label>完成率</label>
               <div class="item-value">
                 <div class="item-value-progress">
-                  <transition name="expand" @before-enter="beforeEnter" @enter="enter">
-                    <div class="progress" v-if="completionRateWidth > 0" :style="{
-                      width: `${completionRateWidth}%`,
-                      backgroundColor: `rgb(${completionRateColor.r},${completionRateColor.g},${completionRateColor.b})`,
-                    }"></div>
-                  </transition>
                   <div class="value">{{ completionRateValue }}%</div>
                 </div>
               </div>
@@ -91,28 +85,47 @@
       </div>
       <el-row :gutter="20" type="flex" class="chart-container-info">
         <el-col :span="12">
-          <LineChart class="chart-content" v-if="lineData.xData.length" height="100%" :chartData="lineData"></LineChart>
-          <div class="chart-content" v-else style="height: 100%">
+          <div class="chart-title">产能分析</div>
+          <LineChart class="chart-content" v-if="lineData.xData.length" style="height: calc(100% - 50px)" :chartData="lineData"></LineChart>
+          <div class="chart-content" v-else style="height: calc(100% - 50px)">
             <Empty></Empty>
           </div>
         </el-col>
         <el-col :span="6">
-          <BarChart class="chart-content" v-if="barData.xData.length" :chartData="barData" height="100%"></BarChart>
-          <div class="chart-content" v-else style="height: 100%">
+          <div class="chart-title">不良数量及占比</div>
+          <BarChart class="chart-content" v-if="barData.xData.length" :chartData="barData" style="height: calc(100% - 50px);background-color: transparent;"></BarChart>
+          <div class="chart-content" v-else style="height: calc(100% - 30px)">
             <Empty></Empty>
           </div>
         </el-col>
         <el-col :span="6">
-          <pieChart3D class="chart-content" v-if="fctDefectStatsList.length" height="100%"
-            :chartData="fctDefectStatsList">
-          </pieChart3D>
-          <div class="chart-content" v-else style="height: 100%">
-            <Empty></Empty>
+          <div class="person-base-info">
+            <div class="info-img">
+              <img :src="imageUrl" alt="" />
+            </div>
+            <div class="info-container">
+              <div class="item">
+                <label>组长</label>
+                <span>{{ groupInfo.teamLeader || "-" }}</span>
+              </div>
+              <div class="item">
+                <label>标准定员</label>
+                <span>{{ groupInfo.standardStaffCount || "-" }}</span>
+              </div>
+              <div class="item">
+                <label>实际出勤</label>
+                <span>{{ groupInfo.actualAttendance || "-" }}</span>
+              </div>
+              <div class="item">
+                <label>人均产能</label>
+                <span>{{ groupInfo.perCapitaCapacity || "-" }}</span>
+              </div>
+            </div>
           </div>
         </el-col>
       </el-row>
       <el-row class="bottom-info" :gutter="20">
-        <el-col :span="6">
+        <el-col :span="12">
           <div class="data-info">
             <el-row :gutter="20" class="item" type="flex">
               <el-col :span="6" class="item-col">产能分析</el-col>
@@ -145,52 +158,36 @@
                 }}</el-col>
             </el-row>
           </div>
+          <div class="table-c">
+            <div class="chart-title">产能统计</div>
+            <el-table v-if="tableData.length" :data="tableData" style="width: 100%; height: calc(100% - 15px);"
+              :row-class-name="tableRowClassName" height="100%" header-row-class-name="table-h-bg">
+              <el-table-column prop="workOrderNumber" label="工单号">
+              </el-table-column>
+              <el-table-column prop="productionType" label="生产表型">
+              </el-table-column>
+              <el-table-column prop="targetCapacity" label="目标产能">
+              </el-table-column>
+              <el-table-column prop="actualCapacity" label="实际产能">
+              </el-table-column>
+            </el-table>
+            <div class="chart-content" v-else style="height: calc(100% - 15px);">
+              <Empty></Empty>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <pieChart3D class="chart-content" v-if="fctDefectStatsList.length" style="height: calc(100%);"
+            :chartData="fctDefectStatsList" :title="'不良占比'">
+          </pieChart3D>
+          <div class="chart-content" v-else style="height: calc(100%)">
+            <Empty></Empty>
+          </div>
         </el-col>
         <el-col :span="6">
           <BarChart class="chart-content" v-if="barData1.xData.length" :chartData="barData1" height="100%"></BarChart>
           <div class="chart-content" v-else style="height: 100%">
             <Empty></Empty>
-          </div>
-        </el-col>
-        <el-col :span="8" class="table-c">
-          <el-table v-if="tableData.length" :data="tableData" style="width: 100%; height: 100%"
-            :row-class-name="tableRowClassName" height="100%" header-row-class-name="table-h-bg">
-            <el-table-column prop="workOrderNumber" label="工单号">
-            </el-table-column>
-            <el-table-column prop="productionType" label="生产表型">
-            </el-table-column>
-            <el-table-column prop="targetCapacity" label="目标产能">
-            </el-table-column>
-            <el-table-column prop="actualCapacity" label="实际产能">
-            </el-table-column>
-          </el-table>
-          <div class="chart-content" v-else style="height: 100%">
-            <Empty></Empty>
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <div class="person-base-info">
-            <div class="info-img">
-              <img :src="imageUrl" alt="" />
-            </div>
-            <div class="info-container">
-              <div class="item">
-                <label>组长</label>
-                <span>{{ groupInfo.teamLeader || "-" }}</span>
-              </div>
-              <div class="item">
-                <label>标准定员</label>
-                <span>{{ groupInfo.standardStaffCount || "-" }}</span>
-              </div>
-              <div class="item">
-                <label>实际出勤</label>
-                <span>{{ groupInfo.actualAttendance || "-" }}</span>
-              </div>
-              <div class="item">
-                <label>人均产能</label>
-                <span>{{ groupInfo.perCapitaCapacity || "-" }}</span>
-              </div>
-            </div>
           </div>
         </el-col>
       </el-row>
@@ -447,6 +444,8 @@ export default {
   // background: #070f20;
   // background-color: #409eff;
   color: #ffffff;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   .header-container {
     margin: 0 10px;
@@ -463,8 +462,8 @@ export default {
       display: flex;
       line-height: 40px;
       color: #fff;
-      font-size: 14px;
-      background-color: rgba(25, 129, 246, 0.2);
+      font-size: 15px;
+      //background-color: rgba(25, 129, 246, 0.2);
       border: 1px solid transparent;
 
       label {
@@ -472,13 +471,17 @@ export default {
         padding: 0 8px;
         text-align: center;
         margin-right: 4px;
-        border-right: 3px solid #3666e3;
+        // border-right: 3px solid #3666e3;
       }
 
       .item-value {
         width: 100%;
         font-size: 12px;
         text-align: center;
+        display: flex;
+        justify-content: center;
+        background-color: rgba(25, 129, 246, 0.2);
+        font-weight: 400;
       }
 
       span {
@@ -500,7 +503,7 @@ export default {
       .item-value-progress {
         width: 60%;
         height: 80%;
-        border: 1px solid rgb(255, 255, 255);
+        // border: 1px solid rgb(255, 255, 255);
         border-radius: 5px;
         position: relative;
 
@@ -523,7 +526,81 @@ export default {
 
   .chart-container-info {
     margin-top: 16px;
-    min-height: 420px;
+    min-height: 320px;
+
+    .person-base-info {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      // background-color: rgba(25, 129, 246, 0.2);
+
+      .info-img {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          // width: auto;
+          height: 140px;
+          object-fit: contain;
+        }
+      }
+
+      .info-container {
+        flex: 1;
+        height: 100%;
+        width: 100%;
+        height: calc(100% - 90px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+
+        .item {
+          width: 90%;
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+
+          label {
+            display: inline-block;
+            min-width: 100px;
+            text-align: end;
+            font-weight: 500;
+            line-height: 30px;
+            font-size: 14px;
+            padding: 0 8px;
+            // background-color: rgba(25, 129, 246, 0.2);
+            margin-right: 8px;
+          }
+
+          span {
+            flex: 1;
+            display: inline-block;
+            line-height: 30px;
+            background-color: rgba(25, 129, 246, 0.2);
+            text-align: center;
+            padding-left: 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .chart-title {
+    height: 30px;
+    background-image: url('../../assets/images/bigScreen/title_bg.png');
+    background-repeat: no-repeat;
+    background-size: 300px 100%;
+    background-position:  0 center;
+    padding-left: 20px;
+    font-size: 15px;
+    line-height: 30px;
+    margin: 10px 0;
   }
 
   .chart-content {
@@ -532,22 +609,23 @@ export default {
 
   .bottom-info {
     margin-top: 16px;
-    height: calc(100% - 500px);
+    height: calc(100% - 400px);
 
     .data-info {
       color: #fff;
       margin-bottom: 4px;
-      margin-left: 6px;
+      margin: 0 8px;
 
       .item {
-        margin-bottom: 16px;
+        margin-bottom: 5px;
 
         .item-col {
-          margin: 0 5px;
+          margin: 0 2px;
+          // border: 1px solid #fff;
           background-color: rgba(25, 129, 246, 0.2);
-          height: 50px;
+          height: 30px;
           font-size: 14px;
-          line-height: 50px;
+          line-height: 30px;
           text-align: center;
         }
       }
@@ -555,7 +633,7 @@ export default {
 
     .table-c {
       background: transparent;
-      height: 100%;
+      height: calc(100% - 134px);
 
       ::v-deep.el-table {
         background: transparent;
@@ -587,66 +665,6 @@ export default {
 
         .even-row {
           background: #032963;
-        }
-      }
-    }
-
-    .person-base-info {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: rgba(25, 129, 246, 0.2);
-
-      .info-img {
-        flex: 1;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        img {
-          width: 100px;
-          object-fit: contain;
-        }
-      }
-
-      .info-container {
-        flex: 1;
-        height: 100%;
-        width: 100%;
-        height: calc(100% - 90px);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-
-        .item {
-          width: 90%;
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 8px;
-
-          label {
-            display: inline-block;
-            min-width: 100px;
-            text-align: center;
-            font-weight: 500;
-            line-height: 30px;
-            font-size: 14px;
-            padding: 0 8px;
-            background-color: rgba(25, 129, 246, 0.2);
-            margin-right: 8px;
-          }
-
-          span {
-            flex: 1;
-            display: inline-block;
-            line-height: 30px;
-            background-color: rgba(25, 129, 246, 0.2);
-            padding-left: 8px;
-          }
         }
       }
     }

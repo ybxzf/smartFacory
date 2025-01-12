@@ -71,10 +71,19 @@ export default {
 					trigger: 'item',
 				},
 				title: {
-          text: this.chartData.title,
+					text: '{img|}'+ this.chartData.title,
 					left: 'center',
 					top: 10,
 					textStyle: {
+						rich: {
+							img: {
+								backgroundColor: {
+									image: '/assets/icons/icon_6.svg',
+								},
+								width: 20,
+								height: 20,
+							}
+						},
 						color: '#fff',
 						fontSize: 16
 					}
