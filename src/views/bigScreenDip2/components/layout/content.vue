@@ -88,14 +88,15 @@
 						<!-- <img v-if="item.imageUrl" :src="item.imageUrl" alt=""> -->
 						<el-image v-if="item.imageUrl" :src="item.imageUrl" fit="fit"></el-image>
 					</div>
-					<div class="item-key" :style="{width: index === processList.length - 1 ? 'calc(100% - 20px)' : '100%'}">
-            <el-image
-              style="width: 19px; height: 19px;margin-right: 5px;"
-              :src="`/assets/icons/icon_${index + 1}.svg`"
-              fit="fit"></el-image>
-            {{ item.processName }}
-          </div>
-					<div class="item-value" :style="{width: index === processList.length - 1 ? 'calc(100% - 20px)' : '100%'}">{{ item.correspondingValue }}</div>
+					<div class="item-key"
+						:style="{ width: index === processList.length - 1 ? 'calc(100% - 20px)' : '100%' }">
+						<el-image style="width: 19px; height: 19px;margin-right: 5px;"
+							:src="`/assets/icons/icon_${index + 1}.svg`" fit="fit"></el-image>
+						{{ item.processName }}
+					</div>
+					<div class="item-value"
+						:style="{ width: index === processList.length - 1 ? 'calc(100% - 20px)' : '100%' }">{{
+							item.correspondingValue }}</div>
 				</div>
 				<!-- <div class="base-item">
           <div class="item-image">
@@ -197,7 +198,8 @@
 		</el-row>
 		<el-row class="base-info row3">
 			<el-col :span="16" class="base-info-col col1">
-				<div class="base-item">
+				<div class="chart-title">产能统计</div>
+				<div class="base-item" style="height: calc(100% - 57px);">
 					<LineChart v-if="lineData.xData.length" height="100%" :chartData="lineData"></LineChart>
 				</div>
 			</el-col>
@@ -217,7 +219,8 @@
 					</div>
 					<div class="item-chart">
 						<!-- <PieChart height="100%" :chartData="pieData"></PieChart> -->
-						<pieChart3D v-if="fctDefectStatsList.length" height="100%" :title="'FCT测试不良统计'" :chartData="fctDefectStatsList">
+						<pieChart3D v-if="fctDefectStatsList.length" height="100%" :title="'FCT测试不良统计'"
+							:chartData="fctDefectStatsList">
 						</pieChart3D>
 					</div>
 				</div>
@@ -351,7 +354,7 @@ export default {
 				if (res.code == SUCCESS_CODE) {
 					this.processList = JSON.parse(JSON.stringify(res.data) || []);
 					this.processList.forEach(item => {
-					    item.load = false; // 添加一个加载状态
+						item.load = false; // 添加一个加载状态
 					})
 					console.log('this.processList', this.processList);
 
@@ -362,7 +365,7 @@ export default {
 							const imageUrl = window.URL.createObjectURL(blob);
 							item.imageUrl = imageUrl;
 						}).finally(() => {
-						    item.load = false;
+							item.load = false;
 						})
 					})
 				}
@@ -460,6 +463,18 @@ export default {
 
 	}
 
+	.chart-title {
+		height: 30px;
+		background-image: url('../../../../assets/images/bigScreen/title_bg.png');
+		background-repeat: no-repeat;
+		background-size: 300px 100%;
+		background-position: 0 center;
+		padding-left: 20px;
+		font-size: 15px;
+		line-height: 30px;
+		margin-bottom: 27px;
+	}
+
 	.row1 {
 		.base-info-col {
 			height: 50px;
@@ -479,12 +494,12 @@ export default {
 					align-items: center;
 					justify-content: end;
 					width: 35%;
-          margin-right: 5%;
-          font-size: 15px;
+					margin-right: 5%;
+					font-size: 15px;
 				}
 
 				.item-value {
-				  background-color: rgba(25, 129, 246, 0.2);
+					background-color: rgba(25, 129, 246, 0.2);
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -492,7 +507,7 @@ export default {
 					font-size: 12px;
 					white-space: nowrap;
 					overflow: hidden;
-          font-weight: 400;
+					font-weight: 400;
 				}
 			}
 		}
@@ -559,14 +574,14 @@ export default {
 				.item-image {
 					height: 174px;
 					width: 100%;
-          width: calc(100% - 20px);
+					width: calc(100% - 20px);
 					background-color: rgba(25, 129, 246, 0.2);
 					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
 					border: 1px solid rgba(25, 129, 246, 0.8);
 					display: flex;
 					align-items: center;
 					justify-content: center;
-          margin-bottom: 20px;
+					margin-bottom: 20px;
 
 					img {
 						width: 100%;
@@ -581,7 +596,7 @@ export default {
 
 				.item-key,
 				.item-value {
-          // margin-top: 20px;
+					// margin-top: 20px;
 					width: 100%;
 					// background-color: rgba(25, 129, 246, 0.2);
 					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
@@ -590,15 +605,17 @@ export default {
 					align-items: center;
 					justify-content: center;
 				}
-        .item-key {
+
+				.item-key {
 					height: 38px;
-          border-top: 1px solid rgba(255, 255, 255);
-        }
-        .item-value {
+					border-top: 1px solid rgba(255, 255, 255);
+				}
+
+				.item-value {
 					height: 58px;
-          font-size: 40px;
-          border-bottom: 1px solid rgba(255, 255, 255);
-        }
+					font-size: 40px;
+					border-bottom: 1px solid rgba(255, 255, 255);
+				}
 			}
 		}
 
@@ -623,17 +640,20 @@ export default {
 					// border-spacing: 10px;
 					/* 使用 separate 模式来启用单元格之间的间隔 */
 					// border-collapse: separate;
-          border-spacing: 0; /* 移除单元格之间的空隙 */
-          border-collapse: collapse; /* 合并表格边框 */
-          font-size: 15px;
+					border-spacing: 0;
+					/* 移除单元格之间的空隙 */
+					border-collapse: collapse;
+					/* 合并表格边框 */
+					font-size: 15px;
 
 					th {
 						padding: 10px 0;
+						width: 33.33%;
 					}
 
 					th,
 					td {
-            border: 1px solid rgba(255, 255, 255, 0.8);
+						border: 1px solid rgba(255, 255, 255, 0.8);
 						background-color: rgba(25, 129, 246, 0.2);
 						// box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.5);
 						// border: 1px solid transparent;
@@ -641,13 +661,14 @@ export default {
 						vertical-align: middle;
 						height: 35px;
 					}
-          .table-body  {
 
-            tr > :not(:first-child) {
-              font-size: 12px;
-              font-weight: 400;
-            }
-          }
+					.table-body {
+
+						tr> :not(:first-child) {
+							font-size: 12px;
+							font-weight: 400;
+						}
+					}
 
 				}
 
@@ -683,7 +704,7 @@ export default {
 				height: 100%;
 				display: flex;
 				flex-wrap: wrap;
-        font-size: 15px;
+				font-size: 15px;
 
 				.item-left,
 				.item-right {
@@ -703,12 +724,12 @@ export default {
 
 				.item-right {
 					flex: 2;
-          width: 100%;
+					width: 100%;
 					// margin-left: 10px;
-          background-image: url('../../../../assets/images/bigScreen/title_bg.png');
-          background-repeat: no-repeat;
-          background-size: 110% 100%;
-          background-position: 0 center;
+					background-image: url('../../../../assets/images/bigScreen/title_bg.png');
+					background-repeat: no-repeat;
+					background-size: 300px 100%;
+					background-position: 0 center;
 					justify-content: space-between;
 					padding: 0 20px;
 				}
