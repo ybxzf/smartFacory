@@ -43,11 +43,11 @@ export default {
     width: 100%;
     height: calc(100vh - 84px);
     /* 设置背景图片 */
-    background-image: url('../../assets/images/bigScreen/bigScreen_bg.png');
+    background-image: url('../../assets/images/bigScreen/kb_bg.png');
     /* 不重复背景图片 */
     background-repeat: no-repeat;
     /* 图片铺满容器 */
-    background-size: 100% 120%;
+    background-size: 100% 100%;
     /* 背景居中显示 */
     background-position: center center;
     // background: #070f20;

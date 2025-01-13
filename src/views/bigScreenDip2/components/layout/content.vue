@@ -88,6 +88,9 @@
 						<!-- <img v-if="item.imageUrl" :src="item.imageUrl" alt=""> -->
 						<el-image v-if="item.imageUrl" :src="item.imageUrl" fit="fit"></el-image>
 					</div>
+					<el-image style="width: 50px; height: 50px;position: absolute;bottom: 25px;"
+						:style="{ left: index === processList.length - 1 ? '5px' : '15px' }"
+						:src="`/assets/dip/dip2_${index + 1}.png`" fit="fit"></el-image>
 					<div class="item-key"
 						:style="{ width: index === processList.length - 1 ? 'calc(100% - 20px)' : '100%' }">
 						<el-image style="width: 19px; height: 19px;margin-right: 5px;"
@@ -198,7 +201,7 @@
 		</el-row>
 		<el-row class="base-info row3">
 			<el-col :span="16" class="base-info-col col1">
-				<div class="chart-title">产能统计</div>
+				<div class="chart-title">每日产能</div>
 				<div class="base-item" style="height: calc(100% - 57px);">
 					<LineChart v-if="lineData.xData.length" height="100%" :chartData="lineData"></LineChart>
 				</div>
@@ -212,7 +215,7 @@
 						<div>
 							线体设备运行状态
 						</div>
-						<img :src="DIPLineStatus | getLineStatus" alt="" style="width:25px">
+						<img :src="DIPLineStatus | getLineStatus" alt="" style="width:25px;margin-right: 100px;">
 						<!-- <el-tag :type="'success'" effect="dark">
               正常{{ DIPLineStatus }}
             </el-tag> -->
@@ -246,6 +249,7 @@ import {
 	getDip2Picture,
 } from '@/api/bigScreen/dip2.js';
 import { SUCCESS_CODE } from '@/utils/constants.js';
+import { colors } from '@/components/chart/pieChartColor.js'
 
 export default {
 	components: {
@@ -318,6 +322,8 @@ export default {
 		}
 	},
 	mounted() {
+		console.log(colors);
+
 		// setInterval(() => {
 		//   this.completionRateWidth = 87;
 		//   this.getcompletionRate(this.completionRateWidth);
@@ -381,12 +387,13 @@ export default {
 		getFctDefectStatsList() {
 			getDip2FctDefectStatsList().then(res => {
 				if (res.code == SUCCESS_CODE) {
-					res.data.forEach(item => {
+					res.data.forEach((item, i) => {
 						this.fctDefectStatsList.push({
 							name: item.projectName,
 							value: item.defectCount,
 							realValue: item.defectCount,
-							itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } // 随机颜色
+							itemStyle: { color: colors[i] }
+							// itemStyle: { color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})` } // 随机颜色
 						});
 					})
 				}
@@ -472,7 +479,7 @@ export default {
 		padding-left: 20px;
 		font-size: 15px;
 		line-height: 30px;
-		margin-bottom: 27px;
+		margin-bottom: 24px;
 	}
 
 	.row1 {
@@ -570,6 +577,7 @@ export default {
 				height: 100%;
 				display: flex;
 				flex-direction: column;
+				position: relative;
 
 				.item-image {
 					height: 174px;
@@ -708,7 +716,7 @@ export default {
 
 				.item-left,
 				.item-right {
-					height: 35px;
+					height: 30px;
 					// background-color: rgba(25, 129, 246, 0.2);
 					// box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
 					// border: 1px solid transparent;

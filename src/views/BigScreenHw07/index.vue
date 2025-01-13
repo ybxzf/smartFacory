@@ -94,7 +94,7 @@
         <el-col :span="6">
           <div class="chart-title">不良数量及占比</div>
           <BarChart class="chart-content" v-if="barData.xData.length" :chartData="barData" style="height: calc(100% - 50px);background-color: transparent;"></BarChart>
-          <div class="chart-content" v-else style="height: calc(100% - 30px)">
+          <div class="chart-content" v-else style="height: calc(100% - 50px)">
             <Empty></Empty>
           </div>
         </el-col>
@@ -160,7 +160,7 @@
           </div>
           <div class="table-c">
             <div class="chart-title">产能统计</div>
-            <el-table v-if="tableData.length" :data="tableData" style="width: 100%; height: calc(100% - 15px);"
+            <el-table v-if="tableData.length" :data="tableData" style="height: calc(100%);"
               :row-class-name="tableRowClassName" height="100%" header-row-class-name="table-h-bg">
               <el-table-column prop="workOrderNumber" label="工单号">
               </el-table-column>
@@ -171,7 +171,7 @@
               <el-table-column prop="actualCapacity" label="实际产能">
               </el-table-column>
             </el-table>
-            <div class="chart-content" v-else style="height: calc(100% - 15px);">
+            <div class="chart-content" v-else style="height: calc(100%);">
               <Empty></Empty>
             </div>
           </div>
@@ -200,7 +200,8 @@ import Empty from "../bigScreen/components/Empty";
 import LineChart from "@/components/chart/LineChart.vue";
 import BarChart from "./components/chart/BarChart.vue";
 import CustomHeader from "@/components/layout/header.vue";
-import pieChart3D from "./components//chart/pieChart3D.vue";
+import pieChart3D from "./components/chart/pieChart3D.vue";
+import { colors } from '@/components/chart/pieChartColor.js';
 import {
   getInfoData,
   getTableData,
@@ -348,14 +349,15 @@ export default {
           const data = res.data;
           this.barData.xData = data.map((item) => item.projectName);
           this.barData.yData = data.map((item) => item.defectCount);
-          this.fctDefectStatsList = data.map((item) => ({
+          this.fctDefectStatsList = data.map((item, i) => ({
             name: item.projectName,
             value: item.defectRatio,
             realValue: item.defectRatio,
-            itemStyle: {
-              color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255
-                })`,
-            }, // 随机颜色
+            itemStyle: { color: colors[i] },
+            // itemStyle: {
+            //   color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255
+            //     })`,
+            // }, // 随机颜色
           }));
         }
       });
@@ -434,11 +436,11 @@ export default {
   width: 100%;
   height: calc(100vh - 84px);
   /* 设置背景图片 */
-  background-image: url("../../assets/images/bigScreen/bigScreen_bg.png");
+  background-image: url("../../assets/images/bigScreen/kb_bg.png");
   /* 不重复背景图片 */
   background-repeat: no-repeat;
   /* 图片铺满容器 */
-  background-size: 100% 120%;
+  background-size: 100% 100%;
   /* 背景居中显示 */
   background-position: center center;
   // background: #070f20;
@@ -633,7 +635,7 @@ export default {
 
     .table-c {
       background: transparent;
-      height: calc(100% - 134px);
+      height: calc(100% - 150px);
 
       ::v-deep.el-table {
         background: transparent;

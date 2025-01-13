@@ -121,15 +121,15 @@ export default {
 					top: "20%",
 					containLabel: true
 				},
-				title: {
-					text: chartData.title,
-					left: '20',
-					top: 10,
-					textStyle: {
-						color: '#fff',
-						fontSize: 16
-					}
-				},
+				// title: {
+				// 	text: chartData.title,
+				// 	left: '20',
+				// 	top: 10,
+				// 	textStyle: {
+				// 		color: '#fff',
+				// 		fontSize: 16
+				// 	}
+				// },
 				tooltip: {
 					trigger: 'axis',
 					axisPointer: {
@@ -144,7 +144,7 @@ export default {
 				},
 				legend: {
 					data: chartData.data.map(item => item.name),
-					right: '20',
+					right: 'center',
 					top: '10',
 					// bottom: 10,
 					textStyle: {
