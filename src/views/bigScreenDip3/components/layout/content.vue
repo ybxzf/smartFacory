@@ -1,9 +1,9 @@
 <template>
   <div class="content-container">
-    <el-row :gutter="20" class="base-info">
-      <el-col :span="4">
-        <div class="com-part">
-          <label>当前工单</label>
+    <el-row class="base-info row1">
+      <el-col :span="4" class="base-info-col col1">
+        <div class="base-item">
+          <div class="item-key">当前工单</div>
           <el-tooltip effect="dark" v-if="baseInfo.workOrder && baseInfo.workOrder.length > 10"
             :content="baseInfo.workOrder" placement="top">
             <div class="item-value">
@@ -15,15 +15,15 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="3">
-        <div class="com-part">
-          <label>工单数量</label>
+      <el-col :span="4" class="base-info-col">
+        <div class="base-item">
+          <div class="item-key">工单数量</div>
           <div class="item-value">{{ baseInfo.workOrderQuantity || '-' }}</div>
         </div>
       </el-col>
-      <el-col :span="5">
-        <div class="com-part">
-          <label>客户</label>
+      <el-col :span="4" class="base-info-col">
+        <div class="base-item">
+          <div class="item-key">客户</div>
           <el-tooltip effect="dark" v-if="baseInfo.customer && baseInfo.customer.length > 10"
             :content="baseInfo.customer" placement="top">
             <div class="item-value">
@@ -35,9 +35,9 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="4">
-        <div class="com-part">
-          <label>产品名称</label>
+      <el-col :span="4" class="base-info-col">
+        <div class="base-item">
+          <div class="item-key">产品名称</div>
           <el-tooltip effect="dark" v-if="baseInfo.productName && baseInfo.productName.length > 10"
             :content="baseInfo.productName" placement="top">
             <div class="item-value">
@@ -49,9 +49,9 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="4">
-        <div class="com-part">
-          <label>产品型号规格</label>
+      <el-col :span="4" class="base-info-col">
+        <div class="base-item">
+          <div class="item-key">产品型号规格</div>
           <el-tooltip effect="dark" v-if="baseInfo.productModel && baseInfo.productModel.length > 10"
             :content="baseInfo.productModel" placement="top">
             <div class="item-value">
@@ -63,33 +63,186 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="4">
-        <div class="com-part">
-          <label>完成率</label>
-          <!-- <span>{{ baseInfo.no || '-' }}</span> -->
+      <el-col :span="4" class="base-info-col col6">
+        <div class="base-item">
+          <div class="item-key">完成率</div>
           <div class="item-value">
             <div class="item-value-progress">
-              <transition name="expand" @before-enter="beforeEnter" @enter="enter">
-                <div class="progress" v-if="completionRateWidth > 0" :style="{
-                  width: `${completionRateWidth}%`,
-                  backgroundColor: `rgb(${completionRateColor.r},${completionRateColor.g},${completionRateColor.b})`
-                }"></div>
-              </transition>
+              <!-- <transition name="expand" @before-enter="beforeEnter" @enter="enter">
+								<div class="progress" v-if="completionRateWidth > 0" :style="{
+									width: `${completionRateWidth}%`,
+									backgroundColor: `rgb(${completionRateColor.r},${completionRateColor.g},${completionRateColor.b})`
+								}"></div>
+							</transition> -->
               <div class="value">{{ completionRateValue }}%</div>
             </div>
           </div>
         </div>
       </el-col>
     </el-row>
-    <el-row :gutter="20" class="project-info">
-      <el-col :span="Math.floor(24 / projectInfo.length)" v-for="item, index in projectInfo" :key="index">
-        <div class="com-part">
-          <label>{{ item.name }}</label>
-          <span>{{ item.value || '0' }}</span>
-        </div>
+    <el-row class="main-base-info" type="flex">
+      <el-col :span="12">
+        <el-row class="base-info row2">
+          <el-col :span="24" class="base-info-col col1">
+            <div class="base-item" v-for="(item, index) in projectInfo" :key="index">
+              <el-image style="width: 40px; height: 40px;position: absolute;bottom: 32px;"
+                :style="{ left: index === projectInfo.length - 1 ? '-24px' : '-5px' }"
+                :src="`/assets/dip/dip2_${(index % 5) + 1}.png`" fit="fit"></el-image>
+              <div class="item-key" :style="{ width: index === projectInfo.length - 1 ? 'calc(100% - 20px)' : '100%' }">
+                <el-image style="width: 19px; height: 19px;margin-right: 5px;"
+                  :src="`/assets/icons/icon_${index + 1}.svg`" fit="fit"></el-image>
+                {{ item.name }}
+              </div>
+              <div class="item-value"
+                :style="{ width: index === projectInfo.length - 1 ? 'calc(100% - 20px)' : '100%' }">
+                {{
+                  item.value }}</div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="base-info row3">
+          <el-col :span="24" class="base-info-col col1">
+            <div class="chart-title">不良数量及占比</div>
+            <div class="base-item" style="height: calc(100% - 57px);">
+              <BarChart :chartData="barData" class="chart-content"></BarChart>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="base-info row4" type="flex">
+          <el-col :span="24" class="table-c">
+            <div class="chart-title">产能统计</div>
+            <div class="table-list" style="height: calc(100% - 50px);">
+              <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" height="100%"
+                header-row-class-name="table-h-bg">
+                <el-table-column prop="pcbNumber" label="PCB板号">
+                </el-table-column>
+                <el-table-column prop="defectProject" label="不良项目">
+                </el-table-column>
+                <el-table-column prop="correspondingWorkOrder" label="对应工单">
+                </el-table-column>
+                <el-table-column prop="productionTime" label="生产时间">
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="12">
+        <el-row :gutter="20" class="base-info row5">
+          <el-col :span="16">
+            <el-row :gutter="20" type="flex">
+              <el-col :span="16">
+                <BarChart :chartData="barData1" class="chart-content"></BarChart>
+              </el-col>
+              <el-col :span="8" class="person-info chart-content">
+                <el-image style="width: 100px; height: 100px" :src="imageUrl" :fit="fit"></el-image>
+                <div class="title-item">
+                  <label>组长</label>
+                  <span>{{ personInfo.teamLeader || "-" }}</span>
+                </div>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="8">
+            <div class="info-container">
+              <div class="item">
+                <label>标准定员</label>
+                <span>{{ personInfo.standardStaffCount || "-" }}</span>
+              </div>
+              <div class="item">
+                <label>实际出勤</label>
+                <span>{{ personInfo.actualAttendance || "-" }}</span>
+              </div>
+              <div class="item">
+                <label>人均产能</label>
+                <span>{{ personInfo.perCapitaCapacity || "-" }}</span>
+              </div>
+              <div class="item">
+                <label>工单</label>
+                <span>{{ baseInfo.workOrder || '-' }}</span>
+              </div>
+              <div class="item">
+                <label>工单数量</label>
+                <span>{{ baseInfo.workOrderQuantity || '-' }}</span>
+              </div>
+              <div class="item">
+                <label>已生产数量</label>
+                <span>{{ baseInfo.productNum || '-' }}</span>
+              </div>
+              <div class="item">
+                <label>合格数量</label>
+                <span>{{ baseInfo.qualifiedNum || '-' }}</span>
+              </div>
+              <div class="item">
+                <label>不合格数量</label>
+                <span>{{ baseInfo.noQualifiedNum || '-' }}</span>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="base-info row6" type="flex">
+          <el-col :span="24">
+            <div class="chart-title">产能分析</div>
+            <div style="height:calc(100% - 50px)" v-if="lineData.xData.length">
+              <LineChart :chart-data="lineData" height="100%"></LineChart>
+            </div>
+            <div class="chart-content" v-else style="height: calc(100% - 50px)">
+              <Empty></Empty>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" class="base-info row7">
+          <el-col :span="24">
+            <div class="data-info">
+              <el-row :gutter="20" class="item" type="flex">
+                <el-col :span="6" class="item-col">产能分析</el-col>
+                <el-col :span="6" class="item-col">目标值</el-col>
+                <el-col :span="6" class="item-col">实际值</el-col>
+                <el-col :span="6" class="item-col">达成率</el-col>
+              </el-row>
+              <el-row :gutter="20" class="item" type="flex">
+                <el-col :span="6" class="item-col">每小时产能</el-col>
+                <el-col :span="6" class="item-col">{{
+                  productivityAnalysis.hour.targetValue || 0
+                }}</el-col>
+                <el-col :span="6" class="item-col">{{
+                  productivityAnalysis.hour.actualValue || 0
+                }}</el-col>
+                <el-col :span="6" class="item-col">{{
+                  productivityAnalysis.hour.achievementRate || 0
+                }}</el-col>
+              </el-row>
+              <el-row :gutter="20" class="item" type="flex">
+                <el-col :span="6" class="item-col">当日产能</el-col>
+                <el-col :span="6" class="item-col">{{
+                  productivityAnalysis.day.targetValue || 0
+                }}</el-col>
+                <el-col :span="6" class="item-col">{{
+                  productivityAnalysis.day.actualValue || 0
+                }}</el-col>
+                <el-col :span="6" class="item-col">{{
+                  productivityAnalysis.day.achievementRate || 0
+                }}</el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
-    <el-row :gutter="20" class="bad-info">
+    <!-- <el-row :gutter="20" class="project-info">
+      <el-col :span="12">
+        <el-row :gutter="20">
+          <el-col :span="Math.floor(24 / projectInfo.length)" v-for="item, index in projectInfo" :key="index">
+            <div class="com-part">
+              <label>{{ item.name }}</label>
+              <span>{{ item.value || '0' }}</span>
+            </div>
+          </el-col>
+        </el-row>
+      </el-col>
+
+    </el-row> -->
+    <!-- <el-row :gutter="20" class="bad-info">
       <el-col :span="12">
         <BarChart :chartData="barData"></BarChart>
       </el-col>
@@ -151,8 +304,8 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
-    <el-row :gutter="20" class="bottom-info">
+    </el-row> -->
+    <!-- <el-row :gutter="20" class="bottom-info">
       <el-col :span="12" class="table-c">
         <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" height="100%"
           header-row-class-name="table-h-bg">
@@ -198,7 +351,7 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
@@ -241,6 +394,12 @@ export default {
         b: 0,
       },
       barData: {
+        title: "不良数量",
+        xData: [],
+        yData: []
+      },
+      barData1: {
+        title: "损失时间",
         xData: [],
         yData: []
       },
@@ -292,17 +451,18 @@ export default {
     getPieCharData() {
       getPieData().then(res => {
         if (res.code === SUCCESS_CODE) {
-          const colorMap = ['rgba(18, 76, 154, 1)', 'rgba(15, 176, 255, 1)', 'rgba(0, 244, 188, 1)']
-          this.pieData.legendData = res.data.map(item => item.name);
-          this.pieData.yData = res.data.map((item, index) => {
-            return {
-              val: item.lossCount,
-              name: item.name,
-              itemStyle: {
-                color: colorMap[index]
-              }
-            }
-          });
+          // const colorMap = ['rgba(18, 76, 154, 1)', 'rgba(15, 176, 255, 1)', 'rgba(0, 244, 188, 1)']
+          this.barData1.xData = res.data.map(item => item.name);
+          this.barData1.yData = res.data.map(item => item.lossCount);
+          // this.barData1.yData = res.data.map((item, index) => {
+          //   return {
+          //     val: item.lossCount,
+          //     name: item.name,
+          //     itemStyle: {
+          //       color: colorMap[index]
+          //     }
+          //   }
+          // });
         }
       })
     },
@@ -409,68 +569,432 @@ export default {
 <style scoped lang="scss">
 $minHeight: 300px;
 
+* {
+  border-radius: 1px;
+}
+
+.chart-title {
+  height: 30px;
+  background-image: url('../../../../assets/images/bigScreen/title_bg.png');
+  background-repeat: no-repeat;
+  background-size: 300px 100%;
+  background-position: 0 center;
+  padding-left: 20px;
+  font-size: 15px;
+  line-height: 30px;
+  margin: 10px 0;
+}
+
+.chart-content {
+  background-color: rgba(25, 129, 246, 0.2);
+}
+
+
+
 .content-container {
+  font-size: 14px;
+  font-weight: 700;
+
+  .main-base-info {
+    height: calc(100% - 66px);
+  }
+
   .base-info {
-    .com-part {
-      min-height: 40px;
-      display: flex;
-      line-height: 40px;
-      color: #fff;
-      font-size: 14px;
-      background-color: rgba(25, 129, 246, 0.2);
-      border: 1px solid transparent;
+    padding: 0 10px;
+    // margin: 5px 0;
 
-      label {
-        min-width: 100px;
-        text-align: center;
-        margin-right: 4px;
-        border-right: 3px solid #3666e3;
-      }
+    &.row1 {
+      margin-bottom: 16px;
 
-      .item-value {
-        width: 100%;
-        font-size: 12px;
-        text-align: center;
-      }
+      .base-info-col {
+        height: 50px;
+        padding: 5px 10px;
 
-      span {
-        flex: 1;
-        padding-left: 4px;
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .item-value {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 60%;
-        font-size: 12px;
-        white-space: nowrap;
-        overflow: hidden;
-      }
-
-      .item-value-progress {
-        width: 60%;
-        height: 80%;
-        border: 1px solid rgb(255, 255, 255);
-        border-radius: 5px;
-        position: relative;
-
-        .progress {
+        .base-item {
+          width: 100%;
           height: 100%;
           display: flex;
-          justify-content: center;
-          align-items: center;
+
+          .item-key {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            width: 35%;
+            margin-right: 5%;
+            font-size: 15px;
+          }
+
+          .item-value {
+            background-color: rgba(25, 129, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60%;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: 400;
+          }
+        }
+      }
+
+      .col1 {
+        padding: 5px 10px 5px 0;
+      }
+
+      .col6 {
+        padding: 5px 0 5px 10px;
+
+        .item-value-progress {
+          width: 60%;
+          height: 80%;
+          // border: 1px solid rgb(255, 255, 255);
+          border-radius: 5px;
+          position: relative;
+
+          .progress {
+            height: 100%;
+            // background-color: rgb(255, 0, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // animation: expandWidth 2s forwards;
+          }
+
+          .value {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+          }
         }
 
-        .value {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
+        // @keyframes expandWidth {
+        // 	0% {
+        // 		width: 0%;
+        // 	}
+
+        // 	100% {
+        // 		width: 100%;
+        // 	}
+        // }
+      }
+    }
+
+    &.row2 {
+      .base-info-col {
+        // height: 300px;
+      }
+
+      .col1 {
+        padding: 5px 0;
+        display: flex;
+
+        .base-item {
+          // margin: 0 20px 0 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+
+          .item-image {
+            height: 174px;
+            width: 100%;
+            width: calc(100% - 20px);
+            background-color: rgba(25, 129, 246, 0.2);
+            // box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+            border: 1px solid rgba(25, 129, 246, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+
+            img {
+              width: 100%;
+              height: 100%;
+            }
+
+            .el-image {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .item-key,
+          .item-value {
+            // margin-top: 20px;
+            width: 100%;
+            // background-color: rgba(25, 129, 246, 0.2);
+            // box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+            // border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .item-key {
+            height: 38px;
+            border-top: 1px solid rgba(255, 255, 255);
+          }
+
+          .item-value {
+            height: 58px;
+            font-size: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255);
+          }
+        }
+      }
+
+      .col2 {
+        .base-item {
+
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          overflow-y: scroll;
+          position: relative;
+
+          &::-webkit-scrollbar {
+            /* 隐藏垂直滚动条 */
+            width: 0px;
+          }
+
+          .item-table {
+            width: 100%;
+            height: 100%;
+            /* 设置单元格之间的间隔为 10px */
+            // border-spacing: 10px;
+            /* 使用 separate 模式来启用单元格之间的间隔 */
+            // border-collapse: separate;
+            border-spacing: 0;
+            /* 移除单元格之间的空隙 */
+            border-collapse: collapse;
+            /* 合并表格边框 */
+            font-size: 15px;
+
+            th {
+              padding: 10px 0;
+              width: 33.33%;
+            }
+
+            th,
+            td {
+              border: 1px solid rgba(255, 255, 255, 0.8);
+              background-color: rgba(25, 129, 246, 0.2);
+              // box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.5);
+              // border: 1px solid transparent;
+              text-align: center;
+              vertical-align: middle;
+              height: 35px;
+            }
+
+            .table-body {
+
+              tr> :not(:first-child) {
+                font-size: 12px;
+                font-weight: 400;
+              }
+            }
+
+          }
+
+        }
+      }
+    }
+
+    &.row3 {
+
+      .col2 {
+        padding: 5px 0 5px 10px;
+
+        .base-item {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          font-size: 15px;
+
+          .item-left,
+          .item-right {
+            height: 30px;
+            // background-color: rgba(25, 129, 246, 0.2);
+            // box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+            // border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+          }
+
+          .item-left {
+            flex: 3;
+            margin-right: 10px;
+            justify-content: center;
+          }
+
+          .item-right {
+            flex: 2;
+            width: 100%;
+            // margin-left: 10px;
+            background-image: url('../../../../assets/images/bigScreen/title_bg.png');
+            background-repeat: no-repeat;
+            background-size: 300px 100%;
+            background-position: 0 center;
+            justify-content: space-between;
+            padding: 0 20px;
+          }
+
+          .item-chart {
+            width: 100%;
+            margin-top: 20px;
+            height: calc(100% - 56px);
+            background-color: rgba(25, 129, 246, 0.2);
+            // box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+            // border: 1px solid transparent;
+          }
+        }
+      }
+    }
+
+    &.row4 {
+      height: calc(100% - 456px);
+
+      .table-c {
+        background: transparent;
+        height: 100%;
+
+        ::v-deep.el-table {
+          background: transparent;
+
+          &::before {
+            height: 0px !important;
+          }
+
+          tr {
+            background: transparent;
+            color: #fff;
+
+            th,
+            td {
+              border-bottom: none;
+            }
+          }
+
+          .table-h-bg {
+            th {
+              background: rgba(25, 129, 246, 0.2);
+              color: #fff;
+            }
+          }
+
+          .odd-row {
+            background: #0e2550;
+          }
+
+          .even-row {
+            background: #032963;
+          }
+        }
+      }
+    }
+
+    &.row5 {
+      .person-info {
+        display: flex;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .title-item {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+
+        label {
+          display: inline-block;
+          // min-width: 100px;
+          text-align: end;
+          font-weight: 500;
+          line-height: 30px;
+          font-size: 14px;
+          padding: 0 8px;
+          margin-right: 8px;
+        }
+
+        span {
+          flex: 1;
+          display: inline-block;
+          line-height: 30px;
+          background-color: rgba(25, 129, 246, 0.2);
+          text-align: center;
+          padding-left: 8px;
+        }
+      }
+
+      .info-container {
+        height: 100%;
+        width: 100%;
+        height: calc(100% - 90px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+
+        .item {
+          width: 90%;
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+
+          label {
+            display: inline-block;
+            min-width: 100px;
+            text-align: end;
+            font-weight: 500;
+            line-height: 30px;
+            font-size: 14px;
+            padding: 0 8px;
+            // background-color: rgba(25, 129, 246, 0.2);
+            margin-right: 8px;
+          }
+
+          span {
+            flex: 1;
+            display: inline-block;
+            line-height: 30px;
+            background-color: rgba(25, 129, 246, 0.2);
+            text-align: center;
+            padding-left: 8px;
+          }
+        }
+      }
+    }
+
+    &.row6 {
+      height: calc(100% - 433px);
+    }
+
+    &.row7 {
+      margin-top: 24px;
+
+      .data-info {
+        color: #fff;
+        margin-bottom: 4px;
+        margin: 0 8px;
+
+        .item {
+          margin-bottom: 5px;
+
+          .item-col {
+            margin: 0 2px;
+            background-color: rgba(25, 129, 246, 0.2);
+            height: 30px;
+            font-size: 14px;
+            line-height: 30px;
+            text-align: center;
+          }
         }
       }
     }
@@ -658,7 +1182,7 @@ $minHeight: 300px;
     // display: none;
   }
 
-  .bottom-info {
+  .table-c {
     .el-table th.gutter {
       display: none;
       width: 0
@@ -684,20 +1208,6 @@ $minHeight: 300px;
         border: none;
       }
     }
-
-    // .el-table__body-wrapper::-webkit-scrollbar {
-    // 	width: 0;
-    // 	height: 6px;
-    // }
-
-    // .el-table__body-wrapper:hover::-webkit-scrollbar {
-    // 	width: 6px;
-    // 	height: 6px;
-    // }
-
-    // .el-table__body-wrapper::-webkit-scrollbar-track-piece {
-    // 	background-color: transparent;
-    // }
 
     .el-table--enable-row-hover .el-table__body tr:hover {
       td {
