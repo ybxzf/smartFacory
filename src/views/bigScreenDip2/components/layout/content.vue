@@ -499,7 +499,7 @@ export default {
 					// border-right: 3px solid rgb(54, 102, 227);
 					display: flex;
 					align-items: center;
-					justify-content: end;
+					justify-content: flex-end;
 					width: 35%;
 					margin-right: 5%;
 					font-size: 15px;

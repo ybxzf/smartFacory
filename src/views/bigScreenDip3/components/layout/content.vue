@@ -111,7 +111,7 @@
         <el-row class="base-info row4" type="flex">
           <el-col :span="24" class="table-c">
             <div class="chart-title">产能统计</div>
-            <div class="table-list" style="height: calc(100% - 50px);">
+            <div class="table-list chart-content" style="height: calc(100% - 50px);">
               <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" height="100%"
                 header-row-class-name="table-h-bg">
                 <el-table-column prop="pcbNumber" label="PCB板号">
@@ -183,7 +183,7 @@
         <el-row :gutter="20" class="base-info row6" type="flex">
           <el-col :span="24">
             <div class="chart-title">产能分析</div>
-            <div style="height:calc(100% - 50px)" v-if="lineData.xData.length">
+            <div style="height:calc(100% - 50px)" class="chart-content" v-if="lineData.xData.length">
               <LineChart :chart-data="lineData" height="100%"></LineChart>
             </div>
             <div class="chart-content" v-else style="height: calc(100% - 50px)">
@@ -618,7 +618,7 @@ $minHeight: 300px;
           .item-key {
             display: flex;
             align-items: center;
-            justify-content: end;
+            justify-content: flex-end;
             width: 35%;
             margin-right: 5%;
             font-size: 15px;
