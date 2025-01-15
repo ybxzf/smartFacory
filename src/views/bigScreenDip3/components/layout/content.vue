@@ -85,9 +85,9 @@
         <el-row class="base-info row2">
           <el-col :span="24" class="base-info-col col1">
             <div class="base-item" v-for="(item, index) in projectInfo" :key="index">
-              <el-image style="width: 40px; height: 40px;position: absolute;bottom: 32px;"
+              <!-- <el-image style="width: 40px; height: 40px;position: absolute;bottom: 32px;"
                 :style="{ left: index === projectInfo.length - 1 ? '-24px' : '-5px' }"
-                :src="`/assets/dip/dip2_${(index % 5) + 1}.png`" fit="fit"></el-image>
+                :src="`/assets/dip/dip2_${(index % 5) + 1}.png`" fit="fit"></el-image> -->
               <div class="item-key" :style="{ width: index === projectInfo.length - 1 ? 'calc(100% - 20px)' : '100%' }">
                 <el-image style="width: 19px; height: 19px;margin-right: 5px;"
                   :src="`/assets/icons/icon_${index + 1}.svg`" fit="fit"></el-image>
@@ -135,7 +135,7 @@
                 <BarChart :chartData="barData1" class="chart-content"></BarChart>
               </el-col>
               <el-col :span="8" class="person-info chart-content">
-                <el-image style="width: 100px; height: 100px" :src="imageUrl" :fit="fit"></el-image>
+                <el-image style="width: 100px; height: 100px" :src="imageUrl" fit="fit"></el-image>
                 <div class="title-item">
                   <label>组长</label>
                   <span>{{ personInfo.teamLeader || "-" }}</span>
@@ -856,7 +856,7 @@ $minHeight: 300px;
     }
 
     &.row4 {
-      height: calc(100% - 456px);
+      height: calc(100% - 461px);
 
       .table-c {
         background: transparent;
@@ -1198,6 +1198,7 @@ $minHeight: 300px;
     }
 
     .el-table__body-wrapper {
+      background: rgba(25, 129, 246, 0.2);
       &::-webkit-scrollbar {
         width: 0;
         height: 6px;
