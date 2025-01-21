@@ -466,8 +466,7 @@ export default {
 
 	.base-info {
 		padding: 10px;
-		margin: 5px 0;
-
+		margin: -10px 0 5px 0;
 	}
 
 	.chart-title {
