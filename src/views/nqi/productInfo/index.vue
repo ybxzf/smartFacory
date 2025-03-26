@@ -1,6 +1,6 @@
 <template>
-  <div class="app-container">
-    <el-row :gutter="10" class="mb8" v-show="showSearch">
+  <div style="height: 100%" class="app-container">
+    <el-row :gutter="10" style="height: 40px" class="mb8" v-show="showSearch">
       <el-col :span="12">
         <el-form
           :model="queryParams"
@@ -47,7 +47,6 @@
           plain
           icon="el-icon-edit"
           size="mini"
-          :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['smartfactory:attendance:edit']"
           >修改</el-button
@@ -58,7 +57,6 @@
           plain
           icon="el-icon-delete"
           size="mini"
-          :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['smartfactory:attendance:remove']"
           >删除</el-button
@@ -70,41 +68,51 @@
         ></right-toolbar>
       </el-col>
     </el-row>
+
     <el-table
+      style="height: calc(100% - 90px); overflow-y: auto"
       v-loading="loading"
-      :data="attendanceList"
+      :data="tableData"
+      ref="tableData"
+      highlight-current-row
+      @row-click="rowClick"
       border
-      @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" />
+      <el-table-column type="index" label="序号" width="50" align="center" />
       <el-table-column
         label="产品编码"
+        sortable
         align="center"
-        prop="expectedQuantity"
+        prop="product_code"
       />
-      <el-table-column label="企业编码" align="center" prop="actualQuantity" />
-      <el-table-column label="产品型号" align="center" prop="actualQuantity" />
-      <el-table-column label="产品名称" align="center" prop="actualQuantity" />
-      <el-table-column label="产品类别" align="center" prop="actualQuantity" />
+      <el-table-column label="企业编码" align="center" prop="enterprise_code" />
+      <el-table-column label="产品型号" align="center" prop="product_type" />
+      <el-table-column label="产品名称" align="center" prop="product_name" />
+      <el-table-column label="产品类别" align="center" prop="product_categid" />
       <el-table-column
         label="产品设计依据"
         align="center"
-        prop="actualQuantity"
+        prop="product_design_basis"
       />
-      <el-table-column label="备注" align="center" prop="actualQuantity" />
-      <el-table-column label="写入时间" align="center" prop="date" width="180">
+      <el-table-column label="备注" align="center" prop="remarks" />
+      <el-table-column
+        label="写入时间"
+        align="center"
+        sortable
+        prop="write_date"
+        width="180"
+      >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.date) }}</span>
+          <span>{{ parseTime(scope.row.write_date) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="处理标记" align="center" prop="actualQuantity" />
+      <!-- <el-table-column label="处理标记" align="center" prop="actualQuantity" />
       <el-table-column label="通知时间" align="center" prop="date" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.date) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="通知号" align="center" prop="actualQuantity" />
+      <el-table-column label="通知号" align="center" prop="actualQuantity" /> -->
     </el-table>
 
     <pagination
@@ -116,40 +124,88 @@
     />
 
     <!-- 添加或修改出勤统计对话框 -->
-    <el-dialog center :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog
+      center
+      :title="title"
+      :visible.sync="open"
+      width="500px"
+      append-to-body
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="产品编码" prop="expectedQuantity">
-          <el-input
-            v-model="form.expectedQuantity"
-            placeholder="请输入产品编码"
-          />
+        <el-form-item label="产品编码" prop="product_code">
+          <el-input v-model="form.product_code" placeholder="请输入产品编码" />
         </el-form-item>
-        <el-form-item label="企业编码" prop="actualQuantity">
+        <el-form-item label="企业编码" prop="enterprise_code">
           <el-input
-            v-model="form.actualQuantity"
+            v-model="form.enterprise_code"
             placeholder="请输入企业编码"
           />
         </el-form-item>
-        <el-form-item label="产品型号" prop="actualQuantity">
+        <el-form-item label="产品型号" prop="product_type">
+          <el-select
+            v-model="form.product_type"
+            auto-complete="off"
+            style="width: 100%"
+            size="mini"
+            filterable
+            placeholder="请选择产品型号"
+            @change="refreshData"
+          >
+            <el-option
+              v-for="item in pubCodeDataList"
+              :key="item.value"
+              :label="item.value"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="产品名称" prop="product_name">
+          <el-select
+            v-model="form.product_name"
+            auto-complete="off"
+            style="width: 100%"
+            size="mini"
+            filterable
+            placeholder="请选择产品名称"
+            @change="refreshData"
+          >
+            <el-option
+              v-for="item in pubCodeDataList1"
+              :key="item"
+              :label="item"
+              :value="item"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="产品类别" prop="product_categid">
+          <el-select
+            v-model="form.product_categid"
+            auto-complete="off"
+            style="width: 100%"
+            size="mini"
+            filterable
+            placeholder="请选择产品类别"
+            @change="refreshData"
+          >
+            <el-option
+              v-for="item in pubCodeDataList2"
+              :key="item.codE_ID"
+              :label="item.codE_ID + ':' + item.name"
+              :value="item.codE_ID"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="产品设计依据" prop="product_design_basis">
           <el-input
-            v-model="form.actualQuantity"
-            placeholder="请输入产品型号"
+            v-model="form.product_design_basis"
+            placeholder="请输入产品设计依据"
           />
         </el-form-item>
-         <el-form-item label="产品名称" prop="actualQuantity">
+        <el-form-item label="备注" prop="remarks">
           <el-input
-            v-model="form.actualQuantity"
-            placeholder="请输入产品名称"
-          />
-        </el-form-item>  <el-form-item label="产品类别" prop="actualQuantity">
-          <el-input
-            v-model="form.actualQuantity"
-            placeholder="请输入产品类别"
-          />
-        </el-form-item><el-form-item label="产品设计依据" prop="actualQuantity">
-          <el-input
-            v-model="form.actualQuantity"
-            placeholder="请输入产品设计依据"
+            type="textarea"
+            v-model="form.remarks"
+            placeholder="请输入备注"
           />
         </el-form-item>
       </el-form>
@@ -163,13 +219,12 @@
 
 <script>
 import {
-  listAttendance,
-  getAttendance,
-  delAttendance,
-  addAttendance,
-  updateAttendance,
-} from "@/api/smartfactory/attendance";
-
+  GetPubCode,
+  GetProductInfo,
+  AddProductInfo,
+  UpdateProductInfo,
+  DeleteProductInfo,
+} from "@/api/nqi/nqi";
 export default {
   name: "Attendance",
   data() {
@@ -186,8 +241,13 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 出勤统计表格数据
-      attendanceList: [],
+      // 产品信息列表
+      tableData: [],
+      pubCodeDataList: [],
+      pubCodeDataList1: [],
+      pubCodeDataList2: [],
+      //选中行数据
+      currentRow: null,
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -197,26 +257,103 @@ export default {
         pageNum: 1,
         pageSize: 10,
         key: null,
-        expectedQuantity: null,
-        actualQuantity: null,
       },
       // 表单参数
       form: {},
       // 表单校验
-      rules: {},
+      rules: {
+        product_code: [
+          { required: true, message: "产品编码不能为空", trigger: "blur" },
+        ],
+        enterprise_code: [
+          {
+            required: true,
+            message: "企业编码不能为空",
+            trigger: "blur",
+          },
+        ],
+        product_type: [
+          {
+            required: true,
+            message: "产品型号不能为空",
+            trigger: "blur",
+          },
+        ],
+        product_name: [
+          { required: true, message: "产品名称不能为空", trigger: "blur" },
+        ],
+        product_categid: [
+          {
+            required: true,
+            message: "产品类别不能为空",
+            trigger: "blur",
+          },
+        ],
+        product_design_basis: [
+          {
+            required: true,
+            message: "产品设计依据不能为空",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   created() {
     this.getList();
   },
   methods: {
-    /** 查询出勤统计列表 */
+    refreshData(val) {
+      this.$forceUpdate();
+    },
+    rowClick(row) {
+      this.$refs.tableData.clearSelection();
+      this.$refs.tableData.toggleRowSelection(row);
+      this.currentRow = row;
+    },
+    /** 查询公共信息列表 */
+    GetPubCodeList(isAdd) {
+      GetPubCode({ key: "'PRODUCT_NAME','PRODUCT_CATEGID'" }).then((res) => {
+        if (res.success) {
+          this.pubCodeDataList = res.response.filter(
+            (r) => r.codE_TYPE === "PRODUCT_NAME"
+          );
+          this.pubCodeDataList1 = [
+            ...new Set(
+              res.response
+                .filter((r) => r.codE_TYPE === "PRODUCT_NAME")
+                .map((y) => y.name)
+            ),
+          ];
+          this.pubCodeDataList2 = res.response.filter(
+            (r) => r.codE_TYPE === "PRODUCT_CATEGID"
+          );
+          if (isAdd) {
+            this.form.product_type =
+              this.pubCodeDataList.length > 0
+                ? this.pubCodeDataList[0].value
+                : "";
+            this.form.product_name =
+              this.pubCodeDataList1.length > 0 ? this.pubCodeDataList1[0] : "";
+            this.form.product_categid =
+              this.pubCodeDataList2.length > 0
+                ? this.pubCodeDataList2[0].codE_ID
+                : "";
+          }
+        }
+      });
+    },
+    /** 查询产品信息列表 */
     getList() {
       this.loading = true;
-      listAttendance(this.queryParams).then((response) => {
-        this.attendanceList = response.rows;
-        this.total = response.total;
-        this.loading = false;
+      GetProductInfo(this.queryParams).then((res) => {
+        if (res.success) {
+          this.tableData = res.response;
+          this.total = res.dataCount;
+          this.loading = false;
+        } else {
+          this.$message.error(res.msg);
+        }
       });
     },
     // 取消按钮
@@ -226,12 +363,7 @@ export default {
     },
     // 表单重置
     reset() {
-      this.form = {
-        id: null,
-        date: null,
-        expectedQuantity: null,
-        actualQuantity: null,
-      };
+      this.form = {};
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -253,34 +385,40 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.GetPubCodeList(true);
       this.open = true;
       this.title = "添加产品信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
-      const id = row.id || this.ids;
-      getAttendance(id).then((response) => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改产品信息";
-      });
+      this.GetPubCodeList(false);
+      this.form = JSON.parse(JSON.stringify(this.currentRow));
+      if (!this.form) {
+        this.$message.error("请选择要修改的产品信息！");
+        return;
+      }
+      this.open = true;
+      this.title = "修改产品信息";
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.id != null) {
-            updateAttendance(this.form).then((response) => {
-              this.$modal.msgSuccess("修改成功");
+            UpdateProductInfo(this.form).then((response) => {
+              if (res.success) {  this.$modal.msgSuccess("修改成功");
               this.open = false;
-              this.getList();
+              this.getList();} else {
+              this.$message.error(res.msg);
+            }
             });
           } else {
-            addAttendance(this.form).then((response) => {
-              this.$modal.msgSuccess("新增成功");
+            AddProductInfo(this.form).then((response) => {
+               if (res.success) { this.$modal.msgSuccess("新增成功");
               this.open = false;
-              this.getList();
+              this.getList();} else {
+              this.$message.error(res.msg);
+            }
             });
           }
         }
@@ -288,15 +426,21 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal
-        .confirm('是否确认删除出勤统计编号为"' + ids + '"的数据项？')
-        .then(function () {
-          return delAttendance(ids);
-        })
+      this.form = JSON.parse(JSON.stringify(this.currentRow));
+      if (!this.form) {
+        this.$message.error("请选择要删除的产品信息！");
+        return;
+      }
+      this.$confirm("确认删除该产品信息吗？", "提示", { type: "warning" })
         .then(() => {
-          this.getList();
-          this.$modal.msgSuccess("删除成功");
+          DeleteProductInfo(this.form.id).then((res) => {
+            if (res.success) {
+              this.$message.success(res.msg);
+            } else {
+              this.$message.error(res.msg);
+            }
+            this.getList();
+          });
         })
         .catch(() => {});
     },

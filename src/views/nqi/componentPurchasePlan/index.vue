@@ -68,9 +68,8 @@
         ></right-toolbar>
       </el-col>
     </el-row>
-
-    <el-table
-      style="height: calc(100% - 90px); overflow-y: auto"
+<el-table
+     style="height: calc(100% - 90px); overflow-y: auto"
       v-loading="loading"
       ref="tableData"
       :data="tableData"
@@ -80,31 +79,19 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="index" label="序号" width="50" align="center" />
+      <el-table-column label="采购编号" align="center" prop="purchase_code" />
       <el-table-column
-        label="研发方案编号"
+        label="元器件编号"
         align="center"
-        prop="development_project_no"
+        prop="component_code"
       />
+      <el-table-column label="供应商企业编号" align="center" prop="supplier_enterprise_code" />
+      <el-table-column label="采购数量" align="center" prop="purchase_num" />
       <el-table-column
-        label="软件版本号"
+        label="到货时间"
         align="center"
-        prop="software_version"
-      />
-      <el-table-column
-        label="硬件版本号"
-        align="center"
-        prop="hardware_version"
-      />
-      <el-table-column
-        label="写入时间"
-        align="center"
-        prop="write_date"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.write_date) }}</span>
-        </template>
-      </el-table-column>
+        prop="arrived_time"
+      /><el-table-column label="写入时间" align="center" prop="write_date" />
     </el-table>
 
     <pagination
@@ -120,41 +107,79 @@
       center
       :title="title"
       :visible.sync="open"
-      width="420px"
+      width="800px"
       append-to-body
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="160px">
         <!-- 第一行 -->
-        <el-form-item label="研发方案编号" prop="development_project_no">
-          <el-select
-            v-model="form.development_project_no"
-            auto-complete="off"
-            style="width: 100%"
-            size="mini"
-            filterable
-            placeholder="请选择研发方案编号"
-            @change="refreshData"
-          >
-            <el-option
-              v-for="item in pubCodeDataList1"
-              :key="item.development_project_no"
-              :label="item.development_project_no"
-              :value="item.development_project_no"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="软件版本号" prop="software_version">
-          <el-input
-            v-model="form.software_version"
-            placeholder="请输入软件版本号"
-          />
-        </el-form-item>
-        <el-form-item label="硬件版本号" prop="hardware_version">
-          <el-input
-            v-model="form.hardware_version"
-            placeholder="请输入硬件版本号"
-          />
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="采购编号" prop="purchase_code">
+              <el-input
+                v-model="form.purchase_code"
+                placeholder="请输入采购编号"
+              />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="元器件编号" prop="component_code">
+              <el-select
+                v-model="form.component_code"
+                auto-complete="off"
+                style="width: 100%"
+                size="mini"
+                filterable
+                @change="refreshData"
+                placeholder="请选择旧元器件编号"
+              >
+                <el-option
+                  v-for="item1 in pubCodeDataList1"
+                  :key="item1.code"
+                  :label="item1.code + ':' + item1.name"
+                  :value="item1.code"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 第三行 -->
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item
+              label="供应商企业编号"
+              prop="supplier_enterprise_code"
+            >
+              <el-input
+                v-model="form.supplier_enterprise_code"
+                placeholder="请输入供应商企编号"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="采购数量" prop="purchase_num">
+              <el-input
+                v-model="form.purchase_num"
+                placeholder="请输入采购数量"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- 第四行 -->
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="到货时间" prop="arrived_time">
+              <el-date-picker
+                clearable
+                v-model="form.arrived_time"
+                format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+                placeholder="请选择变更时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -167,12 +192,15 @@
 <script>
 import {
   GetPubCode,
-  GetProductInfo,
   GetProductProject,
-  GetProjectDetail,
-  AddProjectDetail,
-  UpdateProjectDetail,
-  DeleteProjectDetail,
+  GetProductInfo,
+  GetComponentDetailList,
+  GetProjectChangeRecond,
+  GetProjectDetail,GetProductDetail,
+  GetComponentPurchasePlanInfo,GetPubComponentInfo ,
+  AddComponentPurchasePlanInfo,
+  UpdateComponentPurchasePlanInfo,
+  DeleteComponentPurchasePlanInfo,
 } from "@/api/nqi/nqi";
 
 export default {
@@ -193,35 +221,65 @@ export default {
       total: 0,
       // 出勤统计表格数据
       tableData: [],
-      pubCodeDataList1: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      fileList: [],
+      limit: 5,
+      pubCodeDataList1: [],
+      pubCodeDataList2: [],
+      pubCodeDataList3: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         key: null,
       },
+      changeTypeList: [
+        { value: "部分变更", label: "部分变更" },
+        { value: "全部变更", label: "全部变更" },
+      ],
+      changeResultList: [
+        { value: "成功", label: "成功" },
+        { value: "失败", label: "失败" },
+      ],
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        development_project_no: [
-          { required: true, message: "研发方案编号不能为空", trigger: "blur" },
-        ],
-        software_version: [
+        supplier_enterprise_code: [
           {
             required: true,
-            message: "软件版本号不能为空",
+            message: "供应商企业编号不能为空",
             trigger: "blur",
           },
         ],
-        hardware_version: [
+        purchase_code: [
           {
             required: true,
-            message: "硬件版本号不能为空",
+            message: "采购编号不能为空",
+            trigger: "blur",
+          },
+        ],
+        component_code: [
+          {
+            required: true,
+            message: "元器件编号不能为空",
+            trigger: "blur",
+          },
+        ],
+        purchase_num: [
+          {
+            required: true,
+            message: "采购数量不能为空",
+            trigger: "blur",
+          },
+        ],
+        arrived_time: [
+          {
+            required: true,
+            message: "到货时间不能为空",
             trigger: "blur",
           },
         ],
@@ -232,7 +290,7 @@ export default {
     this.getList();
   },
   methods: {
-    refreshData(val) {
+     refreshData(val) {
       this.$forceUpdate();
     },
     uniqueByProperty(arr, property) {
@@ -252,25 +310,60 @@ export default {
       this.currentRow = row;
     } /** 查询研发方案列表 */,
     GetProductProjectList(isAdd) {
-      GetProductProject(this.queryParams).then((res) => {
+      GetProductProject().then((res) => {
         if (res.success) {
-          this.pubCodeDataList1 = this.uniqueByProperty(
+          this.pubCodeDataList3 = this.uniqueByProperty(
             res.response,
             "development_project_no"
           );
           if (isAdd) {
             this.form.development_project_no =
+              this.pubCodeDataList3.length > 0
+                ? this.pubCodeDataList3[0].development_project_no
+                : "";
+          }
+        }
+      });
+    },/** 查询研发方案详情列表 */
+    GetProjectDetailList(isAdd) {
+      GetProductDetail().then((res) => {
+        if (res.success) {
+          this.pubCodeDataList4 = this.uniqueByProperty(
+            res.response,
+            "product_detail_code"
+          );
+          if (isAdd) {
+            this.form.product_detail_code =
+              this.pubCodeDataList4.length > 0
+                ? this.pubCodeDataList4[0].product_detail_code
+                : "";
+          }
+        }
+      });
+    } , /** 查询产品元器件信息列表 */
+    GetPubComponentInfoList(isAdd) {
+      GetPubComponentInfo().then((res) => {
+        if (res.success) {
+          this.pubCodeDataList1 = this.uniqueByProperty(res.response, "code");
+          if (isAdd) {
+            this.form.component_code =
               this.pubCodeDataList1.length > 0
-                ? this.pubCodeDataList1[0].development_project_no
+                ? this.pubCodeDataList1[0].code
                 : "";
           }
         }
       });
     },
-    /** 查询研发方案列表 */
+    getSelectList(isAdd) {
+      // this.GetProductProjectList(isAdd);
+      // this.GetProjectDetailList(isAdd);
+      this.GetPubComponentInfoList(isAdd);
+      // this.GetPubCodeList(isAdd);
+    },
+    /** 查询出勤统计列表 */
     getList() {
       this.loading = true;
-      GetProjectDetail(this.queryParams).then((res) => {
+      GetComponentPurchasePlanInfo(this.queryParams).then((res) => {
         if (res.success) {
           this.tableData = res.response;
           this.total = res.dataCount;
@@ -308,51 +401,44 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.GetProductProjectList(true);
       this.reset();
+      this.getSelectList(true);this.form.uaser_nature="国网";
       this.open = true;
-      this.title = "添加研发方案明细";
+      this.title = "添加元器件变更";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.GetProductProjectList(false);
+      this.getSelectList(false);
+      // getAttendance(id).then((response) => {
       this.form = JSON.parse(JSON.stringify(this.currentRow));
-      if (!this.form) {
-        this.$message.error("请选择要修改的数据！");
-        return;
-      }
       this.open = true;
-      this.title = "修改研发方案明细";
+      this.title = "修改元器件变更";
+      // });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.id != null) {
-            UpdateProjectDetail(this.form).then((res) => {
+            UpdateComponentPurchasePlanInfo(this.form).then((res) => {
               if (res.success) {
                 this.$modal.msgSuccess("修改成功");
                 this.open = false;
                 this.getList();
-              } else {
-                this.$message.error(res.msg);
               }
             });
           } else {
-            AddProjectDetail(this.form).then((res) => {
+            AddComponentPurchasePlanInfo(this.form).then((res) => {
               if (res.success) {
                 this.$modal.msgSuccess("新增成功");
                 this.open = false;
                 this.getList();
-              } else {
-                this.$message.error(res.msg);
               }
             });
           }
         }
       });
-    },
-    /** 删除按钮操作 */
+    } /** 删除按钮操作 */,
     handleDelete(row) {
       this.form = JSON.parse(JSON.stringify(this.currentRow));
       if (!this.form) {
@@ -361,7 +447,7 @@ export default {
       }
       this.$confirm("确认删除该产品信息吗？", "提示", { type: "warning" })
         .then(() => {
-          DeleteProjectDetail(this.form.id).then((res) => {
+          DeleteComponentPurchasePlanInfo({ id: this.form.id }).then((res) => {
             if (res.success) {
               this.$message.success(res.msg);
             } else {

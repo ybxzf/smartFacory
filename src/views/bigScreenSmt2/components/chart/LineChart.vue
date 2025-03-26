@@ -78,7 +78,7 @@ export default {
 					containLabel: true
 				},
 				title: {
-					text: '产量曲线图',
+					// text: '产量曲线图',
 					left: 'center',
 					textStyle: {
 						color: '#fff',
@@ -94,12 +94,13 @@ export default {
 				},
 				yAxis: {
 					axisTick: {
-						show: false
-					}
+						show: false ,
+					},
+            max:200
 				},
 				legend: {
 					data: this.chartData.legendData,
-					top: 'bottom',
+					top: 'top',
 					textStyle: {
 						color: '#fff'
 					}

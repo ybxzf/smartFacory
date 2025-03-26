@@ -4,34 +4,50 @@
       <el-col style="width: calc((100% / 24) * 3.5)">
         <div class="com-part">
           <label>当前工单</label>
-          <span class="ellipsis-span" :title="basicData.work_order">{{ basicData.work_order || "-" }}</span>
+          <span class="ellipsis-span" :title="basicData.work_order">{{
+            basicData.work_order || "-"
+          }}</span>
         </div>
       </el-col>
       <el-col :span="3">
         <div class="com-part">
           <label>工单数量</label>
-          <span class="ellipsis-span" :title="basicData.work_order_quantity">{{ basicData.work_order_quantity || "-" }}</span>
+          <span class="ellipsis-span" :title="basicData.work_order_quantity">{{
+            basicData.work_order_quantity || "-"
+          }}</span>
         </div>
       </el-col>
       <el-col :span="4">
         <div class="com-part">
           <label>客户</label>
-          <span class="ellipsis-span" :title="basicData.customer">{{ basicData.customer || "-" }}</span>
+          <span class="ellipsis-span" :title="basicData.customer">{{
+            basicData.customer || "-"
+          }}</span>
         </div>
       </el-col>
       <el-col :span="4">
         <div class="com-part">
           <label>产品名称</label>
-          <span class="ellipsis-span" :title="basicData.product_name">{{ basicData.product_name || "-" }}</span>
+          <span class="ellipsis-span" :title="basicData.product_name">{{
+            basicData.product_name || "-"
+          }}</span>
         </div>
       </el-col>
       <el-col style="width: calc((100% / 24) * 5.5)">
         <div class="com-part">
           <label>产品型号规格</label>
-          <span class="ellipsis-span" :title="basicData.product_model">{{ basicData.product_model || "-" }}</span>
+          <span class="ellipsis-span" :title="basicData.product_model">{{
+            basicData.product_model || "-"
+          }}</span>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col style="width: calc((100% / 24) * 3.5)">
+        <div class="com-part">
+          <label>完成率</label>
+          <span class="ellipsis-span">{{ completionRateValue }}%</span>
+        </div>
+      </el-col>
+      <!-- <el-col :span="4">
         <div class="com-part" style="margin-right: 20px">
           <label>完成率</label>
           <div class="item-value-progress" style="margin: 5px">
@@ -52,7 +68,7 @@
             <div class="value">{{ completionRateValue }}%</div>
           </div>
         </div>
-      </el-col>
+      </el-col> -->
     </el-row>
     <div
       style="
@@ -60,52 +76,112 @@
         margin-top: 1%;
         margin-left: 1%;
         margin-right: 1%;
-        height: 86%;
+        height: 91%;
       "
     >
-      <div style="width: 75%">
+      <div style="width: 73%">
         <div
           style="
             display: flex;
-            height: 54%;
-            border: 1px solid #0a4686;
+            height: 45%;
+            /* border: 1px solid #0a4686; */
             border-radius: 8px;
+            padding: 1%;
           "
+          class="chart-content"
         >
           <div style="display: flex; width: 33.33%">
             <div
               style="
                 display: flex;
                 flex-direction: column;
-                width: 33.33%;
-                border-right: 1px solid #0a4686;
+                justify-content: space-between;
+                font-size: 15px;
+                font-weight: 700;
+                width: 25%;
+                /* border-right: 1px solid #0a4686; */
               "
             >
-              <span class="TopSpan" style="width: 90%">当前站点：</span>
-              <span class="TopSpan" style="width: 90%">过站数：</span>
-              <span class="TopSpan" style="width: 90%">完成率：</span>
-              <span class="TopSpan" style="width: 90%">计划产能：</span>
-              <span class="TopSpan" style="width: 90%">产能达成率：</span>
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >当前站点</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >过站数</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >完成率</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >计划产能</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >产能达成率</span
+              >
             </div>
             <div
               style="
                 display: flex;
                 flex-direction: column;
+                justify-content: space-between;
+                font-size: 12px;
+                font-weight: 400;
                 width: 33.34%;
-                border-right: 1px solid #0a4686;
+                /* border-right: 1px solid #0a4686; */
               "
             >
-              <span class="TopSpan" style="width: 90%">SPI</span>
-              <span class="TopSpan" style="width: 90%">{{
-                processData.spiData.corresponding_value || "-"
-              }}</span>
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
+                >SPI</span
+              >
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
+                >{{ processData.spiData.corresponding_value || "-" }}</span
+              >
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.spiData.completion_rate || "-" }}%</span
               >
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.spiData.plancapacity || "-" }}pcs/h</span
               >
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.spiData.achievement_rate || "-" }}%</span
               >
             </div>
@@ -114,8 +190,9 @@
                 display: flex;
                 flex-direction: column;
                 width: 33.33%;
+                height:100%;
                 align-items: center;
-                border-right: 1px solid #0a4686;
+                /* border-right: 1px solid #0a4686; */
               "
             >
               <!-- <span
@@ -128,6 +205,7 @@
                   width: 80%;
                   margin-top: 2%;
                   margin-bottom: 4%;
+                  height:calc( 47% - 25px)
                   display: block;
                   margin-left: auto;
                   margin-right: auto;
@@ -135,10 +213,29 @@
                 src="@/assets/images/devices/device1.png"
                 alt="站点设备图片"
               />
-              <div style="width: 90%; height: 43%">
+              <div style="width: 90%; height: 52%">
                 <PieChart1 :chart-data="pieData1"></PieChart1>
               </div>
-              <span
+              <div
+                style="
+                  display: flex;
+                  align-items: end;
+                  justify-content: center;
+                  width: 25px;
+                  height: 25px;
+                "
+              >
+                <img
+                  :src="
+                    processData.spiData.achievement_rate > 80
+                      ? '正常'
+                      : '异常' | getLineStatus
+                  "
+                  alt=""
+                  style="width: 25px"
+                />
+              </div>
+              <!-- <span
                 class="GreeenSpan"
                 :style="{
                   marginTop: '3px',
@@ -152,7 +249,7 @@
                 {{
                   processData.spiData.achievement_rate > 80 ? "正常" : "异常"
                 }}
-              </span>
+              </span> -->
             </div>
           </div>
 
@@ -161,35 +258,93 @@
               style="
                 display: flex;
                 flex-direction: column;
-                width: 33.33%;
-                border-right: 1px solid #0a4686;
+                justify-content: space-between;
+                font-size: 15px;
+                font-weight: 700;
+                width: 25%;
+                /* border-right: 1px solid #0a4686; */
               "
             >
-              <span class="TopSpan" style="width: 90%">当前站点：</span>
-              <span class="TopSpan" style="width: 90%">过站数：</span>
-              <span class="TopSpan" style="width: 90%">完成率：</span>
-              <span class="TopSpan" style="width: 90%">计划产能：</span>
-              <span class="TopSpan" style="width: 90%">产能达成率：</span>
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >当前站点</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >过站数</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >完成率</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >计划产能</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >产能达成率</span
+              >
             </div>
             <div
               style="
                 display: flex;
                 flex-direction: column;
+                justify-content: space-between;
+                font-size: 12px;
+                font-weight: 400;
                 width: 33.34%;
-                border-right: 1px solid #0a4686;
+                /* border-right: 1px solid #0a4686; */
               "
             >
-              <span class="TopSpan" style="width: 90%">回流焊</span>
-              <span class="TopSpan" style="width: 90%">{{
-                processData.hlhData.corresponding_value || "-"
-              }}</span>
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
+                >回流焊</span
+              >
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
+                >{{ processData.hlhData.corresponding_value || "-" }}</span
+              >
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.hlhData.completion_rate || "-" }}%</span
               >
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.hlhData.plancapacity || "-" }} pcs/h</span
               >
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.hlhData.achievement_rate || "-" }}%</span
               >
             </div>
@@ -198,8 +353,9 @@
                 display: flex;
                 flex-direction: column;
                 width: 33.33%;
+                height:100%;
                 align-items: center;
-                border-right: 1px solid #0a4686;
+                /* border-right: 1px solid #0a4686; */
               "
             >
               <!-- 添加 align-items: center -->
@@ -212,6 +368,7 @@
               <img
                 style="
                   width: 80%;
+                  height:calc( 47% - 25px)
                   margin-top: 2%;
                   margin-bottom: 4%;
                   display: block;
@@ -221,10 +378,29 @@
                 src="@/assets/images/devices/device1.png"
                 alt="站点设备图片"
               />
-              <div style="width: 90%; height: 43%">
-                <PieChart1 :chart-data="pieData2"></PieChart1>
+              <div  style="width: 90%; height: 53%">
+                <PieChart1 :chart-data="pieData2" ></PieChart1>
               </div>
-              <span
+              <div
+                style="
+                  display: flex;
+                  align-items: end;
+                  justify-content: center;
+                  width: 25px;
+                  height: 25px;
+                "
+              >
+                <img
+                  :src="
+                    processData.spiData.achievement_rate > 80
+                      ? '正常'
+                      : '异常' | getLineStatus
+                  "
+                  alt=""
+                  style="width: 25px"
+                />
+              </div>
+              <!-- <span
                 class="GreeenSpan"
                 :style="{
                   marginTop: '3px',
@@ -238,7 +414,8 @@
                 {{
                   processData.spiData.achievement_rate > 80 ? "正常" : "异常"
                 }}
-              </span>
+                /* border-right: 1px solid #0a4686; */
+              </span> -->
             </div>
           </div>
           <div style="display: flex; width: 33.33%">
@@ -246,35 +423,92 @@
               style="
                 display: flex;
                 flex-direction: column;
-                width: 33.33%;
-                border-right: 1px solid #0a4686;
+                justify-content: space-between;
+                font-size: 15px;
+                font-weight: 700;
+                width: 25%;
               "
             >
-              <span class="TopSpan" style="width: 90%">当前站点：</span>
-              <span class="TopSpan" style="width: 90%">过站数：</span>
-              <span class="TopSpan" style="width: 90%">完成率：</span>
-              <span class="TopSpan" style="width: 90%">计划产能：</span>
-              <span class="TopSpan" style="width: 90%">产能达成率：</span>
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >当前站点</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >过站数</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >完成率</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >计划产能</span
+              >
+              <span
+                class="TopSpan"
+                style="width: 90%; height: 40px; justify-content: end"
+                >产能达成率</span
+              >
             </div>
             <div
               style="
                 display: flex;
                 flex-direction: column;
+                justify-content: space-between;
+                font-size: 12px;
+                font-weight: 400;
                 width: 33.34%;
-                border-right: 1px solid #0a4686;
+                /* border-right: 1px solid #0a4686; */
               "
             >
-              <span class="TopSpan" style="width: 90%">AOI</span>
-              <span class="TopSpan" style="width: 90%">{{
-                processData.aoiData.corresponding_value || "-"
-              }}</span>
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
+                >AOI</span
+              >
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
+                >{{ processData.aoiData.corresponding_value || "-" }}</span
+              >
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.aoiData.completion_rate || "-" }}%</span
               >
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.aoiData.plancapacity || "-" }}PCS/h</span
               >
-              <span class="TopSpan" style="width: 90%"
+              <span
+                class="TopSpan"
+                style="
+                  background-color: rgba(25, 129, 246, 0.2);
+                  width: 90%;
+                  height: 40px;
+                "
                 >{{ processData.aoiData.achievement_rate || "-" }}%</span
               >
             </div>
@@ -295,6 +529,7 @@
                 style="
                   width: 80%;
                   margin-top: 2%;
+                  height:calc( 47% - 25px)
                   margin-bottom: 4%;
                   display: block;
                   margin-left: auto;
@@ -303,10 +538,29 @@
                 src="@/assets/images/devices/device1.png"
                 alt="站点设备图片"
               />
-              <div style="width: 90%; height: 43%">
+              <div style="width: 90%; height: 53%">
                 <PieChart1 :chart-data="pieData3"></PieChart1>
               </div>
-              <span
+              <div
+                style="
+                  display: flex;
+                  align-items: end;
+                  justify-content: center;
+                  width: 25px;
+                  height: 25px;
+                "
+              >
+                <img
+                  :src="
+                    processData.spiData.achievement_rate > 80
+                      ? '正常'
+                      : '异常' | getLineStatus
+                  "
+                  alt=""
+                  style="width: 25px"
+                />
+              </div>
+              <!-- <span
                 class="GreeenSpan"
                 :style="{
                   marginTop: '3px',
@@ -320,19 +574,52 @@
                 {{
                   processData.spiData.achievement_rate > 80 ? "正常" : "异常"
                 }}
-              </span>
+              </span> -->
             </div>
           </div>
         </div>
-        <div style="height: 45%; margin-top: 2%; width: 100%; display: flex">
-          <div style="margin-right: 1%; width: 25%; height: 90%">
-            <PieChart :chart-data="pieData"></PieChart>
+        <div style="height: 47%; margin-top: 2%; width: 100%; display: flex">
+          <div style="margin-right: 1%; width: 26%; height: 90%">
+            <div class="smt-title" style="margin: 20px 0">
+              <div>当日AOI检测不良统计</div>
+            </div>
+            <!-- <pieChart3D v-if="pieData.length" height="100%" :chartData="pieData"></pieChart3D> -->
+            <PieChart
+              :chart-data="pieData"
+              v-if="pieData.yData.length"
+              class="chart-content"
+            ></PieChart>
+            <div class="chart-content" v-else style="height: calc(100% - 50px)">
+              <Empty></Empty>
+            </div>
           </div>
           <div style="margin-right: 1%; width: 29%; height: 90%">
-            <BarChart :chartData="barData"></BarChart>
+            <div class="smt-title" style="margin: 20px 0">
+              <div>近15天AOI检测不良数量统计TOP5</div>
+            </div>
+            <BarChart
+              :chartData="barData"
+              v-if="barData.xData.length"
+              class="chart-content"
+            ></BarChart>
+            <div class="chart-content" v-else style="height: calc(100% - 50px)">
+              <Empty></Empty>
+            </div>
           </div>
-          <div style="width: 44%; height: 90%">
-            <LineChart :chart-data="lineData"></LineChart>
+          <div style="width: 43%; height: 90%">
+            <div class="smt-title" style="margin: 20px 0">
+              <div>产量曲线图</div>
+            </div>
+            <LineChart
+              v-if="lineData.xData.length"
+              height="100%"
+              :chartData="lineData"
+              class="chart-content"
+            ></LineChart>
+            <div class="chart-content" v-else style="height: calc(100% - 50px)">
+              <Empty></Empty>
+            </div>
+            <!-- <LineChart :chart-data="lineData"></LineChart> -->
           </div>
         </div>
       </div>
@@ -343,8 +630,8 @@
           flex-direction: column;
           width: 25%;
           margin-left: 1%;
-          margin-bottom: 1%;
-          border: 1px solid #0a4686;
+                height:100%;
+          /* border: 1px solid #0a4686; */
           border-radius: 8px;
         "
       >
@@ -352,8 +639,9 @@
           style="
             display: flex;
             width: 100%;
-            height: 45%;
-            border-bottom: 1px solid #0a4686;
+            height: 30%;
+            background-color: rgba(25, 129, 246, 0.2);
+            /* border-bottom: 1px solid #0a4686; */
           "
         >
           <div
@@ -361,38 +649,158 @@
               display: flex;
               flex-direction: column;
               width: 40%;
-              border-right: 1px solid #0a4686;
+              font-size: 15px;
+              font-weight: 700;
+              /* border-right: 1px solid #0a4686; */
             "
           >
-            <span class="TopSpan" style="width: 90%">回流焊设备参数</span>
-            <span class="TopSpan" style="width: 90%">运行速度</span>
-            <span class="TopSpan" style="width: 90%">升温区温度（℃）</span>
-            <span class="TopSpan" style="width: 90%">恒温区温度（℃）</span>
-            <span class="TopSpan" style="width: 90%">焊接区温度（℃）</span>
-            <span class="TopSpan" style="width: 90%">冷却区温度（℃）</span>
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >回流焊设备参数</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >运行速度</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >升温区温度（℃）</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >恒温区温度（℃）</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >焊接区温度（℃）</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >冷却区温度（℃）</span
+            >
           </div>
           <div
             style="
               display: flex;
               flex-direction: column;
               width: 30%;
-              border-right: 1px solid #0a4686;
+              font-size: 15px;
+              font-weight: 700;
+              /* border-right: 1px solid #0a4686; */
             "
           >
-            <span class="TopSpan" style="width: 90%">设定值</span>
-            <span class="TopSpan" style="width: 90%">999</span>
-            <span class="TopSpan" style="width: 90%">999</span>
-            <span class="TopSpan" style="width: 90%">999</span>
-            <span class="TopSpan" style="width: 90%">999</span>
-            <span class="TopSpan" style="width: 90%">999</span>
+            <span
+              class="TopSpan"
+              style="
+                margin: 0;
+                border: 1px solid rgba(255, 255, 255, 0.8);
+                font-size: 13px;
+                font-weight: 400;
+              "
+              >设定值</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+            >
+              {{
+                this.tabData.yxsdData.length > 0
+                  ? this.tabData.yxsdData[0].set_value
+                  : "-"
+              }}</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{
+                this.tabData.swqwdData.length > 0
+                  ? this.tabData.swqwdData[0].set_value
+                  : "-"
+              }}</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{
+                this.tabData.hwqwdData.length > 0
+                  ? this.tabData.hwqwdData[0].set_value
+                  : "-"
+              }}</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{
+                this.tabData.hjqwdData.length > 0
+                  ? this.tabData.hjqwdData[0].set_value
+                  : "-"
+              }}</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{
+                this.tabData.lqqwdData.length > 0
+                  ? this.tabData.lqqwdData[0].set_value
+                  : "-"
+              }}</span
+            >
           </div>
-          <div style="display: flex; flex-direction: column; width: 30%">
-            <span class="TopSpan" style="width: 90%">实际值</span>
-            <span class="TopSpan" style="width: 90%">999</span>
-            <span class="TopSpan" style="width: 90%">999</span>
-            <span class="TopSpan" style="width: 90%">999</span>
-            <span class="TopSpan" style="width: 90%">999</span>
-            <span class="TopSpan" style="width: 90%">999</span>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              width: 30%;
+              font-size: 15px;
+              font-weight: 700;
+            "
+          >
+            <span
+              class="TopSpan"
+              style="
+                margin: 0;
+                border: 1px solid rgba(255, 255, 255, 0.8);
+                font-size: 13px;
+                font-weight: 400;
+              "
+              >实际值</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{  this.tabData.yxsdData.length > 0
+                  ?this.tabData.yxsdData[0].actual_value : "-" }}</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{  this.tabData.swqwdData.length > 0
+                  ?this.tabData.swqwdData[0].actual_value : "-" }}</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{ this.tabData.hwqwdData.length > 0
+                  ? this.tabData.hwqwdData[0].actual_value :"-" }}</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{  this.tabData.hjqwdData.length > 0
+                  ?this.tabData.hjqwdData[0].actual_value : "-" }}</span
+            >
+            <span
+              class="TopSpan"
+              style="margin: 0; border: 1px solid rgba(255, 255, 255, 0.8)"
+              >{{ this.tabData.lqqwdData.length > 0
+                  ? this.tabData.lqqwdData[0].actual_value : "-" }}</span
+            >
           </div>
         </div>
 
@@ -401,61 +809,133 @@
             display: flex;
             align-items: center;
             width: 100%;
-            height: 15%;
-            border-bottom: 1px solid #0a4686;
+            height: 10%;
+            /* border-bottom: 1px solid #0a4686; */
           "
         >
-          <span
-            class="TopSpan"
-            style="width: 60%; border-right: 1px solid #0a4686; height: 100%"
-            >SMT线体设备运行状态</span
-          >
-          <span
+          <div class="smt-title">
+            <div>SMT线体设备运行状态</div>
+            <img
+              :src="'正常' | getLineStatus"
+              alt=""
+              style="width: 25px; margin-right: 50px"
+            />
+            <!-- <span
             class="GreeenSpan"
             style="display: flex; align-items: center; justify-content: center"
             >正常</span
-          >
+            > -->
+          </div>
         </div>
 
-        <div style="width: 100%; height: 10%; border-bottom: 1px solid #0a4686">
+        <div style="width: 100%; height: 13%" class="chart-content">
           <div
             style="display: flex; flex-direction: row; width: 100%; height: 48%"
           >
-            <span class="TopSpan" style="width: 40%; justify-content: right"
+            <span
+              class="TopSpan"
+              style="
+                width: 40%;
+                height: 35px;
+                font-size: 15px;
+                font-weight: 700;
+                justify-content: right;
+              "
               >当前工单槽位总数：</span
             >
-            <span class="TopSpan" style="width: 15%; justify-content: left">{{
-              patchData.mostationstotalno || "-"
-            }}</span>
-            <span class="TopSpan" style="width: 35%; justify-content: right"
+            <span
+              class="TopSpan"
+              style="
+                width: 15%;
+                height: 35px;
+                background-color: rgba(25, 129, 246, 0.2);
+                justify-content: center;
+              "
+              >{{ patchData.mostationstotalno || "-" }}</span
+            >
+            <span
+              class="TopSpan"
+              style="
+                width: 35%;
+                height: 35px;
+                font-size: 15px;
+                font-weight: 700;
+                justify-content: right;
+              "
               >平均抛料率：</span
             >
-            <span class="TopSpan" style="width: 15%; justify-content: left"
+            <span
+              class="TopSpan"
+              style="
+                width: 15%;
+                height: 35px;
+                background-color: rgba(25, 129, 246, 0.2);
+                justify-content: center;
+              "
               >{{ patchData.total_throwing_rate || "-" }}%</span
             >
           </div>
           <div
             style="display: flex; flex-direction: row; width: 100%; height: 48%"
           >
-            <span class="TopSpan" style="width: 40%; justify-content: right"
+            <span
+              class="TopSpan"
+              style="
+                width: 40%;
+                height: 35px;
+                font-size: 15px;
+                font-weight: 700;
+                justify-content: right;
+              "
               >当日槽位总数：</span
             >
-            <span class="TopSpan" style="width: 15%; justify-content: left">{{
-              patchData.datestationstotalno || "-"
-            }}</span>
-            <span class="TopSpan" style="width: 35%; justify-content: right"
+            <span
+              class="TopSpan"
+              style="
+                width: 15%;
+                height: 35px;
+                background-color: rgba(25, 129, 246, 0.2);
+                justify-content: center;
+              "
+              >{{ patchData.datestationstotalno || "-" }}</span
+            >
+            <span
+              class="TopSpan"
+              style="
+                width: 35%;
+                height: 35px;
+                font-size: 15px;
+                font-weight: 700;
+                justify-content: right;
+              "
               >平均抛料率：</span
             >
-            <span class="TopSpan" style="width: 15%; justify-content: left"
+            <span
+              class="TopSpan"
+              style="
+                width: 15%;
+                height: 35px;
+                background-color: rgba(25, 129, 246, 0.2);
+                justify-content: center;
+              "
               >{{ patchData.daliy_throwing_rate || "-" }}%</span
             >
           </div>
         </div>
 
-        <div
-          style="width: 94%; height: 30%; border: 1px solid #0a4686; margin: 3%"
-        >
-          <BarChart1 ref="barChartRef" :chartData="barData1"></BarChart1>
+        <div style="width: 98%; height: 45%; padding-bottom: 10px">
+          <div class="smt-title" style="margin: 20px 0">
+            <div>近10日抛料率统计TOP5</div>
+          </div>
+          <BarChart1
+            ref="barChartRef"
+            v-if="barData1.xData.length"
+            :chartData="barData1"
+            class="chart-content"
+          ></BarChart1>
+          <div class="chart-content" v-else style="height: calc(100% - 50px)">
+            <Empty></Empty>
+          </div>
         </div>
       </div>
     </div>
@@ -464,8 +944,10 @@
 
 <script>
 import moment from "moment";
+import Empty from "@/views/bigScreen/components/Empty.vue";
 import LineChart from "../../components/chart/LineChart.vue";
 import PieChart from "../../components/chart/PieChart.vue";
+import pieChart3D from "../chart/pieChart3D.vue";
 import PieChart1 from "../../components/chart/PieChart1.vue";
 import BarChart from "../../components/chart/BarChart.vue";
 import BarChart1 from "../../components/chart/BarChart1.vue";
@@ -476,19 +958,33 @@ import {
   GetSmt02_hourly_capacityData,
   GetSmt02_patch_infoData,
   GetSmt02_date_patch_infoData,
+  GetSmt02_param_infoData,
 } from "@/api/bigScreenSmt2/index.js";
-
-import { format } from "echarts";
+import RedLampUrl from "../../../../assets/images/bigScreen/red_lamp.png";
+import YellowLampUrl from "../../../../assets/images/bigScreen/yellow_lamp.png";
+import GreenLampUrl from "../../../../assets/images/bigScreen/green_lamp.png";
 
 export default {
   components: {
+    Empty,
     LineChart,
     PieChart,
+    pieChart3D,
     BarChart,
     BarChart1,
     PieChart1,
   },
   name: "",
+  filters: {
+    getLineStatus(status) {
+      const statusMap = {
+        异常: RedLampUrl,
+        正常: GreenLampUrl,
+        停线: YellowLampUrl,
+      };
+      return statusMap[status];
+    },
+  },
   data() {
     return {
       bigScreenTimeId: null,
@@ -533,6 +1029,13 @@ export default {
           "23时",
         ],
       },
+      tabData: {
+        lqqwdData: [],
+        swqwdData: [],
+        hwqwdData: [],
+        hjqwdData: [],
+        yxsdData: [],
+      },
       barData: {
         title: "近15天AOI检测不良数量统计TOP5",
         xData: [0],
@@ -556,7 +1059,7 @@ export default {
       pieData2: {
         title: "站点完成情况",
         showLabel: true, //是否显示标签
-        yData: 0,
+        yData: 1,
       },
       pieData3: {
         title: "站点完成情况",
@@ -595,6 +1098,7 @@ export default {
       this.GetSmt02_aoi_defect_statsDatas();
       this.GetSmt02_patch_infoData();
       this.GetSmt02_date_patch_infoData();
+      this.GetSmt02_param_infoData();
     },
 
     async GetSmt_basic_infoData() {
@@ -604,7 +1108,6 @@ export default {
         this.basicData = res.result[0];
       } else {
         this.isQuery = false;
-        this.tableData1 = [];
         // this.$message.error(res1.msg);
         this.isSuccess = false;
       }
@@ -627,7 +1130,6 @@ export default {
         this.pieData3.yData = this.processData.aoiData.achievement_rate || 0;
       } else {
         this.isQuery = false;
-        this.tableData1 = [];
         // this.$message.error(res1.msg);
         this.isSuccess = false;
       }
@@ -642,7 +1144,6 @@ export default {
         this.pieData.yData = res.result;
       } else {
         this.isQuery = false;
-        this.tableData1 = [];
         // this.$message.error(res.msg);
         this.isSuccess = false;
       }
@@ -667,7 +1168,6 @@ export default {
         //   .map((item) => item.datetime);
       } else {
         this.isQuery = false;
-        this.tableData1 = [];
         // this.$message.error(res.msg);
         this.isSuccess = false;
       }
@@ -699,7 +1199,6 @@ export default {
         this.patchData = res.result[0];
       } else {
         this.isQuery = false;
-        this.tableData1 = [];
         // this.$message.error(res.msg);
         this.isSuccess = false;
       }
@@ -713,8 +1212,34 @@ export default {
         this.barData1.xData = res.result.map((item) => item.holeNo);
       } else {
         this.isQuery = false;
-        this.tableData1 = [];
         // this.$message.error(res.msg);
+        this.isSuccess = false;
+      }
+    },
+
+    async GetSmt02_param_infoData() {
+      let res = await GetSmt02_param_infoData();
+      this.isQuery = true;
+      if ((res.status = 1 && res.result?.length > 0)) {
+        this.tabData.lqqwdData = res.result.filter(
+          (r) => r.param_name === "冷却区温度（℃）"
+        );
+        this.tabData.swqwdData = res.result.filter(
+          (r) => r.param_name === "升温区温度（℃）"
+        );
+        this.tabData.hwqwdData = res.result.filter(
+          (r) => r.param_name === "恒温区温度（℃）"
+        );
+
+        this.tabData.hjqwdData = res.result.filter(
+          (r) => r.param_name === "焊接区温度（℃）"
+        );
+
+        this.tabData.yxsdData = res.result.filter(
+          (r) => r.param_name === "运行速度"
+        );
+      } else {
+        this.isQuery = false;
         this.isSuccess = false;
       }
     },
@@ -769,7 +1294,7 @@ export default {
   // }
   .item-value-progress {
     width: 90%;
-    border: 1px solid rgb(255, 255, 255);
+    // border: 1px solid rgb(255, 255, 255);
     border-radius: 5px;
     position: relative;
 
@@ -790,16 +1315,25 @@ export default {
     }
   }
 
+  .chart-content {
+    background-color: rgba(25, 129, 246, 0.2);
+  }
   .GreeenSpan {
-    display: flex; /* 使用 flexbox */
-    align-items: center; /* 垂直居中 */
-    justify-content: center; /* 水平居中 */
+    display: flex;
+    /* 使用 flexbox */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
     width: 70px;
     height: 70px;
-    border-radius: 50%; /* 圆形 */
+    border-radius: 50%;
+    /* 圆形 */
     background-color: green;
-    color: white; /* 可以设置文本颜色为白色以便于阅读 */
+    color: white;
+    /* 可以设置文本颜色为白色以便于阅读 */
   }
+
   .TopSpan {
     // width: 35%;
     height: 90%;
@@ -812,10 +1346,29 @@ export default {
     margin-left: 5px;
     margin-top: 3px;
   }
+
+  .smt-title {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    background-image: url("../../../../assets/images/bigScreen/title_bg.png");
+    background-repeat: no-repeat;
+    background-size: 300px 100%;
+    background-position: 0 center;
+    justify-content: space-between;
+    padding-left: 20px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
   .base-info {
+    // margin: -10px;
+    padding: 15px 10px 10px 10px;
+
     .com-part {
-      background-color: rgba(25, 129, 246, 0.2);
-      box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+      // background-color: rgba(25, 129, 246, 0.2);
+      // box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
 
       min-height: 40px;
       display: flex;
@@ -825,22 +1378,29 @@ export default {
       // background-color: rgba(25, 129, 246, 0.5);
       // box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.7);
       border: 1px solid transparent;
-.ellipsis-span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-}
+
+      .ellipsis-span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        text-align: center;
+      }
+
       label {
         min-width: 100px;
         text-align: center;
         margin-right: 4px;
-        border-right: 3px solid #3666e3;
+        font-size: 15px;
+        // border-right: 3px solid #3666e3;
       }
 
       span {
         flex: 1;
+        font-size: 12px;
+        font-weight: 400;
         padding-left: 4px;
+        background-color: rgba(25, 129, 246, 0.2);
       }
     }
   }

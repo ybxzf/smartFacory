@@ -78,7 +78,7 @@ export default {
           containLabel: true,
         },
 				title: {
-					text: '线体损失工时（小时）',
+					text: '',
 					left: 'center',
 					textStyle: {
             color: "#ffffff",

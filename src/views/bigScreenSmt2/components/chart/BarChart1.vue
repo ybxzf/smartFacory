@@ -71,7 +71,7 @@ export default {
           trigger: "item",
         },
 				title: {
-					text: this.chartData.title,
+					// text: this.chartData.title,
 					left: 'center',
 					textStyle: {
 					  color: '#fff',

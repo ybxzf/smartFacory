@@ -42,7 +42,6 @@ export default {
 .dip-two-container {
     width: 100%;
     height: calc(100vh - 84px);
-    overflow: auto;
     /* 设置背景图片 */
     background-image: url('../../assets/images/bigScreen/kb_bg.png');
     /* 不重复背景图片 */

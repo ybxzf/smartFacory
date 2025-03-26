@@ -81,38 +81,45 @@
     >
       <el-table-column type="index" label="序号" width="50" align="center" />
       <el-table-column
+        label="商务合同编号"
+        align="center"
+        prop="business_contract_code"
+      />
+      <el-table-column label="中标批次" align="center" prop="bidding_batch" />
+      <el-table-column
+        label="合同甲方单位"
+        align="center"
+        prop="bidding_party_a"
+      />
+      <el-table-column label="中标时间"
+          show-overflow-tooltip align="center" prop="bidding_time" />
+      <el-table-column label="中标数量" align="center" prop="bidding_count" />
+      <el-table-column label="用户性质" align="center" prop="uaser_nature" />
+      <el-table-column
         label="研发方案编号"
         align="center"
         prop="development_project_no"
       />
-      <el-table-column label="产品编码" align="center" prop="product_code" />
       <el-table-column
-        label="研发方案名称"
+        label="研发方案软件版本"
         align="center"
-        prop="product_name"
+        prop="software_version"
+          show-overflow-tooltip
       />
-      <el-table-column label="产品型号" align="center" prop="product_type" />
       <el-table-column
-        label="产品设计功能依据"
+        label="研发方案硬件版本"
         align="center"
-        prop="product_design_function_basis"
+        prop="hardware_version"
       />
-      <el-table-column label="评审次数" align="center" prop="review_count" />
-      <el-table-column label="变更次数" align="center" prop="change_count" />
-      <el-table-column label="测试次数" align="center" prop="test_count" />
-      <el-table-column label="文档数量" align="center" prop="files_count" />
-      <el-table-column label="需求来源" align="center" prop="sources_demand" />
-      <el-table-column label="附件" align="center" prop="fileName" />
       <el-table-column
+        label="产品详细信息编号"
+        align="center"
+        prop="product_detail_code"
+      /><el-table-column
         label="写入时间"
         align="center"
         prop="write_date"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.write_date) }}</span>
-        </template>
-      </el-table-column>
+      />
     </el-table>
 
     <pagination
@@ -135,29 +142,29 @@
         <!-- 第一行 -->
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="研发方案编号" prop="development_project_no">
+            <el-form-item label="商务合同编号" prop="business_contract_code">
               <el-input
-                v-model="form.development_project_no"
-                placeholder="请输入研发方案编号"
+                v-model="form.business_contract_code"
+                placeholder="请输入商务合同编号"
               />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="产品编码" prop="product_code">
+            <el-form-item label="中标批次" prop="bidding_batch">
               <el-select
-                v-model="form.product_code"
+                v-model="form.bidding_batch"
                 auto-complete="off"
                 style="width: 100%"
                 size="mini"
                 filterable
-                placeholder="请选择产品编码"
+                placeholder="请选择中标批次"
                 @change="refreshData"
               >
                 <el-option
-                  v-for="item in pubCodeDataList2"
-                  :key="item.product_code"
-                  :label="item.product_code"
-                  :value="item.product_code"
+                  v-for="item in pubCodeDataList1"
+                  :key="item.codE_ID"
+                  :label="item.codE_ID + ':' + item.name"
+                  :value="item.codE_ID"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -166,71 +173,95 @@
         <!-- 第二行 -->
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="研发方案名称" prop="product_name">
-              <el-input
-                v-model="form.product_name"
-                placeholder="请输入研发方案名称"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="产品型号" prop="product_type">
+            <el-form-item label="合同甲方单位" prop="bidding_party_a">
               <el-select
-                v-model="form.product_type"
+                v-model="form.bidding_party_a"
                 auto-complete="off"
                 style="width: 100%"
                 size="mini"
                 filterable
-                placeholder="请选择产品型号"
+                placeholder="请选择合同甲方单位"
                 @change="refreshData"
               >
                 <el-option
                   v-for="item in pubCodeDataList2"
-                  :key="item.product_type"
-                  :label="item.product_type"
-                  :value="item.product_type"
+                  :key="item.codE_ID"
+                  :label="item.codE_ID + ':' + item.name"
+                  :value="item.codE_ID"
                 ></el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="中标时间" prop="bidding_time">
+              <el-date-picker
+                clearable
+                v-model="form.bidding_time"
+                format="yyyy-MM-dd HH:mm:ss"
+                type="datetime"
+                placeholder="请选择变更时间"
+              >
+              </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <!-- 第三行 -->
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item
-              label="产品设计功能依据"
-              prop="product_design_function_basis"
-            >
+            <el-form-item label="中标数量" prop="bidding_count">
               <el-input
-                v-model="form.product_design_function_basis"
-                placeholder="请输入产品设计功能依据"
+                v-model="form.bidding_count"
+                placeholder="请输入中标数量"
               />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="评审次数" prop="review_count">
-              <el-input
-                v-model="form.review_count"
-                placeholder="请输入评审次数"
-              />
+            <el-form-item label="用户性质" prop="uaser_nature">
+              <el-select
+                v-model="form.uaser_nature"
+                auto-complete="off"
+                style="width: 100%"
+                size="mini"
+                filterable
+                placeholder="请选择用户性质"
+              >
+                <el-option
+                  v-for="item in uaserNatureList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <!-- 第四行 -->
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="变更次数" prop="change_count">
-              <el-input
-                v-model="form.change_count"
-                placeholder="请输入变更次数"
-              />
+            <el-form-item label="研发方案编号" prop="development_project_no">
+               <el-select
+                v-model="form.development_project_no"
+                auto-complete="off"
+                style="width: 100%"
+                size="mini"
+                filterable
+                placeholder="请选择研发方案编号"
+                @change="refreshData"
+              >
+                <el-option
+                  v-for="item in pubCodeDataList3"
+                  :key="item.development_project_no"
+                  :label="item.development_project_no"
+                  :value="item.development_project_no"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="测试次数" prop="test_count">
+            <el-form-item label="研发方案软件版本" prop="software_version">
               <el-input
-                v-model="form.test_count"
-                placeholder="请输入测试次数"
+                v-model="form.software_version"
+                placeholder="请输入研发方案软件版本"
               />
             </el-form-item>
           </el-col>
@@ -238,57 +269,33 @@
         <!-- 第五行 -->
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="文档数量" prop="files_count">
+            <el-form-item label="研发方案硬件版本" prop="hardware_version">
               <el-input
-                v-model="form.files_count"
-                placeholder="请输入文档数量"
+                v-model="form.hardware_version"
+                placeholder="请输入研发方案硬件版本"
               />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="需求来源" prop="sources_demand">
-              <el-input
-                v-model="form.sources_demand"
-                placeholder="请输入需求来源"
-              />
+            <el-form-item label="产品详细信息编号" prop="product_detail_code">
+              <el-select
+                v-model="form.product_detail_code"
+                auto-complete="off"
+                style="width: 100%"
+                size="mini"
+                filterable
+                placeholder="请选择产品详细信息编号"
+                @change="refreshData"
+              >
+                <el-option
+                  v-for="item in pubCodeDataList4"
+                  :key="item.product_detail_code"
+                  :label="item.product_detail_code"
+                  :value="item.product_detail_code"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="9">
-            <el-form-item label="附件" prop="fileName">
-              <el-upload
-                action="#"
-                :http-request="requestUpload"
-                :show-file-list="false"
-                :before-upload="beforeUpload"
-              >
-                <el-button type="primary" size="small">
-                  选择文件
-                  <i class="el-icon-upload el-icon--right"></i>
-                </el-button>
-              </el-upload>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <!-- 新增的文件图标显示区域 -->
-            <span
-              v-if="form.fileName"
-              @change="refreshData"
-              class="file-icon-container"
-            >
-              <i class="el-icon-document"></i>{{ form.fileName }}
-              <el-button
-                type="text"
-                size="small"
-                @click="removeUploadedFile"
-                style="margin-left: 5px"
-              >
-                删除
-              </el-button>
-            </span></el-col
-          >
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -302,12 +309,15 @@
 <script>
 import {
   GetPubCode,
-  GetProductInfo,
-  GetProductDetail,
   GetProductProject,
-  AddProductProject,
-  UpdateProductProject,
-  DeleteProductProject,
+  GetProductInfo,
+  GetComponentDetailList,
+  GetProjectChangeRecond,
+  GetProjectDetail,GetProductDetail,
+  GetBiddingInfo,
+  AddBiddingInfo,
+  UpdateBiddingInfo,
+  DeleteBiddingInfo,
 } from "@/api/nqi/nqi";
 
 export default {
@@ -334,18 +344,68 @@ export default {
       open: false,
       pubCodeDataList1: [],
       pubCodeDataList2: [],
+      pubCodeDataList3: [],
+      pubCodeDataList4: [],
+      fileList: [],
+      limit: 5,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         key: null,
-        expectedQuantity: null,
-        actualQuantity: null,
       },
+      changeTypeList: [
+        { value: "部分变更", label: "部分变更" },
+        { value: "全部变更", label: "全部变更" },
+      ],
+      uaserNatureList: [
+        { value: "国网", label: "国网" },
+        { value: "南网", label: "南网" },
+        { value: "自购", label: "自购" },
+        { value: "出口", label: "出口" },
+      ],
       // 表单参数
       form: {},
       // 表单校验
       rules: {
+        business_contract_code: [
+          { required: true, message: "商务合同编号不能为空", trigger: "blur" },
+        ],
+        bidding_batch: [
+          {
+            required: true,
+            message: "中标批次不能为空",
+            trigger: "blur",
+          },
+        ],
+        bidding_party_a: [
+          {
+            required: true,
+            message: "合同甲方单位不能为空",
+            trigger: "blur",
+          },
+        ],
+        bidding_time: [
+          {
+            required: true,
+            message: "中标时间不能为空",
+            trigger: "blur",
+          },
+        ],
+        bidding_count: [
+          {
+            required: true,
+            message: "中标数量不能为空",
+            trigger: "blur",
+          },
+        ],
+        uaser_nature: [
+          {
+            required: true,
+            message: "用户性质不能为空",
+            trigger: "blur",
+          },
+        ],
         development_project_no: [
           {
             required: true,
@@ -353,34 +413,24 @@ export default {
             trigger: "blur",
           },
         ],
-        product_code: [
+        software_version: [
           {
             required: true,
-            message: "产品编码不能为空",
+            message: "研发方案软件版本不能为空",
             trigger: "blur",
           },
         ],
-        product_name: [
+        hardware_version: [
           {
             required: true,
-            message: "研发方案名称不能为空",
+            message: "研发方案硬件版本不能为空",
             trigger: "blur",
           },
         ],
-        product_type: [
-          { required: true, message: "产品型号不能为空", trigger: "blur" },
-        ],
-        product_design_function_basis: [
+        product_detail_code: [
           {
             required: true,
-            message: "产品设计功能依据不能为空",
-            trigger: "blur",
-          },
-        ],
-        change_count: [
-          {
-            required: true,
-            message: "变更次数不能为空",
+            message: "产品详细信息编号不能为空",
             trigger: "blur",
           },
         ],
@@ -409,35 +459,74 @@ export default {
       this.$refs.tableData.clearSelection();
       this.$refs.tableData.toggleRowSelection(row);
       this.currentRow = row;
-    },
-    /** 查询公共信息列表 */
-    GetPubCodeList(isAdd) {
-      this.GetProductInfoList(isAdd);
-    } /** 查询产品信息列表 */,
-    GetProductInfoList(isAdd) {
-      GetProductInfo(this.queryParams).then((res) => {
+    } /** 查询研发方案列表 */,
+    GetProductProjectList(isAdd) {
+      GetProductProject().then((res) => {
         if (res.success) {
-          this.pubCodeDataList2 = this.uniqueByProperty(
+          this.pubCodeDataList3 = this.uniqueByProperty(
             res.response,
-            "product_code"
+            "development_project_no"
           );
           if (isAdd) {
-            this.form.product_code =
-              this.pubCodeDataList2.length > 0
-                ? this.pubCodeDataList2[0].product_code
+            this.form.development_project_no =
+              this.pubCodeDataList3.length > 0
+                ? this.pubCodeDataList3[0].development_project_no
                 : "";
-            this.form.product_type =
+          }
+        }
+      });
+    },/** 查询研发方案详情列表 */
+    GetProjectDetailList(isAdd) {
+      GetProductDetail().then((res) => {
+        if (res.success) {
+          this.pubCodeDataList4 = this.uniqueByProperty(
+            res.response,
+            "product_detail_code"
+          );
+          if (isAdd) {
+            this.form.product_detail_code =
+              this.pubCodeDataList4.length > 0
+                ? this.pubCodeDataList4[0].product_detail_code
+                : "";
+          }
+        }
+      });
+    } /** 查询公共信息列表 */,
+    GetPubCodeList(isAdd) {
+      GetPubCode({
+        key: "'BIDDING_BATCH','BIDDING_PARTY_A'",
+      }).then((res) => {
+        if (res.success) {
+          this.pubCodeDataList1 = this.uniqueByProperty(
+            res.response.filter((r) => r.codE_TYPE === "BIDDING_BATCH"),
+            "codE_ID"
+          );
+          this.pubCodeDataList2 = this.uniqueByProperty(
+            res.response.filter((r) => r.codE_TYPE === "BIDDING_PARTY_A"),
+            "codE_ID"
+          );
+          if (isAdd) {
+            this.form.bidding_batch =
+              this.pubCodeDataList1.length > 0
+                ? this.pubCodeDataList1[0].codE_ID
+                : "";
+            this.form.bidding_party_a =
               this.pubCodeDataList2.length > 0
-                ? this.pubCodeDataList2[0].product_type
+                ? this.pubCodeDataList2[0].codE_ID
                 : "";
           }
         }
       });
     },
-    /** 查询研发方案列表 */
+    getSelectList(isAdd) {
+      this.GetProductProjectList(isAdd);
+      this.GetProjectDetailList(isAdd);
+      this.GetPubCodeList(isAdd);
+    },
+    /** 查询出勤统计列表 */
     getList() {
       this.loading = true;
-      GetProductProject(this.queryParams).then((res) => {
+      GetBiddingInfo(this.queryParams).then((res) => {
         if (res.success) {
           this.tableData = res.response;
           this.total = res.dataCount;
@@ -475,33 +564,26 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.GetPubCodeList(true);
       this.reset();
+      this.getSelectList(true);this.form.uaser_nature="国网";
       this.open = true;
-      this.title = "添加产品详细信息";
+      this.title = "添加元器件变更";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.GetPubCodeList(false);
-      // this.form = JSON.parse(JSON.stringify(this.currentRow));
-      this.form = JSON.parse(
-        JSON.stringify(
-          this.tableData.filter((r) => r.id === this.currentRow.id)[0]
-        )
-      );
-      if (!this.form) {
-        this.$message.error("请选择要修改的产品信息！");
-        return;
-      }
+      this.getSelectList(false);
+      // getAttendance(id).then((response) => {
+      this.form = JSON.parse(JSON.stringify(this.currentRow));
       this.open = true;
-      this.title = "修改产品详细信息";
+      this.title = "修改元器件变更";
+      // });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.id != null) {
-            UpdateProductProject(this.form).then((res) => {
+            UpdateBiddingInfo(this.form).then((res) => {
               if (res.success) {
                 this.$modal.msgSuccess("修改成功");
                 this.open = false;
@@ -509,7 +591,7 @@ export default {
               }
             });
           } else {
-            AddProductProject(this.form).then((res) => {
+            AddBiddingInfo(this.form).then((res) => {
               if (res.success) {
                 this.$modal.msgSuccess("新增成功");
                 this.open = false;
@@ -519,17 +601,16 @@ export default {
           }
         }
       });
-    },
-    /** 删除按钮操作 */
+    } /** 删除按钮操作 */,
     handleDelete(row) {
       this.form = JSON.parse(JSON.stringify(this.currentRow));
       if (!this.form) {
-        this.$message.error("请选择要删除的产品详细信息！");
+        this.$message.error("请选择要删除的产品信息！");
         return;
       }
-      this.$confirm("确认删除该产品详细信息吗？", "提示", { type: "warning" })
+      this.$confirm("确认删除该产品信息吗？", "提示", { type: "warning" })
         .then(() => {
-          DeleteProductProject(this.form).then((res) => {
+          DeleteBiddingInfo({ id: this.form.id }).then((res) => {
             if (res.success) {
               this.$message.success(res.msg);
             } else {
@@ -539,29 +620,6 @@ export default {
           });
         })
         .catch(() => {});
-    },
-    // 覆盖默认的上传行为
-    requestUpload() {},
-    // 上传预处理
-    beforeUpload(file) {
-      this.form.fileName = file.name;
-      this.$nextTick(() => {
-        this.$forceUpdate(); // 强制组件重新渲染
-      });
-      this.$refs.form.validateField("fileName"); // 手动验证
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64Data = reader.result.split(",")[1];
-          (this.form.fileBase64 = base64Data), resolve(false); // 阻止默认上传，我们手动控制上传
-        };
-        reader.readAsDataURL(file);
-      });
-    },
-    removeUploadedFile() {
-      this.form.fileName = "";
-      this.form.fileBase64 = "";
-      this.$forceUpdate(); // 强制组件重新渲染
     },
   },
 };

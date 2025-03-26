@@ -4,56 +4,90 @@
       <el-col
         style="height: 100%; width: 65%; margin-left: 1%; margin-right: 1%"
       >
-        <el-row
-          :gutter="20"
-          style="height: 50%; border: 1px solid #637e9b; border-radius: 8px"
-        >
+        <el-row style="height: 50%; border-radius: 8px">
           <el-col :span="24" style="height: 100%" class="table-c">
             <IqcYield :list="tableData"></IqcYield>
           </el-col>
         </el-row>
-        <el-row
-          :gutter="20"
-          style="
-            height: 50%;
-            border: 1px solid #637e9b;
-            border-radius: 8px;
-            padding: 1%;
-          "
-        >
+        <el-row :gutter="20" style="height: 50%; border-radius: 8px">
           <el-col :span="12" style="height: 100%"
             ><div style="height: 100%; width: 100%" ref="myChart">
-              <BarChart :chartData="barData1"></BarChart></div
+              <div class="smt-title" style="margin: 20px 0">
+                <div>电子来料检验批合格率</div>
+              </div>
+              <BarChart
+                :chartData="barData1"
+                v-if="barData1.xData.length"
+                style="height: calc(100% - 70px)"
+                class="chart-content"
+              ></BarChart>
+              <div
+                class="chart-content"
+                v-else
+                style="height: calc(100% - 70px)"
+              >
+                <Empty></Empty>
+              </div></div
           ></el-col>
           <el-col :span="12" style="height: 100%"
             ><div style="height: 100%; width: 100%" ref="myChart">
-              <BarChart :chartData="barData2"></BarChart></div
+              <div class="smt-title" style="margin: 20px 0">
+                <div>结构来料检验批合格率</div>
+              </div>
+              <BarChart
+                :chartData="barData2"
+                v-if="barData2.xData.length"
+                style="height: calc(100% - 70px)"
+                class="chart-content"
+              ></BarChart>
+              <div
+                class="chart-content"
+                v-else
+                style="height: calc(100% - 70px)"
+              >
+                <Empty></Empty>
+              </div></div
           ></el-col>
         </el-row>
       </el-col>
+
       <el-col style="height: 100%; width: 33%">
-        <el-row
-          style="
-            height: 50%;
-            border: 1px solid #637e9b;
-            border-radius: 8px;
-            padding: 1%;
-          "
-        >
+        <el-row style="height: 50%; border-radius: 8px">
           <el-col :span="24" style="height: 100%"
             ><div style="height: 100%; width: 100%" ref="myChart">
-              <BarChart1 :chartData="barData3"></BarChart1></div
+              <div class="smt-title" style="margin: 20px 0">
+                <div>每月来料检验合格率</div>
+              </div>
+              <BarChart1
+                :chartData="barData3"
+                v-if="barData3.yData.length"
+                style="height: calc(100% - 70px)"
+                class="chart-content"
+              ></BarChart1>
+              <div
+                class="chart-content"
+                v-else
+                style="height: calc(100% - 70px)"
+              >
+                <Empty></Empty>
+              </div></div
           ></el-col>
         </el-row>
 
-        <el-row
-          style="height: 50%; border: 1px solid #637e9b; border-radius: 8px"
-          class="table-c"
-        >
-          <div
-            style="margin-right: 1%; margin-top: 4%; width: 100%; height: 90%"
-          >
-            <PieChart :chart-data="pieData"></PieChart>
+        <el-row style="height: 50%; border-radius: 8px" class="table-c">
+          <div style="margin-right: 1%; width: 100%; height: 100%">
+            <div class="smt-title" style="margin: 20px 0">
+              <div>当月来料不良统计</div>
+            </div>
+            <PieChart
+              :chart-data="pieData"
+              v-if="pieData.yData.length"
+              style="height: calc(100% - 70px)"
+              class="chart-content"
+            ></PieChart>
+            <div class="chart-content" v-else style="height: calc(100% - 70px)">
+              <Empty></Empty>
+            </div>
           </div>
         </el-row>
       </el-col>
@@ -62,6 +96,7 @@
 </template>
 
 <script>
+import Empty from "@/views/bigScreen/components/Empty.vue";
 import LineChart from "../chart/LineChart";
 import PieChart from "../chart/PieChart";
 import BarChart from "../chart/BarChart";
@@ -76,17 +111,18 @@ import {
 import {
   GetIqc_checkitemData,
   GetIqc_defect_infoData,
-  GetIqc_pass_infoData,GetIqc_pass_sum_infoData
+  GetIqc_pass_infoData,
+  GetIqc_pass_sum_infoData,
 } from "@/api/bigScreenIqc/index.js";
 export default {
   components: {
     LineChart,
+    Empty,
     PieChart,
     BarChart,
     IqcYield,
     BarChart1,
   },
-  name: "DIPContent",
   data() {
     return {
       bigScreenTimeId: null,
@@ -102,7 +138,7 @@ export default {
         b: 0,
       },
       barData3: {
-        title: "每月来料检验合格率",
+        title: "",
         xData: [],
         yData: [],
         yData1: [],
@@ -155,7 +191,7 @@ export default {
         ],
       },
       pieData: {
-        title: "当月来料不良统计",
+        title: "",
         showLabel: true, //是否显示标签
         yData: [0],
       },
@@ -167,48 +203,6 @@ export default {
       //     { value: 0.5, name: "设备异常" },
       //   ],
       // },
-      projectInfo: [
-        {
-          name: "测试项目1",
-          value: 100,
-        },
-        {
-          name: "测试项目2",
-          value: 100,
-        },
-        {
-          name: "测试项目3",
-          value: 100,
-        },
-        {
-          name: "测试项目4",
-          value: 100,
-        },
-        {
-          name: "测试项目5",
-          value: 100,
-        },
-        {
-          name: "测试项目6",
-          value: 100,
-        },
-        {
-          name: "测试项目7",
-          value: 100,
-        },
-        {
-          name: "测试项目8",
-          value: 100,
-        },
-        {
-          name: "不良总数",
-          value: 100,
-        },
-        {
-          name: "不良比例",
-          value: "100%",
-        },
-      ],
     };
   },
   mounted() {
@@ -265,10 +259,18 @@ export default {
       let res = await GetIqc_pass_infoData("'电子料','结构件'");
       this.isQuery = true;
       if ((res.status = 1 && res.result?.length > 0)) {
-        this.barData1.xData = res.result.filter((r) => (r.producttype === "电子料")).map(y=>y.month);
-        this.barData1.yData = res.result.filter((r) => (r.producttype === "电子料")).map(y=>y.pass_rate);
-        this.barData2.xData = res.result.filter((r) => (r.producttype === "结构件")).map(y=>y.month);
-        this.barData2.yData = res.result.filter((r) => (r.producttype === "结构件")).map(y=>y.pass_rate);
+        this.barData1.xData = res.result
+          .filter((r) => r.producttype === "电子料")
+          .map((y) => y.month);
+        this.barData1.yData = res.result
+          .filter((r) => r.producttype === "电子料")
+          .map((y) => y.pass_rate);
+        this.barData2.xData = res.result
+          .filter((r) => r.producttype === "结构件")
+          .map((y) => y.month);
+        this.barData2.yData = res.result
+          .filter((r) => r.producttype === "结构件")
+          .map((y) => y.pass_rate);
       } else {
         this.isQuery = false;
         this.isSuccess = false;
@@ -279,9 +281,15 @@ export default {
       let res = await GetIqc_pass_sum_infoData("'电子料','结构件'");
       this.isQuery = true;
       if ((res.status = 1 && res.result?.length > 0)) {
-        this.barData3.xData = res.result.filter((r) => (r.producttype === "电子料")).map(y=>y.month);
-        this.barData3.yData = res.result.filter((r) => (r.producttype === "电子料")).map(y=>y.pass_rate);
-        this.barData3.yData1 = res.result.filter((r) => (r.producttype === "结构件")).map(y=>y.pass_rate);
+        this.barData3.xData = res.result
+          .filter((r) => r.producttype === "电子料")
+          .map((y) => y.month);
+        this.barData3.yData = res.result
+          .filter((r) => r.producttype === "电子料")
+          .map((y) => y.pass_rate);
+        this.barData3.yData1 = res.result
+          .filter((r) => r.producttype === "结构件")
+          .map((y) => y.pass_rate);
       } else {
         this.isQuery = false;
         this.isSuccess = false;
@@ -330,7 +338,7 @@ $minHeight: 300px;
 .content-container {
   // height: 100%;
   width: 100%;
-  height: calc(100% - 40px);
+  height:100%;
 
   .table-c {
     background: transparent;
@@ -498,6 +506,23 @@ $minHeight: 300px;
       background-color: #3c4f72 !important;
       color: #478ddb;
     }
+  }
+  .smt-title {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    background-image: url("../../../../assets/images/bigScreen/title_bg.png");
+    background-repeat: no-repeat;
+    background-size: 300px 100%;
+    background-position: 0 center;
+    justify-content: space-between;
+    padding-left: 20px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .chart-content {
+    background-color: rgba(25, 129, 246, 0.2);
   }
 }
 </style>

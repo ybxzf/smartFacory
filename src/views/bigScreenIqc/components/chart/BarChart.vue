@@ -153,7 +153,7 @@ export default {
             data: this.chartData.yData,
           },
           {
-            name: "不良数量",
+            name:this.chartData.title,
             type: "bar",
             barWidth: this.barChartWidth,
             data: this.chartData.yData,
