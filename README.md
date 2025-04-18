@@ -15,10 +15,12 @@ npm run build:prod
 - 公共常量抽取到`utils`文件夹下的`constants.js`文件中
 - `class`的命名使用`-`隔离, 例如`user-info`;
 - 一个功能模块建立一个文件夹，文件夹下使用`index.vue`作为入口文件,`components`文件夹下存放公共组件
+- 每个业务功能模块下的常量都需要提取到当前功能模块下的```const```文件中。
 
 ## 统一代码风格
-
 - 每个组件需要自定义自身的 root 元素的样式，以避免全局样式污染
+- 每个组件必须保持单一功能原则
+- 每个组件必须含有```name```属性
 - 代码采用 prettier 进行格式化
 - 代码中不要出现`console.log`，`debugger`等调试代码
 - 代码中不要出现`alert`，`confirm`等弹窗代码
@@ -56,6 +58,24 @@ function xxx() {
 - 尽量不要在元素的style属性中书写样式，使用选择器来定义样式
 - scss嵌套不要太深，不要超过3层
 - 避免使⽤ID选择器及全局标签选择器防⽌污染全局样式
+
+##  代码提交规则
+```js
+type(scope) : subject
+```
+1. type（必须） : commit 的类别，只允许使用下面几个标识：
+- feat : 新功能
+- fix : 修复bug
+- docs : 文档改变
+- style : 代码格式改变
+- refactor : 某个已有功能重构
+- perf : 性能优化
+- test : 增加测试
+- build : 改变了build工具 如 grunt换成了 npm
+- revert : 撤销上一次的 commit
+- chore : 构建过程或辅助工具的变动
+2. scope（可选） : 用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。
+3. subject（必须） : commit 的简短描述，不超过50个字符。
 
 ## 一些公共模块
 - `UI`：Element UI,主要参考[默认主题]('https://element.eleme.cn/#/zh-CN/theme/preview')
