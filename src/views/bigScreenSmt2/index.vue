@@ -58,7 +58,7 @@ export default {
     }
 
     .content-container {
-        margin: 10px;
+		padding: 10px;
     }
 }
 </style>

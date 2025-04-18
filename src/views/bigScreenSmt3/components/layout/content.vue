@@ -39,7 +39,13 @@
           }}</span>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col style="width: calc((100% / 24) * 3.5)">
+        <div class="com-part">
+          <label>完成率</label>
+          <span class="ellipsis-span">{{ completionRateValue }}%</span>
+        </div>
+      </el-col>
+      <!-- <el-col :span="4">
         <div class="com-part" style="margin-right: 20px">
           <label>完成率</label>
           <div class="item-value-progress" style="margin: 5px">
@@ -60,28 +66,38 @@
             <div class="value">{{ completionRateValue }}%</div>
           </div>
         </div>
-      </el-col>
+      </el-col> -->
     </el-row>
-    <el-row style="height: calc(100% - 80px); padding: 15px">
+    <el-row style="height: calc(100% - 35px); padding: 1%">
       <el-col style="height: 100%; width: 65%">
         <el-row
           :gutter="20"
           style="
             height: 50%;
-            border: 1px solid #637e9b;
+            <!-- border: 1px solid #637e9b; -->
             border-radius: 8px;
-            padding: 1%;
           "
         >
           <el-col :span="8" style="height: 100%">
-            <BarChart :chartData="barData"></BarChart
+            <div class="smt-title" style="margin: 20px 0">
+              <div>当前工单AOI不良统计</div>
+            </div>
+            <BarChart
+              :chartData="barData"
+              v-if="barData.xData.length"
+              style="height: calc(100% - 70px)"
+              class="chart-content"
+            ></BarChart>
+            <div class="chart-content" v-else style="height: calc(100% - 70px)">
+              <Empty></Empty></div
           ></el-col>
           <el-col :span="16" style="height: 100%" class="table-c">
-            <div style="height: 35px; text-align: center">
-              <span class="table-title">当前工单不良统计明细</span>
+            <div class="smt-title" style="margin: 20px 0">
+              <div>当前工单不良统计明细</div>
             </div>
-            <div style="height: calc(100% - 35px)">
+            <div style="height: calc(100% - 70px)" class="chart-content">
               <el-table
+                v-if="tableData.length"
                 :data="tableData"
                 style="width: 100%"
                 height="100%"
@@ -104,6 +120,9 @@
                 <el-table-column prop="defect_rate" label="不良比例">
                 </el-table-column>
               </el-table>
+              <div class="chart-content" v-else style="height: 100%">
+                <Empty></Empty>
+              </div>
             </div>
           </el-col>
         </el-row>
@@ -111,17 +130,17 @@
           :gutter="20"
           style="
             height: 50%;
-            border: 1px solid #637e9b;
+            <!-- border: 1px solid #637e9b; -->
             border-radius: 8px;
-            padding: 1%;
           "
         >
           <el-col :span="16" style="height: 100%" class="table-c">
-            <div style="height: 35px; text-align: center">
-              <span class="table-title">AOI检测不良统计明细(近15天)</span>
+            <div class="smt-title" style="margin: 20px 0">
+              <div>AOI检测不良统计明细(近15天)</div>
             </div>
-            <div style="height: calc(100% - 35px)">
+            <div style="height: calc(100% - 70px)" class="chart-content">
               <el-table
+                v-if="tableData1.length"
                 :data="tableData1"
                 style="width: 100%; background: transparent"
                 :row-class-name="tableRowClassName"
@@ -145,11 +164,29 @@
                 </el-table-column>
                 <el-table-column width="150px" prop="date" label="生产时间">
                 </el-table-column>
-              </el-table></div
+              </el-table>
+              <div class="chart-content" v-else style="height: 100%">
+                <Empty></Empty>
+              </div></div
           ></el-col>
           <el-col :span="8" style="height: 100%"
             ><div style="height: 100%; width: 100%" ref="myChart">
-              <BarChart :chartData="barData1"></BarChart></div
+              <div class="smt-title" style="margin: 20px 0">
+                <div>近15天不良数量统计TOP5</div>
+              </div>
+              <BarChart
+                :chartData="barData1"
+                v-if="barData1.xData.length"
+                class="chart-content"
+                style="height: calc(100% - 70px)"
+              ></BarChart>
+              <div
+                class="chart-content"
+                v-else
+                style="height: calc(100% - 70px)"
+              >
+                <Empty></Empty>
+              </div></div
           ></el-col>
         </el-row>
       </el-col>
@@ -158,16 +195,15 @@
           height: 100%;
           width: 34%;
           margin-left: 1%;
-          border: 1px solid #637e9b;
+          <!-- border: 1px solid #637e9b; -->
           border-radius: 8px;
-          padding: 1%;
         "
       >
         <el-row style="height: 30%">
-          <div style="height: 35px; text-align: center">
-            <span class="table-title">当前工单贴片抛料统计Top5</span>
+          <div class="smt-title" style="margin: 20px 0">
+            <div>当前工单贴片抛料统计Top5</div>
           </div>
-          <div style="height: calc(100% - 35px)" class="data-info">
+          <div style="height: calc(100% - 70px)" class="data-info">
             <el-row class="item">
               <el-col :span="4" class="item-col">槽位</el-col>
               <el-col :span="4" class="item-col">{{
@@ -225,45 +261,69 @@
             <el-row class="item" style="height: 34%">
               <el-col :span="4" class="item-col">预警灯</el-col>
               <el-col :span="4" class="item-col">
-                <span class="GreeenSpan" style="background-color: red"></span
-              ></el-col>
+                <img
+                  src="@/assets/images/bigScreen/red_lamp.png"
+                  alt=""
+                  style="width: 25px"
+              /></el-col>
               <el-col :span="4" class="item-col">
-                <span class="GreeenSpan" style="background-color: yellow"></span
-              ></el-col>
+                <img
+                  src="@/assets/images/bigScreen/yellow_lamp.png"
+                  alt=""
+                  style="width: 25px"
+              /></el-col>
               <el-col :span="4" class="item-col">
-                <span class="GreeenSpan"></span
-              ></el-col>
+                <img
+                  src="@/assets/images/bigScreen/green_lamp.png"
+                  alt=""
+                  style="width: 25px"
+              /></el-col>
               <el-col :span="4" class="item-col">
-                <span class="GreeenSpan"></span
-              ></el-col>
+                <img
+                  src="@/assets/images/bigScreen/green_lamp.png"
+                  alt=""
+                  style="width: 25px"
+              /></el-col>
               <el-col :span="4" class="item-col">
-                <span class="GreeenSpan"></span
-              ></el-col>
+                <img
+                  src="@/assets/images/bigScreen/green_lamp.png"
+                  alt=""
+                  style="width: 25px"
+              /></el-col>
             </el-row>
           </div>
         </el-row>
 
         <el-row style="height: 69%; margin-top: 1%" class="table-c">
-          <el-table
-            :data="tableData3"
-            :style="{ textalign: 'center', width: '100%' }"
-            :row-class-name="tableRowClassName"
-            height="100%"
-            ref="scrollTable2"
-            @mouseenter.native="handleEnter2"
-            @mouseleave.native="handleLevel2"
-            header-row-class-name="table-h-bg"
-          >
-            <el-table-column prop="holeNo" label="槽位"> </el-table-column>
-            <el-table-column prop="componentCode" label="物料信息">
-            </el-table-column>
-            <el-table-column prop="pickedNum" label="起料数量">
-            </el-table-column>
-            <el-table-column prop="placedNum" label="抛料数量">
-            </el-table-column>
-            <el-table-column prop="throwing_rate" label="抛料率">
-            </el-table-column>
-          </el-table>
+          <div class="smt-title" style="margin: 20px 0">
+            <div>抛料信息</div>
+          </div>
+          <div style="height: calc(100% - 70px)" class="chart-content">
+            <el-table
+              :data="tableData3"
+              v-if="tableData3.length"
+              :style="{ textalign: 'center', width: '100%' }"
+              :row-class-name="tableRowClassName"
+              height="100%"
+              ref="scrollTable2"
+              @mouseenter.native="handleEnter2"
+              @mouseleave.native="handleLevel2"
+              header-row-class-name="table-h-bg"
+            >
+              <el-table-column prop="holeNo" label="槽位"> </el-table-column>
+              <el-table-column prop="componentCode" label="物料信息">
+              </el-table-column>
+              <el-table-column prop="pickedNum" label="起料数量">
+              </el-table-column>
+              <el-table-column prop="placedNum" label="抛料数量">
+              </el-table-column>
+              <el-table-column prop="throwing_rate" label="抛料率">
+              </el-table-column>
+            </el-table>
+            <div class="chart-content" v-else style="height: 100%">
+              <Empty></Empty>
+            </div>
+          </div>
         </el-row>
       </el-col>
     </el-row>
@@ -271,6 +331,7 @@
 </template>
 
 <script>
+import Empty from "@/views/bigScreen/components/Empty.vue";
 import LineChart from "../chart/LineChart";
 import PieChart from "../chart/PieChart";
 import BarChart from "../chart/BarChart";
@@ -281,11 +342,7 @@ import {
   GetSmt03_mo_defect_projectData,
 } from "@/api/bigScreenSmt2/index.js";
 export default {
-  components: {
-    LineChart,
-    PieChart,
-    BarChart,
-  },
+  components: { Empty, LineChart, PieChart, BarChart },
   name: "DIPContent",
   data() {
     return {
@@ -305,12 +362,12 @@ export default {
         b: 0,
       },
       barData: {
-        title: "当前工单AOI不良统计",
+        title: "",
         xData: [],
         yData: [],
       },
       barData1: {
-        title: "近15天不良数量统计TOP5",
+        title: "",
         xData: [],
         yData: [],
       },
@@ -414,9 +471,15 @@ export default {
     this.bigScreenTimeId = setInterval(() => {
       this.initData();
     }, 60000 * 1);
-    this.autoScroll();
-    this.autoScroll1();
-    this.autoScroll2();
+    this.$nextTick(() => {
+      if (this.tableData.length) {
+        this.autoScroll();
+      }
+      if (this.tableData.length) {
+      this.autoScroll1();}
+      if (this.tableData3.length) {
+      this.autoScroll2();}
+    });
   },
   methods: {
     initData() {
@@ -491,6 +554,7 @@ export default {
       this.autoScroll(true);
     },
     autoScroll(stop) {
+      if (!this.tableData.length) return;
       const table = this.$refs.scrollTable;
       // 拿到表格中承载数据的div元素
       const divData = table.$refs.bodyWrapper;
@@ -516,7 +580,6 @@ export default {
       }
     },
 
-
     handleLevel1() {
       this.autoScroll1(false);
     },
@@ -524,6 +587,7 @@ export default {
       this.autoScroll1(true);
     },
     autoScroll1(stop) {
+      if (!this.tableData1.length) return;
       const table = this.$refs.scrollTable1;
       // 拿到表格中承载数据的div元素
       const divData = table.$refs.bodyWrapper;
@@ -549,7 +613,6 @@ export default {
       }
     },
 
-
     handleLevel2() {
       this.autoScroll2(false);
     },
@@ -557,6 +620,7 @@ export default {
       this.autoScroll2(true);
     },
     autoScroll2(stop) {
+       if (!this.tableData3.length) return;
       const table = this.$refs.scrollTable2;
       // 拿到表格中承载数据的div元素
       const divData = table.$refs.bodyWrapper;
@@ -614,7 +678,8 @@ export default {
   beforeDestroy() {
     this.autoScroll(true);
     this.autoScroll1(true);
-    this.autoScroll2(true);},
+    this.autoScroll2(true);
+  },
 };
 </script>
 
@@ -720,13 +785,13 @@ $minHeight: 300px;
   .base-info {
     height: 40px !important;
     .com-part {
-      height: 40px;
+      min-height: 40px;
       display: flex;
       line-height: 40px;
       color: #fff;
       font-size: 11px;
-      background-color: rgba(25, 129, 246, 0.2);
-      box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
+      // background-color: rgba(25, 129, 246, 0.2);
+      // box-shadow: 0 0 5px 3px rgba(25, 129, 246, 0.5);
       // box-shadow: 0 0 3px 3px rgba(25, 129, 246, 0.7);
       border: 1px solid transparent;
       .ellipsis-span {
@@ -734,12 +799,14 @@ $minHeight: 300px;
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
+        text-align: center;
       }
       label {
         min-width: 100px;
         text-align: center;
         margin-right: 4px;
-        border-right: 3px solid #3666e3;
+        font-size: 15px;
+        // border-right: 3px solid #3666e3;
       }
       .text-container {
         display: inline-block; /* 使容器宽度自适应内容 */
@@ -747,6 +814,13 @@ $minHeight: 300px;
         overflow: hidden; /* 超出部分隐藏 */
         white-space: nowrap; /* 不换行 */
         text-overflow: ellipsis; /* 超出部分用省略号表示 */
+      }
+      span {
+        flex: 1;
+        font-size: 12px;
+        font-weight: 400;
+        padding-left: 4px;
+        background-color: rgba(25, 129, 246, 0.2);
       }
     }
   }
@@ -792,6 +866,23 @@ $minHeight: 300px;
       background-color: #3c4f72 !important;
       color: #478ddb;
     }
+  }
+  .chart-content {
+    background-color: rgba(25, 129, 246, 0.2);
+  }
+  .smt-title {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    background-image: url("../../../../assets/images/bigScreen/title_bg.png");
+    background-repeat: no-repeat;
+    background-size: 300px 100%;
+    background-position: 0 center;
+    justify-content: space-between;
+    padding-left: 20px;
+    font-size: 15px;
+    font-weight: 700;
   }
 }
 </style>

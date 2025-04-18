@@ -2,7 +2,7 @@
   <div class="content-container">
     <el-row style="height: 100%">
       <el-col style="height: 100%; width: 100%; padding: 1%">
-        <el-row :gutter="20" style="height: 50%;">
+        <el-row :gutter="20" style="height: 49%">
           <el-tabs
             @tab-click="handleTabClick"
             type="border-card"
@@ -22,7 +22,7 @@
             <div
               style="
                 height: 100%;
-                border: 1px solid #637e9b;
+                <!-- border: 1px solid #637e9b; -->
                 border-radius: 8px;
               "
             >
@@ -36,7 +36,7 @@
                     margin-left: auto;
                     margin-right: auto;
                   "
-                  src="@/assets/images/devices/device1.png"
+               :src="getImageSrc(equ.equipmentname)"
                   alt="站点设备图片"
                 />
               </el-row>
@@ -64,19 +64,47 @@
           :gutter="20"
           style="
             margin-top: 1%;
-            height: 49%;
-            border: 1px solid #637e9b;
-            border-radius: 8px;
-            padding: 1%;
+            height: 50%;
+            <!-- border: 1px solid #637e9b; -->
+            border-radius: 8px;padding:1%
           "
         >
-          <el-col style="height: 100%;width:48%; padding: 1%"
+          <el-col style="height: 100%; width: 50%"
             ><div style="height: 100%; width: 100%" ref="myChart">
-              <BarChart :chartData="barData"></BarChart></div
+              <div class="smt-title" style="margin: 20px 0">
+                <div>线体设备效率(%)</div>
+              </div>
+              <BarChart
+                :chartData="barData"
+                class="chart-content"
+                v-if="barData.xData.length"
+                style="height: calc(100% - 70px)"
+              ></BarChart><div
+                class="chart-content"
+                v-else
+                style="height: calc(100% - 70px)"
+              >
+                <Empty></Empty>
+              </div></div
           ></el-col>
-          <el-col  style="width:48%;height: 100%; padding: 1%"
+          <el-col style="width: 50%; height: 100%"
             ><div style="height: 100%; width: 100%" ref="myChart">
-              <LineChart :chartData="lineData"></LineChart></div
+              <div class="smt-title" style="margin: 20px 0">
+                <div>线体损失工时（小时）</div>
+              </div>
+              <LineChart
+                :chartData="lineData"
+                class="chart-content"
+                v-if="lineData.xData.length"
+                style="height: calc(100% - 70px)"
+              ></LineChart>
+              <div
+                class="chart-content"
+                v-else
+                style="height: calc(100% - 70px)"
+              >
+                <Empty></Empty>
+              </div></div
           ></el-col>
         </el-row>
       </el-col>
@@ -85,6 +113,7 @@
 </template>
 
 <script>
+import Empty from "@/views/bigScreen/components/Empty.vue";
 import LineChart from "../chart/LineChart";
 import BarChart from "../chart/BarChart";
 import {
@@ -94,6 +123,7 @@ import {
 } from "@/api/bigScreenEqu/index.js";
 export default {
   components: {
+    Empty,
     LineChart,
     BarChart,
   },
@@ -106,7 +136,7 @@ export default {
       allEquData: [
         {
           workshop: "SMT二级看板",
-          equipmentname: "equ1",
+          equipmentname: "device1",
           equipmentstatus: "运行",
         },
         {
@@ -194,7 +224,7 @@ export default {
         b: 0,
       },
       barData: {
-        title: "线体设备效率(%)",
+        title: "",
         xData: [],
         yData: [],
       },
@@ -217,6 +247,15 @@ export default {
     }, 60000 * 1);
   },
   methods: {
+
+    getImageSrc(name) {
+      try {
+        return require(`@/assets/images/devices/${name}.png`);
+      } catch (error) {
+        console.error('图片加载失败:', error);
+        return '';
+      }
+    },
     initData() {
       this.GetEquipment_efficiencyData();
       this.GetEquipment_losttimeData();
@@ -320,7 +359,7 @@ $minHeight: 300px;
 .content-container {
   // height: 100%;
   width: 100%;
-  height: calc(100% - 40px);
+  height: 100%;
 
   .table-c {
     background: transparent;
@@ -505,6 +544,23 @@ $minHeight: 300px;
       background-color: #3c4f72 !important;
       color: #478ddb;
     }
+  }
+  .smt-title {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    background-image: url("../../../../assets/images/bigScreen/title_bg.png");
+    background-repeat: no-repeat;
+    background-size: 300px 100%;
+    background-position: 0 center;
+    justify-content: space-between;
+    padding-left: 20px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .chart-content {
+    background-color: rgba(25, 129, 246, 0.2);
   }
 }
 </style>

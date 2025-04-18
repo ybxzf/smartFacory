@@ -2,7 +2,7 @@
   <div class="hw01-content-container">
     <!-- <custom-header class="header-container">
       <template #title> 国内调试生产线可视化看板 </template>
-    </custom-header> -->
+</custom-header> -->
     <div class="content-container">
       <div class="base-info">
         <el-row :gutter="20">
@@ -84,16 +84,18 @@
         </el-row>
       </div>
       <el-row :gutter="20" type="flex" class="chart-container-info">
-        <el-col :span="12">
+        <el-col :span="10">
           <div class="chart-title">产能分析</div>
-          <LineChart class="chart-content" v-if="lineData.xData.length" style="height: calc(100% - 50px)" :chartData="lineData"></LineChart>
+          <LineChart class="chart-content" v-if="lineData.xData.length" style="height: calc(100% - 50px)"
+            :chartData="lineData"></LineChart>
           <div class="chart-content" v-else style="height: calc(100% - 50px)">
             <Empty></Empty>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <div class="chart-title">不良数量及占比</div>
-          <BarChart class="chart-content" v-if="barData.xData.length" :chartData="barData" style="height: calc(100% - 50px);background-color: transparent;"></BarChart>
+          <BarChart class="chart-content" v-if="barData.xData.length" :chartData="barData"
+            style="height: calc(100% - 50px);background-color: transparent;"></BarChart>
           <div class="chart-content" v-else style="height: calc(100% - 50px)">
             <Empty></Empty>
           </div>
@@ -125,7 +127,7 @@
         </el-col>
       </el-row>
       <el-row class="bottom-info" :gutter="20">
-        <el-col :span="12">
+        <el-col :span="10">
           <div class="data-info">
             <el-row :gutter="20" class="item" type="flex">
               <el-col :span="6" class="item-col">产能分析</el-col>
@@ -137,25 +139,25 @@
               <el-col :span="6" class="item-col">每小时产能</el-col>
               <el-col :span="6" class="item-col">{{
                 productivityAnalysis.hour.targetValue || 0
-                }}</el-col>
+              }}</el-col>
               <el-col :span="6" class="item-col">{{
                 productivityAnalysis.hour.actualValue || 0
-                }}</el-col>
+              }}</el-col>
               <el-col :span="6" class="item-col">{{
                 productivityAnalysis.hour.achievementRate || 0
-                }}</el-col>
+              }}</el-col>
             </el-row>
             <el-row :gutter="20" class="item" type="flex">
               <el-col :span="6" class="item-col">当日产能</el-col>
               <el-col :span="6" class="item-col">{{
                 productivityAnalysis.day.targetValue || 0
-                }}</el-col>
+              }}</el-col>
               <el-col :span="6" class="item-col">{{
                 productivityAnalysis.day.actualValue || 0
-                }}</el-col>
+              }}</el-col>
               <el-col :span="6" class="item-col">{{
                 productivityAnalysis.day.achievementRate || 0
-                }}</el-col>
+              }}</el-col>
             </el-row>
           </div>
           <div class="table-c">
@@ -176,7 +178,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <pieChart3D class="chart-content" v-if="fctDefectStatsList.length" style="height: calc(100%);"
             :chartData="fctDefectStatsList" :title="'不良占比'">
           </pieChart3D>
@@ -598,7 +600,7 @@ export default {
     background-image: url('../../assets/images/bigScreen/title_bg.png');
     background-repeat: no-repeat;
     background-size: 300px 100%;
-    background-position:  0 center;
+    background-position: 0 center;
     padding-left: 20px;
     font-size: 15px;
     line-height: 30px;
@@ -703,6 +705,8 @@ export default {
     }
 
     .el-table__body-wrapper {
+      background: rgba(25, 129, 246, 0.2);
+
       &::-webkit-scrollbar {
         width: 0;
         height: 6px;
@@ -715,8 +719,7 @@ export default {
     }
 
     .el-table--enable-row-hover .el-table__body tr:hover {
-      td {
-        background-color: #3c4f72 !important;
+      td {background-color: #3c4f72 !important;
         color: #478ddb;
       }
     }

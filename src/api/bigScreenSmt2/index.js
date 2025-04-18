@@ -162,3 +162,14 @@ export function GetSmt03_mo_defect_projectData(work_order,date) {
     method: "get",
   });
 }
+
+/**
+* @description 获取SMT设备参数
+* @returns
+*/
+export function GetSmt02_param_infoData() {
+ return request({
+   url: '/boardApi/GetBoardData/GetSmt02_param_infoData',
+   method: "get",
+ });
+}

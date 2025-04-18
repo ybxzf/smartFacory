@@ -1,9 +1,9 @@
 <template>
   <div class="section time-table-container">
-    <div style="height: 35px; text-align: center">
-      <span class="table-title">当前工单贴片抛料统计Top5</span>
+    <div class="smt-title" style="margin: 20px 0">
+      <div>当月IQC来料检验合格率</div>
     </div>
-    <div class="table-c">
+    <div class="table-c" style="height: calc(100% - 70px)">
       <el-table
         :data="tableData"
         height="100%"
@@ -14,11 +14,7 @@
         header-row-class-name="table-h-bg"
         :row-class-name="tableRowClassName"
       >
-        <el-table-column
-        type="index"
-          show-overflow-tooltip
-          label="序号"
-        >
+        <el-table-column type="index" show-overflow-tooltip label="序号">
         </el-table-column>
         <el-table-column
           prop="checkname"
@@ -132,7 +128,6 @@ export default {
 .section {
   width: 100%;
   height: 100%;
-  padding-top: 1%;
 }
 
 .title {
@@ -159,14 +154,15 @@ export default {
   overflow: hidden;
 }
 </style>
-<style lang="scss"> .table-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ffffff;
-    align-items: center; /* 垂直居中 */
-    justify-content: center; /* 水平居中 */
-    width: 100% !important;
-  }
+<style lang="scss">
+.table-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  width: 100% !important;
+}
 .time-table-container {
   .table-c {
     background: transparent;
@@ -221,7 +217,20 @@ export default {
 <style lang="scss">
 $width: 10px;
 $width_active: 6px;
-
+.smt-title {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    background-image: url("../../../../assets/images/bigScreen/title_bg.png");
+    background-repeat: no-repeat;
+    background-size: 300px 100%;
+    background-position: 0 center;
+    justify-content: space-between;
+    padding-left: 20px;
+    font-size: 15px;
+    font-weight: 700;
+  }
 .time-table-container {
   .el-table__body-wrapper::-webkit-scrollbar {
     width: 0;
