@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="monitor" v-loading="!cameraShow">
-      <div ref="divPlugin" id="divPlugin" class="video" v-if="cameraShow"></div>
+      <div ref="divPlugin" id="divPlugin" class="video" v-if="cameraShow" v-loading="isPreview"></div>
       <!-- <video ref="videoPlayer" class="video" autoplay preload="metadata" @ended="autoPlayVideo()">
         <source type="video/mp4" :src="videoSrc">
       </video> -->
@@ -34,22 +34,32 @@ export default {
   data() {
     return {
       // videoSrc: require("../../../assets/images/bigScreen/monitor_demo.mp4"),
-      szIP: '192.168.1.64',     //IP地址
+      szIP: "172.17.6.109",     //IP地址
       iPrototocol: 1,
-      iPort: '8023',               //端口号
+      iPort: '80',               //端口号
       szUserName: 'admin',        //用户名
-      szPassword: 'zzn85626688',   //管理员密码
+      szPassword: 'longdian2021',   //管理员密码
       ids: [],
       cameraList: [],
       selectCamera: {},
       cameraShow: true,
+      isPreview: false,
     }
   },
   async mounted() {
     try {
+      this.isPreview = true;
       const res = await getCameraData();
       if (res.code === 200 && res.rows && res.rows.length > 0) {
         this.cameraList = res.rows;
+        const len = this.cameraList.length;
+        const firstData = len ? this.cameraList[0] : null;
+        if (firstData) {
+          this.szIP = firstData.reserved1;
+          this.iPort = firstData.reserved2;
+          this.szUserName = firstData.reserved3;
+          this.szPassword = firstData.reserved4;
+        }
       } else {
         this.$message.error("监控信息获取失败！");
       }
@@ -76,13 +86,14 @@ export default {
         this.szUserName = this.selectCamera.reserved3;
         this.szPassword = this.selectCamera.reserved4;
       } else {
-        this.szIP = '192.168.1.64';
-        this.iPort = '8023';
+        this.szIP = '172.17.6.109';
+        this.iPort = '80';
         this.szUserName = 'admin';
-        this.szPassword = 'zzn85626688';
+        this.szPassword = 'longdian2021';
       }
       this.stopSee();
       this.logout();
+      this.destruction();
       setTimeout(() => {
         // this.destruction();
       }, 1000)
@@ -99,7 +110,6 @@ export default {
         bWndFull: true,     //是否支持单窗口双击全屏，默认支持 true:支持 false:不支持
         cbInitPluginComplete: function () {
           WebVideoCtrl.I_InsertOBJECTPlugin("divPlugin").then(() => {
-
             // 检查插件是否最新
             WebVideoCtrl.I_CheckPluginVersion().then((bFlag) => {
               if (bFlag) {
@@ -107,13 +117,14 @@ export default {
               }
             });
             that.login();
-          }, () => {
+          }, (error) => {
+            console.log(error);
             const h = that.$createElement;
             that.$message({
               type: 'error',
               message: h('a', {
                 attrs: {
-                  href: '/webControls/LocalServiceComponents.exe',
+                  href: '/webControls/HCWebSDKPluginsUserSetup.exe',
                   style: 'color: teal;text-decoration: none;'
                 },
               },
@@ -143,6 +154,7 @@ export default {
           } else {
             that.$message.error("监控登录失败，请检查配置！" + err.errorMsg);
           }
+          that.isPreview = false;
         }
       });
     },
@@ -177,6 +189,7 @@ export default {
             type: 'success',
             message: '监控预览成功!'
           });
+          that.isPreview = false;
         },
         error: (err) => {
           if (err.errorCode === 3001) {
@@ -187,6 +200,7 @@ export default {
           else {
             that.$message.error("监控预览失败，请先登录！" + err.errorMsg);
           }
+          that.isPreview = false;
         }
       })
     },
@@ -207,8 +221,8 @@ export default {
       WebVideoCtrl.I_Logout(this.szIP + '_' + this.iPort)
     },
     // 销毁插件
-    destruction() {
-      WebVideoCtrl.I_DestroyPlugin()
+    async destruction() {
+      await WebVideoCtrl.I_DestroyPlugin();
     },
     //自动循环播放视频
     autoPlayVideo() {
@@ -225,13 +239,13 @@ export default {
       const height = window.innerHeight;
       const element = document.getElementById('divPlugin');
       element.style.fontSize = `${220 / 918 * height}px`;
-
     },
   },
   // 在组件销毁时调用
   beforeDestroy() {
     this.stopSee()
     this.logout()
+    this.destruction();
   },
   destroyed() {
     setTimeout(() => {
@@ -333,5 +347,10 @@ export default {
 
 .monitor:hover video {
   transform: scale(1.05);
+}
+</style>
+<style>
+.camera-popper {
+  //z-index: 10001!important;
 }
 </style>
