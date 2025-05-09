@@ -2,9 +2,10 @@
   <div class="section">
     <div class="title">
       <span>实时监控
-        <el-select v-model="selectCamera" placeholder="请选择" clearable size="mini" popper-class="camera-popper" class="camera-select"
+        <el-select v-model="selectCameraId" placeholder="请选择" clearable size="mini" popper-class="camera-popper force-top"
+          class="camera-select mySelect" :popper-append-to-body="false" @visible-change="resetPopperPosition"
           @change="changeCamera">
-          <el-option v-for="item in cameraList" :key="item.id" :label="item.lineBody" :value="item">
+          <el-option v-for="item in cameraList" :key="item.id" :label="item.lineBody" :value="item.id">
           </el-option>
         </el-select>
       </span>
@@ -41,12 +42,13 @@ export default {
       szPassword: 'longdian2021',   //管理员密码
       ids: [],
       cameraList: [],
-      selectCamera: {},
+      selectCameraId: null,
       cameraShow: true,
       isPreview: false,
     }
   },
   async mounted() {
+    document.body.appendChild(document.querySelector('.force-top.el-select-dropdown'))
     try {
       this.isPreview = true;
       const res = await getCameraData();
@@ -55,6 +57,7 @@ export default {
         const len = this.cameraList.length;
         const firstData = len ? this.cameraList[0] : null;
         if (firstData) {
+          this.selectCameraId = firstData.id;
           this.szIP = firstData.reserved1;
           this.iPort = firstData.reserved2;
           this.szUserName = firstData.reserved3;
@@ -73,18 +76,55 @@ export default {
 
   },
   methods: {
+    resetPopperPosition(val) {
+      if (val) {
+        // 初始化隐藏下拉框防止闪烁
+        const popperInit = document.querySelector('.force-top.el-select-dropdown');
+        popperInit.style.visibility = 'hidden';
+        setTimeout(() => {
+          const popper = document.querySelector('.force-top.el-select-dropdown');
+          const input = document.querySelector('.mySelect>.el-input');
+          //需要下拉框arrow箭头就放开下面代码注释
+          // const arrow = document.querySelector('.force-top>.popper__arrow');
+          if (popper && input) {
+            const inputRect = input.getBoundingClientRect();
+            const popperHeight = popper.offsetHeight;
+
+            // 修正后的定位计算
+            const topPosition = inputRect.top - popperHeight - 5;
+            popper.style.position = 'fixed';
+            popper.style.top = `${Math.max(topPosition, 5)}px`; // 确保不超出视窗顶部
+            // popper.style.top = Math.max(topPosition, 5) + `px`; // 确保不超出视窗顶部
+            popper.style.left = `${inputRect.left}px`;
+            popper.style.width = `${inputRect.width + 100}px`;
+            popper.style.zIndex = 9999;
+            popper.style.visibility = 'visible'; // 计算好再出现
+            //需要下拉框arrow箭头就放开下面代码注释
+            // arrow.style.top = `${popperHeight - 1}px`;
+            // arrow.style.transform = 'rotate(180deg)';
+            console.log('定位参数:', {
+              inputTop: inputRect.top,
+              popperHeight,
+              finalTop: topPosition,
+              appliedTop: popper.style.top
+            });
+          }
+        }, 100);
+      }
+    },
     //监控改变
     changeCamera(val) {
       this.cameraShow = false;
       console.log("val", val);
       console.log("this.cameraList", this.cameraList);
-      console.log("this.selectCamera", this.selectCamera);
-      this.selectCamera = val;
+      console.log("this.selectCameraId", this.selectCameraId);
+      this.selectCameraId = val;
+      const selectedCamera = this.cameraList.find(item => item.id === val);
       if (val) {
-        this.szIP = this.selectCamera.reserved1;
-        this.iPort = this.selectCamera.reserved2;
-        this.szUserName = this.selectCamera.reserved3;
-        this.szPassword = this.selectCamera.reserved4;
+        this.szIP = selectedCamera.reserved1;
+        this.iPort = selectedCamera.reserved2;
+        this.szUserName = selectedCamera.reserved3;
+        this.szPassword = selectedCamera.reserved4;
       } else {
         this.szIP = '172.17.6.109';
         this.iPort = '80';
@@ -264,20 +304,24 @@ export default {
 .camera-select {
   position: fixed;
   width: 100px;
-  top:-3px;
+  top: -3px;
   left: 80px;
-  ::v-deep .el-input__inner{
+
+  ::v-deep .el-input__inner {
     background-color: transparent;
     color: #ffffff;
     border: 1px solid #11a6ff;
   }
-  ::v-deep .el-select__caret{
+
+  ::v-deep .el-select__caret {
     color: #ffffff;
   }
 
 }
-.camera-popper{
-    background-color: transparent !important;
+
+.camera-popper {
+  background-color: transparent !important;
+
   .el-select-dropdown__item {
     // color: #ff2727;
   }
@@ -351,6 +395,26 @@ export default {
 </style>
 <style>
 .camera-popper {
-  //z-index: 10001!important;
+  /* //z-index: 10001!important; */
+}
+
+.force-top.el-select-dropdown {
+  /* 需要下拉框arrow箭头可以设置margin-top: -6px; */
+  margin: 0 !important;
+  transform-origin: center bottom !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+
+  .popper__arrow {
+    display: none !important;
+  }
+
+  &.el-zoom-in-top-enter-active {
+    transform-origin: center bottom !important;
+  }
+}
+.force-top.el-select-dropdown.hover {
+  background-color: #e35f5f;
 }
 </style>
