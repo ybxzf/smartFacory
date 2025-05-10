@@ -1,5 +1,5 @@
 <template>
-  <div class="dip-two-container">
+  <div ref="bigScreenHome" class="dip-two-container">
     <div class="big-screen-header">
       <svg-icon class="full-screen-icon" :icon-class="isFullScreen ? 'exit-fullscreen' : 'fullscreen'"
         @click="toggleFullScreen()" />
@@ -102,6 +102,7 @@ export default {
   position: absolute;
   left: 20px;
   top: 30px;
+  z-index: 1;
   transform: translateY(-50%);
   cursor: pointer;
 
