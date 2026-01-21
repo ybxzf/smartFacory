@@ -372,6 +372,7 @@ export default {
 							item.imageUrl = imageUrl;
 						}).finally(() => {
 							item.load = false;
+							this.$forceUpdate();
 						})
 					})
 				}
