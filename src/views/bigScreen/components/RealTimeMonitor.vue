@@ -156,9 +156,10 @@ export default {
                 that.$message.error("检测到新的插件版本，双击开发包目录里的HCWebSDKPlugin.exe升级！");
               }
             });
+            console.log('插件加载成功');
             that.login();
           }, (error) => {
-            console.log(error);
+            console.log('插件加载成功', error);
             const h = that.$createElement;
             that.$message({
               type: 'error',
@@ -175,6 +176,7 @@ export default {
       });
     },
     login() {
+      console.log('正在登录');
       const that = this;
       WebVideoCtrl.I_Login(this.szIP, this.iPrototocol, this.iPort, this.szUserName, this.szPassword, {
         success: function () {
@@ -182,7 +184,9 @@ export default {
             type: 'success',
             message: '监控登录成功!'
           });
-          that.see();
+          setTimeout(() => {
+            that.see();
+          }, 1000);
         },
         error: function (err) {
           if (err.errorCode === 2000) {
@@ -195,6 +199,7 @@ export default {
             that.$message.error("监控登录失败，请检查配置！" + err.errorMsg);
           }
           that.isPreview = false;
+          console.error('登录失败：',err);
         }
       });
     },
@@ -220,6 +225,7 @@ export default {
       });
     },
     see() {
+      console.log('正在加载预览');
       const that = this;
       WebVideoCtrl.I_StartRealPlay(this.szIP + '_' + this.iPort, {
         // iWndIndex: 1,
@@ -240,6 +246,7 @@ export default {
           else {
             that.$message.error("监控预览失败，请先登录！" + err.errorMsg);
           }
+          console.error('监控预览失败：',err);
           that.isPreview = false;
         }
       })

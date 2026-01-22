@@ -6,7 +6,7 @@
 					@click="toggleFullScreen()" />
 			</div>
 			<div class="big-screen-header-logo">
-				<img src="../../assets/images/bigScreen/logo.png" alt="">
+				<img src="../../assets/images/bigScreen/logo.png" alt="" style="width: 150px;">
 			</div>
 			<span>数智化工厂智慧物联平台</span>
 			<div class="time-container">
